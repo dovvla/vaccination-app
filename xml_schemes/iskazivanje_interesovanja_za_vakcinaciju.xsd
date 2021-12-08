@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="http://tim.robot/iskazivanje_interesovanja_za_vakcinaciju"
+    xmlns:iizv="http://tim.robot/iskazivanje_interesovanja_za_vakcinaciju">
+
+    <xs:element name="Obrazac_interesovanja">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Licni_podaci">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Drzavljanstvo">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="RS"/>
+                                        <xs:enumeration value="Strani sa boravkom"/>
+                                        <xs:enumeration value="Strani bez boravka"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="JMBG">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:pattern value="^\d{13}"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="Ime" type="xs:string"/>
+                            <xs:element name="Prezime" type="xs:string"/>
+                            <xs:element name="Imejl">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:pattern
+                                            value="[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+                                        />
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="Broj_mobilnog_telefona">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:pattern value="06^\d{8}"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="Broj_fiksnog_telefona">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:pattern value="0^\d{9}"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Zeljena_lokacija_vakcinacije" type="xs:string"/>
+                <xs:element name="Zeljena_vakcina">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="Pfizer"/>
+                            <xs:enumeration value="Sputnik"/>
+                            <xs:enumeration value="Sinopharm"/>
+                            <xs:enumeration value="AZ"/>
+                            <xs:enumeration value="Moderna"/>
+                            <xs:enumeration value="Bilo koja"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="Davalac_krvi">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:whiteSpace value="preserve"/>
+                            <xs:enumeration value="Da"/>
+                            <xs:enumeration value="Ne"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="Datum" type="xs:date"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
