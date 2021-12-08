@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Potvrda xmlns="http://tim.robot/potvrda_o_vakcinaciji"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://tim.robot/potvrda_o_vakcinaciji potvrda_o_vakcinaciji.xsd">
+    <Podaci_pacijenta>
+        <Ime>Nikola</Ime>
+        <Prezime>Nikolic</Prezime>
+        <Pol>Musko</Pol>
+        <JMBG>0303995666666</JMBG>
+    </Podaci_pacijenta>
+    <Doza_vakcine>
+        <Datum_davanja>2021-05-04</Datum_davanja>
+        <Serija>EN1193</Serija>
+    </Doza_vakcine>
+    <Doza_vakcine>
+        <Datum_davanja>2021-05-25</Datum_davanja>
+        <Serija>EN1193</Serija>
+    </Doza_vakcine>
+    <Zdravstvena_ustanova>Vakcinski punkt Novi Sad</Zdravstvena_ustanova>
+    <Naziv_vakcine>Pfizer</Naziv_vakcine>
+    <Datum>2021-05-25</Datum>
+</Potvrda>

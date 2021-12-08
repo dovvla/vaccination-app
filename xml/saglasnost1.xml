@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Obrazac xmlns="http://tim.robot/obrazac_saglasnosti_za_imunizaciju"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://tim.robot/obrazac_saglasnosti_za_imunizaciju saglasnost.xsd">
+    <Podaci_o_pacijentu>
+        <Drzavljanstvo>
+            <JMBG>0505000111111</JMBG>
+        </Drzavljanstvo>
+        <Prezime>Hrvotic</Prezime>
+        <Ime>Srba</Ime>
+        <Ime_roditelja>Gojko</Ime_roditelja>
+        <Pol>Muski</Pol>
+        <Datum_rodjenja>2000-05-04</Datum_rodjenja>
+        <Mesto_rodjenja>Becej</Mesto_rodjenja>
+        <Adresa>
+            <Ulica>Splitska</Ulica>
+            <Broj>50</Broj>
+        </Adresa>
+        <Naselje>Becej</Naselje>
+        <Grad>Becej</Grad>
+        <Telefon_fiksni>011696969</Telefon_fiksni>
+        <Telefon_mobilni>069420420</Telefon_mobilni>
+        <Imejl>srbo@mail.rs</Imejl>
+        <Radni_status>Zaposlen</Radni_status>
+        <Zanimanje_zaposlenog>Zdravstvena zastita</Zanimanje_zaposlenog>
+        <Korisnik_socijalne_zastite>NE</Korisnik_socijalne_zastite>
+        <Sediste_socijalne_zastite>
+            <Naziv></Naziv>
+            <Opstina></Opstina>
+        </Sediste_socijalne_zastite>
+    </Podaci_o_pacijentu>
+    <Podaci_o_saglasnosti>
+        <Saglasnost>SAGLASAN SAM</Saglasnost>
+        <Naziv_imunoloskog_leka>SARS-CoV-2 Vakcinaciono sredstvo za imunizaciju ljudskog organizma, tzv. Pfizer</Naziv_imunoloskog_leka>
+        <Datum>2021-05-04</Datum>
+    </Podaci_o_saglasnosti>
+    <Evidencija_o_vakcinaciji>
+        <Zdravstvena_ustanova>Vakcinski punkt Novi Sad</Zdravstvena_ustanova>
+        <Vakcinacijski_punkt>Punkt 1</Vakcinacijski_punkt>
+        <Podaci_o_lekaru>
+            <Ime>Edita</Ime>
+            <Prezime>Stokic</Prezime>
+            <Faksimil>vafer12345</Faksimil>
+            <Broj_telefona>069666666</Broj_telefona>
+        </Podaci_o_lekaru>
+        <Podaci_o_izvrsenim_imunizacijama>
+            <Primljena_vakcina>
+                <Naziv>Pfizer</Naziv>
+                <Datum_izdavanja>2021-05-04</Datum_izdavanja>
+                <Ekstremitet>DR</Ekstremitet>
+                <Serija_vakcine>EN1193</Serija_vakcine>
+                <Proizvodjac>Pfizer-BioNTech</Proizvodjac>
+                <Nezeljena_reakcija>Glavobolja, reuma</Nezeljena_reakcija>
+            </Primljena_vakcina>
+            <Primljena_vakcina>
+                <Naziv>Pfizer</Naziv>
+                <Datum_izdavanja>2021-05-25</Datum_izdavanja>
+                <Ekstremitet>DR</Ekstremitet>
+                <Serija_vakcine>EN1193</Serija_vakcine>
+                <Proizvodjac>Pfizer-BioNTech</Proizvodjac>
+                <Nezeljena_reakcija>Bol u ruci</Nezeljena_reakcija>
+            </Primljena_vakcina>
+            <Odluka_komisije>Pacijent nek odmara, pije topli caj i oblaci se slojevito.</Odluka_komisije>
+        </Podaci_o_izvrsenim_imunizacijama>
+    </Evidencija_o_vakcinaciji>
+</Obrazac>

@@ -31,14 +31,14 @@
                             <xs:element name="JMBG">
                                 <xs:simpleType>
                                     <xs:restriction base="xs:string">
-                                        <xs:pattern value="^\d{13}"/>
+                                        <xs:pattern value="\d{13}"/>
                                     </xs:restriction>
                                 </xs:simpleType>
                             </xs:element>
                             <xs:element name="Broj_pasosa">
                                 <xs:simpleType>
                                     <xs:restriction base="xs:string">
-                                        <xs:pattern value="^\d{9}"/>
+                                        <xs:pattern value="\d{9}"/>
                                     </xs:restriction>
                                 </xs:simpleType>
                             </xs:element>

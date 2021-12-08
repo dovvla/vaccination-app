@@ -15,7 +15,7 @@
                                         <xs:element name="JMBG">
                                             <xs:simpleType>
                                                 <xs:restriction base="xs:string">
-                                                  <xs:pattern value="^\d{13}"/>
+                                                  <xs:pattern value="\d{13}"/>
                                                 </xs:restriction>
                                             </xs:simpleType>
                                         </xs:element>
@@ -26,7 +26,7 @@
                                                   <xs:element name="Br_pasosa">
                                                   <xs:simpleType>
                                                   <xs:restriction base="xs:string">
-                                                  <xs:pattern value="^\d{9}"/>
+                                                  <xs:pattern value="\d{9}"/>
                                                   </xs:restriction>
                                                   </xs:simpleType>
                                                   </xs:element>
@@ -55,14 +55,14 @@
                             <xs:element name="Telefon_fiksni">
                                 <xs:simpleType>
                                     <xs:restriction base="xs:string">
-                                        <xs:pattern value="0^\d{9}"/>
+                                        <xs:pattern value="0\d{8,9}"/>
                                     </xs:restriction>
                                 </xs:simpleType>
                             </xs:element>
                             <xs:element name="Telefon_mobilni">
                                 <xs:simpleType>
                                     <xs:restriction base="xs:string">
-                                        <xs:pattern value="06^\d{8}"/>
+                                        <xs:pattern value="06\d{7,8}"/>
                                     </xs:restriction>
                                 </xs:simpleType>
                             </xs:element>
@@ -70,7 +70,7 @@
                                 <xs:simpleType>
                                     <xs:restriction base="xs:string">
                                         <xs:pattern
-                                            value="[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+                                            value="[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,64}"
                                         />
                                     </xs:restriction>
                                 </xs:simpleType>
@@ -134,7 +134,7 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-                <xs:element name="Evidencija_o_vakcinaciji">
+                <xs:element name="Evidencija_o_vakcinaciji" minOccurs="0">
                     <xs:complexType>
                         <xs:sequence>
                             <xs:element name="Zdravstvena_ustanova" type="xs:string"/>
@@ -148,7 +148,7 @@
                                         <xs:element name="Broj_telefona">
                                             <xs:simpleType>
                                                 <xs:restriction base="xs:string">
-                                                  <xs:pattern value="06^\d{8}"/>
+                                                  <xs:pattern value="06\d{7,8}"/>
                                                 </xs:restriction>
                                             </xs:simpleType>
                                         </xs:element>
@@ -158,9 +158,9 @@
                             <xs:element name="Podaci_o_izvrsenim_imunizacijama">
                                 <xs:complexType>
                                     <xs:sequence>
-                                        <xs:element maxOccurs="2" minOccurs="0"
+                                        <xs:element maxOccurs="2" minOccurs="1"
                                             ref="oszi:Primljena_vakcina"/>
-                                        <xs:element name="Privremene_kontraindikacije">
+                                        <xs:element name="Privremene_kontraindikacije" minOccurs="0">
                                             <xs:complexType>
                                                 <xs:sequence>
                                                   <xs:element name="Datum" type="xs:date"/>

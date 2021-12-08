@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Sertifikat xmlns="http://tim.robot/zeleni_sertifikat"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://tim.robot/zeleni_sertifikat zeleni_sertifikat.xsd">
+    <Podaci_o_sertifikatu>
+        <Broj>12345</Broj>
+        <Datum_i_vreme>2021-05-26T18:13:51.0</Datum_i_vreme>
+    </Podaci_o_sertifikatu>
+    <Podaci_o_pacijentu>
+        <Ime>Nikola</Ime>
+        <Prezime>Nikolic</Prezime>
+        <Pol>Musko</Pol>
+        <Datum_rodjenja>1995-05-04</Datum_rodjenja>
+        <JMBG>0405995666666</JMBG>
+        <Broj_pasosa>123456789</Broj_pasosa>
+    </Podaci_o_pacijentu>
+    <Doza_vakcinacije>
+        <Tip>Pfizer</Tip>
+        <Proizvodjac>Pfizer-BioNTech</Proizvodjac>
+        <Serija>EN1193</Serija>
+        <Datum>2021-05-04</Datum>
+        <Zdravstvena_ustanova>Vakcinski punkt Novi Sad</Zdravstvena_ustanova>
+    </Doza_vakcinacije>
+    <Doza_vakcinacije>
+        <Tip>Pfizer</Tip>
+        <Proizvodjac>Pfizer-BioNTech</Proizvodjac>
+        <Serija>EN1193</Serija>
+        <Datum>2021-05-25</Datum>
+        <Zdravstvena_ustanova>Vakcinski punkt Novi Sad</Zdravstvena_ustanova>
+    </Doza_vakcinacije>
+    <Kovid_test>
+        <Naziv_testa>PCR</Naziv_testa>
+        <Vrsta_uzorka>Nazalni bris</Vrsta_uzorka>
+        <Proizvodjac_testa>Batut</Proizvodjac_testa>
+        <Datum_i_vreme_uzorkovanja>2021-05-26T18:13:51.0</Datum_i_vreme_uzorkovanja>
+        <Rezultat>Negativan</Rezultat>
+        <Laboratorija>Novi Sad 1</Laboratorija>
+    </Kovid_test>
+    <Kovid_test>
+        <Naziv_testa>Antigen</Naziv_testa>
+        <Vrsta_uzorka>Nazalni bris</Vrsta_uzorka>
+        <Proizvodjac_testa>Batut</Proizvodjac_testa>
+        <Datum_i_vreme_uzorkovanja>2021-05-25T18:13:51.0</Datum_i_vreme_uzorkovanja>
+        <Rezultat>Negativan</Rezultat>
+        <Laboratorija>Novi Sad 2</Laboratorija>
+    </Kovid_test>
+</Sertifikat>
