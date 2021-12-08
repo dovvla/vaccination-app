@@ -45,13 +45,13 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-                <xs:element maxOccurs="2" minOccurs="0" ref="zs:Doza_vakcinacije"/>
-                <xs:element maxOccurs="unbounded" minOccurs="0" ref="zs:Kovid_test"/>
+                <xs:element maxOccurs="2" minOccurs="0" type="zs:TDoza_vakcinacije" name="Doza_vakcinacije"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" type="zs:TKovid_test" name="Kovid_test"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    <xs:element name="Doza_vakcinacije">
-        <xs:complexType>
+
+        <xs:complexType name="TDoza_vakcinacije">
             <xs:sequence>
                 <xs:element name="Tip" type="xs:string"/>
                 <xs:element name="Proizvodjac" type="xs:string"/>
@@ -60,9 +60,8 @@
                 <xs:element name="Zdravstvena_ustanova" type="xs:string"/>
             </xs:sequence>
         </xs:complexType>
-    </xs:element>
-    <xs:element name="Kovid_test">
-        <xs:complexType>
+    
+        <xs:complexType name="TKovid_test">
             <xs:sequence>
                 <xs:element name="Naziv_testa">
                     <xs:simpleType>
@@ -87,5 +86,5 @@
                 <xs:element name="Laboratorija" type="xs:string"/>
             </xs:sequence>
         </xs:complexType>
-    </xs:element>
+   
 </xs:schema>

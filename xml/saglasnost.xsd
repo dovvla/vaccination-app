@@ -49,7 +49,7 @@
                             </xs:element>
                             <xs:element name="Datum_rodjenja" type="xs:date"/>
                             <xs:element name="Mesto_rodjenja" type="xs:string"/>
-                            <xs:element ref="oszi:Adresa"/>
+                            <xs:element type="oszi:TAdresa" name="Adresa"/>
                             <xs:element name="Naselje" type="xs:string"/>
                             <xs:element name="Grad" type="xs:string"/>
                             <xs:element name="Telefon_fiksni">
@@ -107,11 +107,13 @@
                                     </xs:restriction>
                                 </xs:simpleType>
                             </xs:element>
-                            <xs:element name="Sediste_socijalne_zastite">
+                            <xs:element name="Sediste_socijalne_zastite" nillable="true"
+                                minOccurs="0">
                                 <xs:complexType>
                                     <xs:sequence>
-                                        <xs:element name="Naziv" type="xs:string"/>
-                                        <xs:element name="Opstina" type="xs:string"/>
+                                        <xs:element name="Naziv" type="xs:string" nillable="true"/>
+                                        <xs:element name="Opstina" type="xs:string" nillable="true"
+                                        />
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>
@@ -159,7 +161,7 @@
                                 <xs:complexType>
                                     <xs:sequence>
                                         <xs:element maxOccurs="2" minOccurs="1"
-                                            ref="oszi:Primljena_vakcina"/>
+                                            type="oszi:TPrimljena_vakcina" name="Primljena_vakcina"/>
                                         <xs:element name="Privremene_kontraindikacije" minOccurs="0">
                                             <xs:complexType>
                                                 <xs:sequence>
@@ -178,31 +180,29 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    <xs:element name="Adresa">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="Ulica" type="xs:string"/>
-                <xs:element name="Broj" type="xs:positiveInteger"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="Primljena_vakcina">
-        <xs:complexType>
-            <xs:sequence maxOccurs="1" minOccurs="1">
-                <xs:element name="Naziv" type="xs:string"/>
-                <xs:element name="Datum_izdavanja" type="xs:date"/>
-                <xs:element name="Ekstremitet">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:enumeration value="DR"/>
-                            <xs:enumeration value="LR"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="Serija_vakcine" type="xs:string"/>
-                <xs:element name="Proizvodjac" type="xs:string"/>
-                <xs:element name="Nezeljena_reakcija" type="xs:string"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
+    <xs:complexType name="TAdresa">
+        <xs:sequence>
+            <xs:element name="Ulica" type="xs:string"/>
+            <xs:element name="Broj" type="xs:positiveInteger"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TPrimljena_vakcina">
+        <xs:sequence maxOccurs="1" minOccurs="1">
+            <xs:element name="Naziv" type="xs:string"/>
+            <xs:element name="Datum_izdavanja" type="xs:date"/>
+            <xs:element name="Ekstremitet">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="DR"/>
+                        <xs:enumeration value="LR"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="Serija_vakcine" type="xs:string"/>
+            <xs:element name="Proizvodjac" type="xs:string"/>
+            <xs:element name="Nezeljena_reakcija" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
 </xs:schema>

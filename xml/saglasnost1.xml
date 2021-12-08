@@ -24,10 +24,6 @@
         <Radni_status>Zaposlen</Radni_status>
         <Zanimanje_zaposlenog>Zdravstvena zastita</Zanimanje_zaposlenog>
         <Korisnik_socijalne_zastite>NE</Korisnik_socijalne_zastite>
-        <Sediste_socijalne_zastite>
-            <Naziv></Naziv>
-            <Opstina></Opstina>
-        </Sediste_socijalne_zastite>
     </Podaci_o_pacijentu>
     <Podaci_o_saglasnosti>
         <Saglasnost>SAGLASAN SAM</Saglasnost>

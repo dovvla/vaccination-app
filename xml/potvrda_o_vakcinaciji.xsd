@@ -5,6 +5,7 @@
     <xs:element name="Potvrda">
         <xs:complexType>
             <xs:sequence>
+                <xs:element name="Sifra_potvrde" type="xs:string"/>
                 <xs:element name="Podaci_pacijenta">
                     <xs:complexType>
                         <xs:sequence>
@@ -28,7 +29,7 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-                <xs:element maxOccurs="2" ref="pov:Doza_vakcine"/>
+                <xs:element maxOccurs="2" type="pov:TDoza_vakcine" name="Doza_vakcine"/>
                 <xs:element name="Zdravstvena_ustanova" type="xs:string"/>
                 <xs:element name="Naziv_vakcine">
                     <xs:simpleType>
@@ -45,12 +46,10 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    <xs:element name="Doza_vakcine">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="Datum_davanja" type="xs:date"/>
-                <xs:element name="Serija" type="xs:string"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
+    <xs:complexType name="TDoza_vakcine">
+        <xs:sequence>
+            <xs:element name="Datum_davanja" type="xs:date"/>
+            <xs:element name="Serija" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
 </xs:schema>
