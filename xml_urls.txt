@@ -1,7 +1,7 @@
 			URL-ovi
 ------------------------------------------------------------------------------------------------------
-http://tim.robot/iskazivanje_interesovanja_za_vakcinaciju/{JMBG}
-http://tim.robot/iskazivanje_interesovanja_za_vakcinaciju/0609969101010
+http://tim.robot/iskazivanje_interesovanja_za_vakcinaciju/{ID}
+http://tim.robot/iskazivanje_interesovanja_za_vakcinaciju/123456789
 ------------------------------------------------------------------------------------------------------
 http://tim.robot/izvestaj_o_imunizaciji/{Datum_od}/{Datum_do}
 http://tim.robot/izvestaj_o_imunizaciji/2021-01-08/2021-01-09
@@ -13,8 +13,8 @@ http://tim.robot/obrazac_saglasnosti_za_imunizaciju/{JMBG/Br_pasosa}
 http://tim.robot/obrazac_saglasnosti_za_imunizaciju/0609969101010
 http://tim.robot/obrazac_saglasnosti_za_imunizaciju/060996910
 ------------------------------------------------------------------------------------------------------
-http://tim.robot/zahtev_za_sertifikat/{JMBG}/{Datum}
-http://tim.robot/zahtev_za_sertifikat/0609969101010/2022-01-01
+http://tim.robot/zahtev_za_sertifikat/{ID}
+http://tim.robot/zahtev_za_sertifikat/123456789
 ------------------------------------------------------------------------------------------------------
 http://tim.robot/zeleni_sertifikat/{Broj}
 http://tim.robot/zeleni_sertifikat/2847902

@@ -11,6 +11,7 @@
                         <xs:sequence>
                             <xs:element name="Broj" type="xs:positiveInteger"/>
                             <xs:element name="Datum_i_vreme" type="xs:dateTime"/>
+                            <xs:element name="QR_kod" type="xs:string"/>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
@@ -45,46 +46,48 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-                <xs:element maxOccurs="2" minOccurs="0" type="zs:TDoza_vakcinacije" name="Doza_vakcinacije"/>
-                <xs:element maxOccurs="unbounded" minOccurs="0" type="zs:TKovid_test" name="Kovid_test"/>
+                <xs:element maxOccurs="2" minOccurs="0" type="zs:TDoza_vakcinacije"
+                    name="Doza_vakcinacije"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" type="zs:TKovid_test"
+                    name="Kovid_test"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
-        <xs:complexType name="TDoza_vakcinacije">
-            <xs:sequence>
-                <xs:element name="Tip" type="xs:string"/>
-                <xs:element name="Proizvodjac" type="xs:string"/>
-                <xs:element name="Serija" type="xs:string"/>
-                <xs:element name="Datum" type="xs:date"/>
-                <xs:element name="Zdravstvena_ustanova" type="xs:string"/>
-            </xs:sequence>
-        </xs:complexType>
-    
-        <xs:complexType name="TKovid_test">
-            <xs:sequence>
-                <xs:element name="Naziv_testa">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:enumeration value="PCR"/>
-                            <xs:enumeration value="Antigen"/>
-                            <xs:enumeration value="IgG"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="Vrsta_uzorka" type="xs:string"/>
-                <xs:element name="Proizvodjac_testa" type="xs:string"/>
-                <xs:element name="Datum_i_vreme_uzorkovanja" type="xs:dateTime"/>
-                <xs:element name="Rezultat">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:enumeration value="Pozitivan"/>
-                            <xs:enumeration value="Negativan"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="Laboratorija" type="xs:string"/>
-            </xs:sequence>
-        </xs:complexType>
-   
+    <xs:complexType name="TDoza_vakcinacije">
+        <xs:sequence>
+            <xs:element name="Tip" type="xs:string"/>
+            <xs:element name="Proizvodjac" type="xs:string"/>
+            <xs:element name="Serija" type="xs:string"/>
+            <xs:element name="Datum" type="xs:date"/>
+            <xs:element name="Zdravstvena_ustanova" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TKovid_test">
+        <xs:sequence>
+            <xs:element name="Naziv_testa">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="PCR"/>
+                        <xs:enumeration value="Antigen"/>
+                        <xs:enumeration value="IgG"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="Vrsta_uzorka" type="xs:string"/>
+            <xs:element name="Proizvodjac_testa" type="xs:string"/>
+            <xs:element name="Datum_i_vreme_uzorkovanja" type="xs:dateTime"/>
+            <xs:element name="Rezultat">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="Pozitivan"/>
+                        <xs:enumeration value="Negativan"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="Laboratorija" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
 </xs:schema>

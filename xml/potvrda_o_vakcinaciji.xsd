@@ -43,6 +43,7 @@
                     </xs:simpleType>
                 </xs:element>
                 <xs:element name="Datum" type="xs:date"/>
+                <xs:element name="QR_kod" type="xs:string"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

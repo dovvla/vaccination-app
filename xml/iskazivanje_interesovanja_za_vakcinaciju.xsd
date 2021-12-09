@@ -6,6 +6,7 @@
     <xs:element name="Obrazac_interesovanja">
         <xs:complexType>
             <xs:sequence>
+                <xs:element name="ID" type="xs:positiveInteger"/>
                 <xs:element name="Licni_podaci">
                     <xs:complexType>
                         <xs:sequence>
