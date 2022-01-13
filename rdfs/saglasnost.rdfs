@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xml:lang="en"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+    <rdfs:Class rdf:ID="Saglasnost">
+        <rdfs:label>Saglasnost</rdfs:label>
+        <rdfs:comment>Predstavlja saglasnost za vakcinaciju gradjanina</rdfs:comment>
+    </rdfs:Class>
+    
+    <rdfs:Property rdf:ID="datum">
+        <rdfs:domain rdf:resource="#Saglasnost"/>
+        <rdfs:range rdf:resource="rdfs:Literal"/>
+    </rdfs:Property>
+
+    <rdfs:Property rdf:ID="pripada">
+        <rdfs:domain rdf:resource="#Saglasnost"/>
+        <rdfs:range rdf:resource="rdfs:Literal"/>
+    </rdfs:Property>
+
+    <rdfs:Property rdf:ID="saglasnost">
+        <rdfs:domain rdf:resource="#Saglasnost"/>
+        <rdfs:range rdf:resource="rdfs:Literal"/>
+    </rdfs:Property>
+    
+    
+</rdf:RDF>

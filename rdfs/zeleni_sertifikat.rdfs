@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xml:lang="en"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">   
+
+    <rdfs:Class rdf:ID="ZeleniSertifikat">
+        <rdfs:label>ZeleniSertifikat</rdfs:label>
+        <rdfs:comment>Predstavlja zeleni sertifikat koji validira vakcinaciju gradjanina</rdfs:comment>
+    </rdfs:Class>   
+    
+    <rdfs:Property rdf:ID="datum">
+        <rdfs:domain rdf:resource="#ZeleniSertifikat"/>
+        <rdfs:range rdf:resource="rdfs:Literal"/>
+    </rdfs:Property>
+
+    <rdfs:Property rdf:ID="pripada">
+        <rdfs:domain rdf:resource="#ZeleniSertifikat"/>
+        <rdfs:range rdf:resource="rdfs:Literal"/>
+    </rdfs:Property>
+
+    <rdfs:Property rdf:ID="broj_doza">
+        <rdfs:domain rdf:resource="#ZeleniSertifikat"/>
+        <rdfs:range rdf:resource="rdfs:Literal"/>
+    </rdfs:Property>
+    
+    
+</rdf:RDF>

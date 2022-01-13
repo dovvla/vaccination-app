@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xml:lang="en"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+    <rdfs:Class rdf:ID="Zahtev">
+        <rdfs:label>Zahtev</rdfs:label>
+        <rdfs:comment>Predstavlja zahtev za izdavanje digitalnog zelenog sertifikata gradjaninu</rdfs:comment>
+    </rdfs:Class>
+    
+    <rdfs:Property rdf:ID="datum">
+        <rdfs:domain rdf:resource="#Zahtev"/>
+        <rdfs:range rdf:resource="rdfs:Literal"/>
+    </rdfs:Property>
+
+    <rdfs:Property rdf:ID="podneo">
+        <rdfs:domain rdf:resource="#Zahtev"/>
+        <rdfs:range rdf:resource="rdfs:Literal"/>
+    </rdfs:Property>
+    
+    <rdfs:Property rdf:ID="mesto">
+        <rdfs:domain rdf:resource="#Zahtev"/>
+        <rdfs:range rdf:resource="rdfs:Literal"/>
+    </rdfs:Property>
+
+</rdf:RDF>

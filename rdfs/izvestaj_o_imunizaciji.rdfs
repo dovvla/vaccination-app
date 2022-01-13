@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xml:lang="en"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+    <rdfs:Class rdf:ID="Izvestaj">
+        <rdfs:label>Izvestaj</rdfs:label>
+        <rdfs:comment>Predstavlja izvestaj o raznim podacima vakcinacije</rdfs:comment>
+    </rdfs:Class>
+    
+    <rdfs:Property rdf:ID="datum_zahtevan">
+        <rdfs:domain rdf:resource="#Izvestaj"/>
+        <rdfs:range rdf:resource="rdfs:Literal"/>
+    </rdfs:Property>
+
+    <rdfs:Property rdf:ID="datum_od">
+        <rdfs:domain rdf:resource="#Izvestaj"/>
+        <rdfs:range rdf:resource="rdfs:Literal"/>
+    </rdfs:Property>
+
+    <rdfs:Property rdf:ID="datum_do">
+        <rdfs:domain rdf:resource="#Izvestaj"/>
+        <rdfs:range rdf:resource="rdfs:Literal"/>
+    </rdfs:Property>
+    
+    
+</rdf:RDF>
