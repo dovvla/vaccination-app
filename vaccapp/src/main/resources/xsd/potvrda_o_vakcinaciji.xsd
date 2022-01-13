@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="http://tim.robot/potvrda_o_vakcinaciji"
+    xmlns:pov="http://tim.robot/potvrda_o_vakcinaciji">
+    <xs:element name="Potvrda">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Sifra_potvrde" type="xs:string"/>
+                <xs:element name="Podaci_pacijenta">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Ime" type="xs:string"/>
+                            <xs:element name="Prezime" type="xs:string"/>
+                            <xs:element name="Pol">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="Musko"/>
+                                        <xs:enumeration value="Zensko"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="JMBG">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:pattern value="\d{13}"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element maxOccurs="2" type="pov:TDoza_vakcine" name="Doza_vakcine"/>
+                <xs:element name="Zdravstvena_ustanova" type="xs:string"/>
+                <xs:element name="Naziv_vakcine">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="Pfizer"/>
+                            <xs:enumeration value="Sputnik"/>
+                            <xs:enumeration value="Sinopharm"/>
+                            <xs:enumeration value="AZ"/>
+                            <xs:enumeration value="Moderna"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="Datum" type="xs:date"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="TDoza_vakcine">
+        <xs:sequence>
+            <xs:element name="Datum_davanja" type="xs:date"/>
+            <xs:element name="Serija" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
