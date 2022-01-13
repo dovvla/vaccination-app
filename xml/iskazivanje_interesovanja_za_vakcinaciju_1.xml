@@ -2,6 +2,7 @@
 <Obrazac_interesovanja xmlns="http://tim.robot/iskazivanje_interesovanja_za_vakcinaciju"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:schemaLocation="http://tim.robot/iskazivanje_interesovanja_za_vakcinaciju iskazivanje_interesovanja_za_vakcinaciju.xsd">
+    <ID>123456789</ID>
     <Licni_podaci>
         <Drzavljanstvo>RS</Drzavljanstvo>
         <JMBG>0303999800092</JMBG>

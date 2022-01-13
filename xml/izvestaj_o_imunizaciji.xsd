@@ -14,26 +14,26 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-                <xs:element name="Podnetih_interesovanja_imunizacije" type="xs:positiveInteger"/>
-                <xs:element name="Zahtevi_za_zeleni_sertifikat" type="xs:positiveInteger"/>
-                <xs:element name="Izdatih_zelenih_sertifikata" type="xs:positiveInteger"/>
+                <xs:element name="Podnetih_interesovanja_imunizacije" type="xs:nonNegativeInteger"/>
+                <xs:element name="Zahtevi_za_zeleni_sertifikat" type="xs:nonNegativeInteger"/>
+                <xs:element name="Izdatih_zelenih_sertifikata" type="xs:nonNegativeInteger"/>
                 <xs:element name="Podaci_o_datim_dozama">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="Ukupno_doza" type="xs:positiveInteger"/>
-                            <xs:element name="Broj_date_prve_doze" type="xs:positiveInteger"/>
-                            <xs:element name="Broj_date_druge_doze" type="xs:positiveInteger"/>
-                            <xs:element name="Broj_date_trece_doze" type="xs:positiveInteger"/>
+                            <xs:element name="Ukupno_doza" type="xs:nonNegativeInteger"/>
+                            <xs:element name="Broj_date_prve_doze" type="xs:nonNegativeInteger"/>
+                            <xs:element name="Broj_date_druge_doze" type="xs:nonNegativeInteger"/>
+                            <xs:element name="Broj_date_trece_doze" type="xs:nonNegativeInteger"/>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
                 <xs:element name="Raspodela_po_proizvodjacima">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="Broj_pfizer_vakcina" type="xs:positiveInteger"/>
-                            <xs:element name="Broj_sinopharm_vakcina" type="xs:positiveInteger"/>
-                            <xs:element name="Broj_sputnik_vakcina" type="xs:positiveInteger"/>
-                            <xs:element name="Broj_az_vakcina" type="xs:positiveInteger"/>
+                            <xs:element name="Broj_pfizer_vakcina" type="xs:nonNegativeInteger"/>
+                            <xs:element name="Broj_sinopharm_vakcina" type="xs:nonNegativeInteger"/>
+                            <xs:element name="Broj_sputnik_vakcina" type="xs:nonNegativeInteger"/>
+                            <xs:element name="Broj_az_vakcina" type="xs:nonNegativeInteger"/>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
