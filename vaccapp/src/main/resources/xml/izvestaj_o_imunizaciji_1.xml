@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Izvestaj xmlns="http://tim.robot/izvestaj_o_imunizaciji"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://tim.robot/izvestaj_o_imunizaciji izvestaj_o_imunizaciji.xsd">
+    <Period_izvestaja>
+        <Datum_od>2021-08-04</Datum_od>
+        <Datum_do>2021-09-04</Datum_do>
+    </Period_izvestaja>
+    <Podnetih_interesovanja_imunizacije>1000</Podnetih_interesovanja_imunizacije>
+    <Zahtevi_za_zeleni_sertifikat>50</Zahtevi_za_zeleni_sertifikat>
+    <Izdatih_zelenih_sertifikata>50</Izdatih_zelenih_sertifikata>
+    <Podaci_o_datim_dozama>
+        <Ukupno_doza>150</Ukupno_doza>
+        <Broj_date_prve_doze>50</Broj_date_prve_doze>
+        <Broj_date_druge_doze>50</Broj_date_druge_doze>
+        <Broj_date_trece_doze>50</Broj_date_trece_doze>
+    </Podaci_o_datim_dozama>
+    <Raspodela_po_proizvodjacima>
+        <Broj_pfizer_vakcina>20</Broj_pfizer_vakcina>
+        <Broj_sinopharm_vakcina>100</Broj_sinopharm_vakcina>
+        <Broj_sputnik_vakcina>20</Broj_sputnik_vakcina>
+        <Broj_az_vakcina>10</Broj_az_vakcina>
+    </Raspodela_po_proizvodjacima>
+    <Datum>2021-09-05</Datum>
+</Izvestaj>

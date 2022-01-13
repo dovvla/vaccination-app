@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Obrazac_interesovanja xmlns="http://tim.robot/iskazivanje_interesovanja_za_vakcinaciju"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://tim.robot/iskazivanje_interesovanja_za_vakcinaciju iskazivanje_interesovanja_za_vakcinaciju.xsd">
+    <ID>123456789</ID>
+    <Licni_podaci>
+        <Drzavljanstvo>RS</Drzavljanstvo>
+        <JMBG>0303999800092</JMBG>
+        <Ime>Nikola</Ime>
+        <Prezime>Nikolic</Prezime>
+        <Imejl>nikola.nikolic@gmail.com</Imejl>
+        <Broj_mobilnog_telefona>069696969</Broj_mobilnog_telefona>
+        <Broj_fiksnog_telefona>0111234567</Broj_fiksnog_telefona>
+    </Licni_podaci>
+    <Zeljena_lokacija_vakcinacije>Vakcinski punkt Novi Sad</Zeljena_lokacija_vakcinacije>
+    <Zeljena_vakcina>Pfizer</Zeljena_vakcina>
+    <Davalac_krvi>Ne</Davalac_krvi>
+    <Datum>2021-05-04</Datum>
+</Obrazac_interesovanja>

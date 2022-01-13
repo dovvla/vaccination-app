@@ -8,7 +8,10 @@ import javax.xml.transform.OutputKeys;
 
 import com.timrobot.vaccapp.utility.ExistAuthenticationUtilities;
 import com.timrobot.vaccapp.utility.ExistAuthenticationUtilities.ConnectionProperties;
+import com.timrobot.vaccapp.utility.XMLMapper;
+import org.apache.xerces.parsers.XMLParser;
 import org.exist.xmldb.EXistResource;
+import org.springframework.stereotype.Component;
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.Collection;
 import org.xmldb.api.base.Database;
@@ -18,32 +21,38 @@ import org.xmldb.api.modules.XMLResource;
 
 public class DatabaseConnection {
 
-    public static boolean storeXML(String collectionId,String documentId,String contextPath,Object objectToStore) {
-
+    public static <T> boolean storeInXMLDB(String collectionId, String documentId, Class<?> clazz, T objectToStore, String xsdFileName) {
+        // a collection of Resources stored within an XML database
         Collection col = null;
         XMLResource res = null;
+        OutputStream os = new ByteArrayOutputStream();
+
         try {
-            ExistAuthenticationUtilities.ConnectionProperties conn=ExistAuthenticationUtilities.loadProperties();
+            ExistAuthenticationUtilities.ConnectionProperties conn = ExistAuthenticationUtilities.loadProperties();
+
+            // initialize database driver
             Class<?> cl = Class.forName(conn.driver);
+
+            // encapsulation of the database driver functionality
             Database database = (Database) cl.newInstance();
             database.setProperty("create-database", "true");
+
+            // entry point for the API which enables you to get the Collection reference
             DatabaseManager.registerDatabase(database);
 
-            OutputStream os = new ByteArrayOutputStream();
-
-            col = getOrCreateCollection(collectionId,0,conn);
+            col = getOrCreateCollection(collectionId, conn);
             res = (XMLResource) col.createResource(documentId, XMLResource.RESOURCE_TYPE);
 
-            XMLParser.marshal(contextPath, "",objectToStore,os,false);
+            XMLMapper.marshal(clazz, os, xsdFileName, objectToStore);
 
+            // link the stream to the XML resource
             res.setContent(os);
             col.storeResource(res);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | XMLDBException | IOException e) {
             return false;
-        }finally {
-
+        } finally {
             //don't forget to cleanup
-            if(res != null) {
+            if (res != null) {
                 try {
                     ((EXistResource)res).freeResources();
                 } catch (XMLDBException xe) {
@@ -51,7 +60,7 @@ public class DatabaseConnection {
                 }
             }
 
-            if(col != null) {
+            if (col != null) {
                 try {
                     col.close();
                 } catch (XMLDBException xe) {
@@ -62,13 +71,14 @@ public class DatabaseConnection {
         return true;
     }
 
-    public static Object retriveXML(String collectionId,String documentId,String contextPath) {
-
+    public static <T> T retrieveFromXMLDB(String collectionId, String documentId, Class<?> clazz, String xsdFileName) {
         Collection col = null;
         XMLResource res = null;
 
         try {
-            ConnectionProperties conn=ExistAuthenticationUtilities.loadProperties();
+            ExistAuthenticationUtilities.ConnectionProperties conn = ExistAuthenticationUtilities.loadProperties();
+
+            // initialize database driver
             Class<?> cl = Class.forName(conn.driver);
 
             Database database = (Database) cl.newInstance();
@@ -78,17 +88,18 @@ public class DatabaseConnection {
 
             col = DatabaseManager.getCollection(conn.uri + collectionId);
             col.setProperty(OutputKeys.INDENT, "yes");
-            res = (XMLResource)col.getResource(documentId);
 
-            if(res == null) {
+            res = (XMLResource) col.getResource(documentId);
+
+            if (res == null) {
                 System.out.println("[WARNING] Document '" + documentId + "' can not be found!");
             } else {
-                return XMLParser.unmarshal(contextPath, "","", false,true,res);
+                return XMLMapper.<T>unmarshal(clazz, res.getContentAsDOM(), xsdFileName);
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | XMLDBException | IOException e) {
             e.printStackTrace();
-        }finally {
-            if(res != null) {
+        } finally {
+            if (res != null) {
                 try {
                     ((EXistResource)res).freeResources();
                 } catch (XMLDBException xe) {
@@ -96,7 +107,7 @@ public class DatabaseConnection {
                 }
             }
 
-            if(col != null) {
+            if (col != null) {
                 try {
                     col.close();
                 } catch (XMLDBException xe) {
@@ -104,8 +115,14 @@ public class DatabaseConnection {
                 }
             }
         }
+
         return null;
     }
+
+    private static Collection getOrCreateCollection(String collectionUri, ConnectionProperties conn) throws XMLDBException {
+        return getOrCreateCollection(collectionUri, 0, conn);
+    }
+
     private static Collection getOrCreateCollection(String collectionUri, int pathSegmentOffset,ConnectionProperties conn) throws XMLDBException {
 
         Collection col = DatabaseManager.getCollection(conn.uri + collectionUri, conn.user, conn.password);
