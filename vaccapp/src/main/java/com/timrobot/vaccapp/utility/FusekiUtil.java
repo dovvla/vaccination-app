@@ -21,6 +21,8 @@ public class FusekiUtil {
             metadataExtractor = new MetadataExtractor();
 
             System.out.println("[INFO] Extracting metadata from RDFa attributes...");
+            File rdfFile = new File(rdfFilePath);
+            rdfFile.createNewFile();
             metadataExtractor.extractMetadata(
                     new FileInputStream(new File(xmlFilePath)),
                     new FileOutputStream(new File(rdfFilePath)));

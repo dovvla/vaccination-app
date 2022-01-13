@@ -9,8 +9,24 @@
                 <xs:element name="Period_izvestaja">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="Datum_od" type="xs:date"/>
-                            <xs:element name="Datum_do" type="xs:date"/>
+                            <xs:element name="Datum_od">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:date">
+                                            <xs:attribute name="property"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Datum_do">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:date">
+                                            <xs:attribute name="property"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
@@ -37,7 +53,15 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-                <xs:element name="Datum" type="xs:date"/>
+                <xs:element name="Datum">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:date">
+                                <xs:attribute name="property"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

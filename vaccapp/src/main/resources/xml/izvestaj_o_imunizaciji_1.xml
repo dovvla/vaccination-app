@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Izvestaj xmlns="http://tim.robot/izvestaj_o_imunizaciji"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://tim.robot/izvestaj_o_imunizaciji izvestaj_o_imunizaciji.xsd">
+ xsi:schemaLocation="http://tim.robot/izvestaj_o_imunizaciji izvestaj_o_imunizaciji.xsd"
+ xmlns:pred="http://tim.robot/rdf/predicate">
     <Period_izvestaja>
-        <Datum_od>2021-08-04</Datum_od>
-        <Datum_do>2021-09-04</Datum_do>
+        <Datum_od property="pred:datum_od">2021-08-04</Datum_od>
+        <Datum_do property="pred:datum_do">2021-09-04</Datum_do>
     </Period_izvestaja>
     <Podnetih_interesovanja_imunizacije>1000</Podnetih_interesovanja_imunizacije>
     <Zahtevi_za_zeleni_sertifikat>50</Zahtevi_za_zeleni_sertifikat>
@@ -21,5 +22,5 @@
         <Broj_sputnik_vakcina>20</Broj_sputnik_vakcina>
         <Broj_az_vakcina>10</Broj_az_vakcina>
     </Raspodela_po_proizvodjacima>
-    <Datum>2021-09-05</Datum>
+    <Datum property="pred:datum_zahtevan">2021-09-05</Datum>
 </Izvestaj>
