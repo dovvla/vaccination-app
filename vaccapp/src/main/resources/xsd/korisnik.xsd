@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+           targetNamespace="http://tim.robot/korisnik"
+           xmlns:kor="http://tim.robot/korisnik">
+
+    <xs:element name="Korisnik">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Drzavljanstvo" type="xs:string"/>
+                <xs:element name="Jmbg" type="xs:string"/>
+                <xs:element name="Broj_pasosa" type="xs:string"/>
+                <xs:element name="Ime" type="xs:string"/>
+                <xs:element name="Prezime" type="xs:string"/>
+                <xs:element name="Ime_roditelja" type="xs:string"/>
+                <xs:element name="Pol">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="Muski"/>
+                            <xs:enumeration value="Zenski"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="Datum_rodjenja" type="xs:date"/>
+                <xs:element name="Mesto_rodjenja" type="xs:string"/>
+                <xs:element name="Adresa" type="xs:string"/>
+                <xs:element name="Mesto" type="xs:string"/>
+                <xs:element name="Grad" type="xs:string"/>
+                <xs:element name="Fiksni_telefon" type="xs:string"/>
+                <xs:element name="Mobilni_telefon" type="xs:string"/>
+                <xs:element name="Email" type="xs:string"/>
+                <xs:element name="Sifra" type="xs:string"/>
+                <xs:element name="Rola">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="Gradjanin"/>
+                            <xs:enumeration value="Sluzbenik"/>
+                            <xs:enumeration value="Zdravstveni_radnik"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

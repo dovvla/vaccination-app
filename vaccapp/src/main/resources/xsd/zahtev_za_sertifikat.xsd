@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
-    targetNamespace="http://tim.robot/zahtev_za_sertifikat"
-    xmlns:zzs="http://tim.robot/zahtev_za_sertifikat">
+           targetNamespace="http://tim.robot/zahtev_za_sertifikat"
+           xmlns:zzs="http://tim.robot/zahtev_za_sertifikat">
 
     <xs:element name="Zahtev">
         <xs:complexType>
@@ -40,6 +40,16 @@
                 <xs:element name="Razlog_za_podnosenje" type="xs:string"/>
                 <xs:element name="Mesto" type="xs:string"/>
                 <xs:element name="Datum" type="xs:date"/>
+                <xs:element default="Neobradjen" name="Status">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="Prihvacen"/>
+                            <xs:enumeration value="Odbijen"/>
+                            <xs:enumeration value="Neobradjen"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element nillable="true" minOccurs="0" name="Razlog_za_odbijanje" type="xs:string"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

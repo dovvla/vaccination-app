@@ -26,7 +26,7 @@ public class XMLMapper {
             Unmarshaller unmarshaller = context.createUnmarshaller();
 
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema = schemaFactory.newSchema(new File("./src/main/resources/xsd/" + xsdFileName));
+            Schema schema = schemaFactory.newSchema(new File("src/main/resources/xsd/" + xsdFileName));
             unmarshaller.setSchema(schema);
             unmarshaller.setEventHandler(new MyValidationEventHandler());
 
@@ -49,7 +49,7 @@ public class XMLMapper {
             Marshaller marshaller = context.createMarshaller();
 
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema = schemaFactory.newSchema(new File("./src/main/resources/xsd/" + xsdFileName));
+            Schema schema = schemaFactory.newSchema(new File("src/main/resources/xsd/" + xsdFileName));
             marshaller.setSchema(schema);
             marshaller.setEventHandler(new MyValidationEventHandler());
 
