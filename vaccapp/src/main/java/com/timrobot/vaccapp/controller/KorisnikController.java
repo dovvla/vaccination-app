@@ -1,15 +1,13 @@
 package com.timrobot.vaccapp.controller;
 
 import com.timrobot.vaccapp.exceptions.ResourceAlreadyExistsException;
+import com.timrobot.vaccapp.models.EntityList;
 import com.timrobot.vaccapp.models.Korisnik;
 import com.timrobot.vaccapp.services.KorisnikService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/korisnici")
@@ -26,6 +24,11 @@ public class KorisnikController {
         } catch (ResourceAlreadyExistsException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
+    }
+
+    @GetMapping(value = "", produces = MediaType.APPLICATION_XML_VALUE)
+    public EntityList<Korisnik> getAllKorisnici() {
+        return korisnikService.getAll();
     }
 
 }

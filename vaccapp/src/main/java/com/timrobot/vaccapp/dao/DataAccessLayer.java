@@ -4,6 +4,7 @@ import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,11 +29,7 @@ public class DataAccessLayer {
         return Optional.of(resourceContent);
     }
 
-
-//    public Optional<String> getSearchQuery(String folderId, String documentId) {
-//        String resourceContent = dbConnection.getOneSearchQuery(folderId, documentId);
-//        if (resourceContent.equals(""))
-//            return Optional.empty();
-//        return Optional.of(resourceContent);
-//    }
+    public List<String> getAllDocuments(String folderId) {
+        return DatabaseConnection.retrieveAllFromXMLDB(folderId);
+    }
 }

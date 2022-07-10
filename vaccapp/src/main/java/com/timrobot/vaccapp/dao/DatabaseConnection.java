@@ -3,6 +3,8 @@ package com.timrobot.vaccapp.dao;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -11,16 +13,16 @@ import javax.xml.transform.OutputKeys;
 import com.timrobot.vaccapp.utility.ExistAuthenticationUtilities;
 import com.timrobot.vaccapp.utility.ExistAuthenticationUtilities.ConnectionProperties;
 import com.timrobot.vaccapp.utility.XMLMapper;
+import org.apache.jena.base.Sys;
 import org.apache.xerces.parsers.XMLParser;
 import org.exist.xmldb.EXistResource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.xmldb.api.DatabaseManager;
-import org.xmldb.api.base.Collection;
-import org.xmldb.api.base.Database;
-import org.xmldb.api.base.XMLDBException;
+import org.xmldb.api.base.*;
 import org.xmldb.api.modules.CollectionManagementService;
 import org.xmldb.api.modules.XMLResource;
+import org.xmldb.api.modules.XPathQueryService;
 
 @Component
 public class DatabaseConnection {
@@ -177,6 +179,41 @@ public class DatabaseConnection {
         }
         return responseContent;
     }
+
+    public static ArrayList<String> retrieveAllFromXMLDB(String folderId) {
+        Collection col = null;
+        ArrayList<String> retval = new ArrayList<>();
+        try {
+            ExistAuthenticationUtilities.ConnectionProperties conn = ExistAuthenticationUtilities.loadProperties();
+
+            Class<?> cl = Class.forName(conn.driver);
+            Database database = (Database) cl.newInstance();
+            database.setProperty("create-database", "true");
+            DatabaseManager.registerDatabase(database);
+            col = DatabaseManager.getCollection(conn.uri + folderId, conn.user, conn.password);
+            col.setProperty(OutputKeys.INDENT, "no");
+
+            for (String resource : col.listResources()) {
+                try {
+                    retval.add((String) col.getResource(resource).getContent());
+                } catch (Exception ignored) {
+
+                }
+            }
+
+        } catch (Exception ignored) {
+        } finally {
+            if (col != null) {
+                try {
+                    col.close();
+                } catch (XMLDBException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return retval;
+    }
+
 
     private static Collection getOrCreateCollection(String collectionUri, ConnectionProperties conn) throws XMLDBException {
         return getOrCreateCollection(collectionUri, 0, conn);
