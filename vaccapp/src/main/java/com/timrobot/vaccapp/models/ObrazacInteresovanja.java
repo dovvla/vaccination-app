@@ -19,9 +19,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType&gt;
  *   &lt;complexContent&gt;
@@ -104,16 +104,14 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "licniPodaci",
-    "zeljenaLokacijaVakcinacije",
-    "zeljenaVakcina",
-    "davalacKrvi",
-    "datum"
+        "licniPodaci",
+        "zeljenaLokacijaVakcinacije",
+        "zeljenaVakcina",
+        "davalacKrvi",
+        "datum"
 })
 @XmlRootElement(name = "Obrazac_interesovanja", namespace = "http://tim.robot/iskazivanje_interesovanja_za_vakcinaciju")
 public class ObrazacInteresovanja {
@@ -130,13 +128,22 @@ public class ObrazacInteresovanja {
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar datum;
 
+    @Override
+    public String toString() {
+        return "ObrazacInteresovanja{" +
+               "licniPodaci=" + licniPodaci +
+               ", zeljenaLokacijaVakcinacije='" + zeljenaLokacijaVakcinacije + '\'' +
+               ", zeljenaVakcina='" + zeljenaVakcina + '\'' +
+               ", davalacKrvi='" + davalacKrvi + '\'' +
+               ", datum=" + datum +
+               '}';
+    }
+
     /**
      * Gets the value of the licniPodaci property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ObrazacInteresovanja.LicniPodaci }
-     *     
+     *
+     * @return possible object is
+     * {@link ObrazacInteresovanja.LicniPodaci }
      */
     public ObrazacInteresovanja.LicniPodaci getLicniPodaci() {
         return licniPodaci;
@@ -144,11 +151,9 @@ public class ObrazacInteresovanja {
 
     /**
      * Sets the value of the licniPodaci property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ObrazacInteresovanja.LicniPodaci }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ObrazacInteresovanja.LicniPodaci }
      */
     public void setLicniPodaci(ObrazacInteresovanja.LicniPodaci value) {
         this.licniPodaci = value;
@@ -156,11 +161,9 @@ public class ObrazacInteresovanja {
 
     /**
      * Gets the value of the zeljenaLokacijaVakcinacije property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getZeljenaLokacijaVakcinacije() {
         return zeljenaLokacijaVakcinacije;
@@ -168,11 +171,9 @@ public class ObrazacInteresovanja {
 
     /**
      * Sets the value of the zeljenaLokacijaVakcinacije property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setZeljenaLokacijaVakcinacije(String value) {
         this.zeljenaLokacijaVakcinacije = value;
@@ -180,11 +181,9 @@ public class ObrazacInteresovanja {
 
     /**
      * Gets the value of the zeljenaVakcina property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getZeljenaVakcina() {
         return zeljenaVakcina;
@@ -192,11 +191,9 @@ public class ObrazacInteresovanja {
 
     /**
      * Sets the value of the zeljenaVakcina property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setZeljenaVakcina(String value) {
         this.zeljenaVakcina = value;
@@ -204,11 +201,9 @@ public class ObrazacInteresovanja {
 
     /**
      * Gets the value of the davalacKrvi property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getDavalacKrvi() {
         return davalacKrvi;
@@ -216,11 +211,9 @@ public class ObrazacInteresovanja {
 
     /**
      * Sets the value of the davalacKrvi property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setDavalacKrvi(String value) {
         this.davalacKrvi = value;
@@ -228,11 +221,9 @@ public class ObrazacInteresovanja {
 
     /**
      * Gets the value of the datum property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     * {@link XMLGregorianCalendar }
      */
     public XMLGregorianCalendar getDatum() {
         return datum;
@@ -240,11 +231,9 @@ public class ObrazacInteresovanja {
 
     /**
      * Sets the value of the datum property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link XMLGregorianCalendar }
      */
     public void setDatum(XMLGregorianCalendar value) {
         this.datum = value;
@@ -253,9 +242,9 @@ public class ObrazacInteresovanja {
 
     /**
      * <p>Java class for anonymous complex type.
-     * 
+     *
      * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
+     *
      * <pre>
      * &lt;complexType&gt;
      *   &lt;complexContent&gt;
@@ -305,20 +294,30 @@ public class ObrazacInteresovanja {
      *   &lt;/complexContent&gt;
      * &lt;/complexType&gt;
      * </pre>
-     * 
-     * 
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "drzavljanstvo",
-        "jmbg",
-        "ime",
-        "prezime",
-        "imejl",
-        "brojMobilnogTelefona",
-        "brojFiksnogTelefona"
+            "drzavljanstvo",
+            "jmbg",
+            "ime",
+            "prezime",
+            "imejl",
+            "brojMobilnogTelefona",
+            "brojFiksnogTelefona"
     })
     public static class LicniPodaci {
+        @Override
+        public String toString() {
+            return "LicniPodaci{" +
+                   "drzavljanstvo='" + drzavljanstvo + '\'' +
+                   ", jmbg='" + jmbg + '\'' +
+                   ", ime='" + ime + '\'' +
+                   ", prezime='" + prezime + '\'' +
+                   ", imejl='" + imejl + '\'' +
+                   ", brojMobilnogTelefona='" + brojMobilnogTelefona + '\'' +
+                   ", brojFiksnogTelefona='" + brojFiksnogTelefona + '\'' +
+                   '}';
+        }
 
         @XmlElement(name = "Drzavljanstvo", namespace = "http://tim.robot/iskazivanje_interesovanja_za_vakcinaciju", required = true)
         protected String drzavljanstvo;
@@ -337,11 +336,9 @@ public class ObrazacInteresovanja {
 
         /**
          * Gets the value of the drzavljanstvo property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         *
+         * @return possible object is
+         * {@link String }
          */
         public String getDrzavljanstvo() {
             return drzavljanstvo;
@@ -349,11 +346,9 @@ public class ObrazacInteresovanja {
 
         /**
          * Sets the value of the drzavljanstvo property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
+         *
+         * @param value allowed object is
+         *              {@link String }
          */
         public void setDrzavljanstvo(String value) {
             this.drzavljanstvo = value;
@@ -361,11 +356,9 @@ public class ObrazacInteresovanja {
 
         /**
          * Gets the value of the jmbg property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         *
+         * @return possible object is
+         * {@link String }
          */
         public String getJMBG() {
             return jmbg;
@@ -373,11 +366,9 @@ public class ObrazacInteresovanja {
 
         /**
          * Sets the value of the jmbg property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
+         *
+         * @param value allowed object is
+         *              {@link String }
          */
         public void setJMBG(String value) {
             this.jmbg = value;
@@ -385,11 +376,9 @@ public class ObrazacInteresovanja {
 
         /**
          * Gets the value of the ime property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         *
+         * @return possible object is
+         * {@link String }
          */
         public String getIme() {
             return ime;
@@ -397,11 +386,9 @@ public class ObrazacInteresovanja {
 
         /**
          * Sets the value of the ime property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
+         *
+         * @param value allowed object is
+         *              {@link String }
          */
         public void setIme(String value) {
             this.ime = value;
@@ -409,11 +396,9 @@ public class ObrazacInteresovanja {
 
         /**
          * Gets the value of the prezime property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         *
+         * @return possible object is
+         * {@link String }
          */
         public String getPrezime() {
             return prezime;
@@ -421,11 +406,9 @@ public class ObrazacInteresovanja {
 
         /**
          * Sets the value of the prezime property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
+         *
+         * @param value allowed object is
+         *              {@link String }
          */
         public void setPrezime(String value) {
             this.prezime = value;
@@ -433,11 +416,9 @@ public class ObrazacInteresovanja {
 
         /**
          * Gets the value of the imejl property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         *
+         * @return possible object is
+         * {@link String }
          */
         public String getImejl() {
             return imejl;
@@ -445,11 +426,9 @@ public class ObrazacInteresovanja {
 
         /**
          * Sets the value of the imejl property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
+         *
+         * @param value allowed object is
+         *              {@link String }
          */
         public void setImejl(String value) {
             this.imejl = value;
@@ -457,11 +436,9 @@ public class ObrazacInteresovanja {
 
         /**
          * Gets the value of the brojMobilnogTelefona property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         *
+         * @return possible object is
+         * {@link String }
          */
         public String getBrojMobilnogTelefona() {
             return brojMobilnogTelefona;
@@ -469,11 +446,9 @@ public class ObrazacInteresovanja {
 
         /**
          * Sets the value of the brojMobilnogTelefona property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
+         *
+         * @param value allowed object is
+         *              {@link String }
          */
         public void setBrojMobilnogTelefona(String value) {
             this.brojMobilnogTelefona = value;
@@ -481,11 +456,9 @@ public class ObrazacInteresovanja {
 
         /**
          * Gets the value of the brojFiksnogTelefona property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         *
+         * @return possible object is
+         * {@link String }
          */
         public String getBrojFiksnogTelefona() {
             return brojFiksnogTelefona;
@@ -493,11 +466,9 @@ public class ObrazacInteresovanja {
 
         /**
          * Sets the value of the brojFiksnogTelefona property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
+         *
+         * @param value allowed object is
+         *              {@link String }
          */
         public void setBrojFiksnogTelefona(String value) {
             this.brojFiksnogTelefona = value;

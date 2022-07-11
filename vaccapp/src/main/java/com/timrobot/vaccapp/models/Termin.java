@@ -19,9 +19,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType&gt;
  *   &lt;complexContent&gt;
@@ -35,14 +35,12 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "datumVreme",
-    "jmbg",
-    "vakcina"
+        "datumVreme",
+        "jmbg",
+        "vakcina"
 })
 @XmlRootElement(name = "Termin", namespace = "http://www.ftn.uns.ac.rs/termin")
 public class Termin {
@@ -55,13 +53,20 @@ public class Termin {
     @XmlElement(namespace = "http://www.ftn.uns.ac.rs/termin", required = true)
     protected String vakcina;
 
+    @Override
+    public String toString() {
+        return "Termin{" +
+               "datumVreme=" + datumVreme +
+               ", jmbg='" + jmbg + '\'' +
+               ", vakcina='" + vakcina + '\'' +
+               '}';
+    }
+
     /**
      * Gets the value of the datumVreme property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     * {@link XMLGregorianCalendar }
      */
     public XMLGregorianCalendar getDatumVreme() {
         return datumVreme;
@@ -69,11 +74,9 @@ public class Termin {
 
     /**
      * Sets the value of the datumVreme property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link XMLGregorianCalendar }
      */
     public void setDatumVreme(XMLGregorianCalendar value) {
         this.datumVreme = value;
@@ -81,11 +84,9 @@ public class Termin {
 
     /**
      * Gets the value of the jmbg property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getJmbg() {
         return jmbg;
@@ -93,11 +94,9 @@ public class Termin {
 
     /**
      * Sets the value of the jmbg property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setJmbg(String value) {
         this.jmbg = value;
@@ -105,11 +104,9 @@ public class Termin {
 
     /**
      * Gets the value of the vakcina property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getVakcina() {
         return vakcina;
@@ -117,11 +114,9 @@ public class Termin {
 
     /**
      * Sets the value of the vakcina property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setVakcina(String value) {
         this.vakcina = value;

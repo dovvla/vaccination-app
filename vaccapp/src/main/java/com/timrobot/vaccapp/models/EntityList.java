@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @XmlRootElement
-@XmlSeeAlso({Korisnik.class})
+
+@XmlSeeAlso({Korisnik.class, ObrazacInteresovanja.class})
 public class EntityList<T> {
 
     private List<T> listOfEntityObjects;
