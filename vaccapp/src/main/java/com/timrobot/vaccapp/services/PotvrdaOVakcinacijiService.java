@@ -2,18 +2,16 @@ package com.timrobot.vaccapp.services;
 
 import com.timrobot.vaccapp.dao.DataAccessLayer;
 import com.timrobot.vaccapp.models.EntityList;
+import com.timrobot.vaccapp.models.Potvrda;
 import com.timrobot.vaccapp.models.Zahtev;
 import com.timrobot.vaccapp.utility.XMLMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import javax.xml.datatype.DatatypeConfigurationException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Service
-public class ZahtevZaSertifikatService {
-    private final String folderId = "/db/vacc-app/zahtev-zeleni";
+public class PotvrdaOVakcinacijiService {
+    private final String folderId = "/db/vacc-app/potvrda-o-vakcinaciji";
 
     @Autowired
     private DataAccessLayer dataAccessLayer;
@@ -21,37 +19,36 @@ public class ZahtevZaSertifikatService {
     @Autowired
     private XMLMapper mapper;
 
-    public EntityList<Zahtev> getAll() {
+    public EntityList<Potvrda> getAll() {
 
         return new EntityList<>(dataAccessLayer
                 .getAllDocuments(folderId)
                 .stream()
-                .map(s -> (Zahtev) mapper.convertToObject(s, "zahtev_za_sertifikat", Zahtev.class))
+                .map(s -> (Potvrda) mapper.convertToObject(s, "potvrda_o_vakcinaciji", Zahtev.class))
                 .collect(Collectors.toList()));
     }
 
-    public EntityList<Zahtev> getAllForUser(String id) {
+    public EntityList<Potvrda> getAllForUser(String id) {
         return new EntityList<>(dataAccessLayer
                 .getAllDocuments(folderId)
                 .stream()
-                .map(s -> (Zahtev) mapper.convertToObject(s, "zahtev_za_sertifikat", Zahtev.class))
-                .filter(zahtev -> zahtev
-                        .getPodaciOPodnosiocu()
+                .map(s -> (Potvrda) mapper.convertToObject(s, "potvrda_o_vakcinaciji", Potvrda.class))
+                .filter(potvrda -> potvrda
+                        .getPodaciPacijenta()
                         .getJMBG()
                         .equals(id))
                 .collect(Collectors.toList()));
     }
 
-
-    public Zahtev createZahtev(Zahtev zahtev) throws DatatypeConfigurationException {
-
-
+    public Potvrda createPotvrda(Potvrda potvrda) {
         String documentId = UUID
                                     .randomUUID() + ".xml";
 
-        dataAccessLayer.saveDocument(zahtev, folderId, documentId, Zahtev.class);
+        potvrda.setSifraPotvrde(documentId);
 
-        return zahtev;
+        dataAccessLayer.saveDocument(potvrda, folderId, documentId, Potvrda.class);
+
+        return potvrda;
 
     }
 }
