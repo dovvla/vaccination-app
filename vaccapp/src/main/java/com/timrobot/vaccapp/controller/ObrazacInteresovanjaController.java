@@ -40,7 +40,6 @@ public class ObrazacInteresovanjaController {
                     .badRequest()
                     .body(e.getMessage());
         }
-        
 
     }
 }
