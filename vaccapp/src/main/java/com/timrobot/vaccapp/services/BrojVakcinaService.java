@@ -88,8 +88,10 @@ public class BrojVakcinaService {
             Optional<ObrazacInteresovanja> prioObrazacInteresovanja = obrasci
                     .stream()
                     .filter(obrazacInteresovanja -> obrazacInteresovanja
-                            .getZeljenaVakcina()
-                            .equals(brojVakcina.getVakcina()))
+                                                            .getZeljenaVakcina()
+                                                            .equals(brojVakcina.getVakcina()) || obrazacInteresovanja
+                                                            .getZeljenaVakcina()
+                                                            .equals("Bilo koja"))
                     .filter(obrazacInteresovanja -> termini
                             .stream()
                             .anyMatch(termin -> termin
