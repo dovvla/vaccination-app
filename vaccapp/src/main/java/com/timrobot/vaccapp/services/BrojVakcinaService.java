@@ -100,7 +100,7 @@ public class BrojVakcinaService {
                                             .getLicniPodaci()
                                             .getJMBG())))
                     .min(obrazacInteresovanjaDateComparator);
-            if (brojVakcina.getBroj() > 0 && prioObrazacInteresovanja.isPresent()) {
+            if (brojVakcina.getBroj() > 1 && prioObrazacInteresovanja.isPresent()) {
                 obrazacInteresovanjaService.rezervisiTermin(prioObrazacInteresovanja.get());
                 reservedSomething = true;
             }
@@ -115,7 +115,7 @@ public class BrojVakcinaService {
             for (BrojVakcina brojVakcina : this
                     .getAll()
                     .getItems()) {
-                if (brojVakcina.getBroj() > 0) return brojVakcina.getBroj();
+                if (brojVakcina.getBroj() > 1) return brojVakcina.getBroj();
             }
             return 0;
         }
@@ -126,7 +126,7 @@ public class BrojVakcinaService {
         for (BrojVakcina brojVakcina : this
                 .getAll()
                 .getItems()) {
-            if (brojVakcina.getBroj() > 0) return brojVakcina.getVakcina();
+            if (brojVakcina.getBroj() > 1) return brojVakcina.getVakcina();
         }
         return "";
     }
