@@ -34,18 +34,7 @@ public class SaglasnostController {
                     .badRequest()
                     .body(e.getMessage());
         }
-    }
 
-    @PostMapping(value = "/imunizuj", produces = MediaType.APPLICATION_XML_VALUE, consumes = MediaType.APPLICATION_XML_VALUE)
 
-    public ResponseEntity<?> imunizujGradjanina(@RequestBody Obrazac obrazac) {
-        try {
-            return ResponseEntity.ok(saglasnostService.imunizujGradjanina(obrazac));
-        }
-        catch (Exception e) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(e.getMessage());
-        }
     }
 }
