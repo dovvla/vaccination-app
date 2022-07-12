@@ -55,6 +55,15 @@ public class Termin {
     @XmlElement(namespace = "http://www.ftn.uns.ac.rs/termin", required = true)
     protected String vakcina;
 
+
+    @Override
+    public String toString() {
+        return "Termin{" +
+                "datumVreme=" + datumVreme +
+                ", jmbg='" + jmbg + '\'' +
+                ", vakcina='" + vakcina + '\'' +
+                '}';
+    }
     /**
      * Gets the value of the datumVreme property.
      * 

@@ -174,8 +174,30 @@ public class ObrazacInteresovanjaService {
         emailService.sendSimpleMessage(obrazacInteresovanja
                 .getLicniPodaci()
                 .getImejl(), "Termin vase vakcinacije", termin.toString());
-        brojVakcinaService.izmeniBrojVakcina(obrazacInteresovanja.getZeljenaVakcina(), -1);
+        brojVakcinaService.izmeniBrojVakcina(obrazacInteresovanja.getZeljenaVakcina(), -2);
     }
 
-
+    public void rezervisiNePrviTermin(ObrazacInteresovanja obrazacInteresovanja) throws DatatypeConfigurationException {
+        Termin termin = terminService
+                .getSlobodanTermin()
+                .orElse(new Termin());
+        termin.setVakcina(obrazacInteresovanja.getZeljenaVakcina());
+        termin.setJmbg(obrazacInteresovanja
+                .getLicniPodaci()
+                .getJMBG());
+        int brojDana = 21;
+        if (obrazacInteresovanja
+                .getZeljenaVakcina()
+                .equals("AZ")) {
+            brojDana = 90;
+        }
+        if (termin.getDatumVreme() == null) termin.setDatumVreme(localDateTimeToXMLDate(LocalDateTime
+                .now()
+                .plusDays(brojDana)));
+        terminService.saveXmlFromText(termin);
+        emailService.sendSimpleMessage(obrazacInteresovanja
+                .getLicniPodaci()
+                .getImejl(), "Termin vase vakcinacije", termin.toString());
+        brojVakcinaService.izmeniBrojVakcina(obrazacInteresovanja.getZeljenaVakcina(), 0);
+    }
 }
