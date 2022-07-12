@@ -1,12 +1,19 @@
 package com.timrobot.vaccapp;
 
+import com.timrobot.vaccapp.models.ObrazacInteresovanja;
+import com.timrobot.vaccapp.models.Zahtev;
 import com.timrobot.vaccapp.services.DemoService;
 import com.timrobot.vaccapp.services.DemoServiceImpl;
+import com.timrobot.vaccapp.services.InteresovanjeService;
+import com.timrobot.vaccapp.utility.PdfUtil;
+import com.timrobot.vaccapp.utility.QRcodeUtils;
+import com.timrobot.vaccapp.utility.XHtmlUtil;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import org.apache.xmlrpc.webserver.ServletWebServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,10 +21,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+import javax.xml.datatype.DatatypeConfigurationException;
 import java.util.Properties;
 
 @SpringBootApplication
 public class VaccappApplication {
+
 
     public static void main(String[] args) {
         DemoService demoService = new DemoServiceImpl();
@@ -29,6 +38,21 @@ public class VaccappApplication {
         demoService.RDFExample();
 
         SpringApplication.run(VaccappApplication.class, args);
+
+        //String base64 = QRcodeUtils.writeQRCode("wow");
+        //System.out.println(base64);
+        //System.out.println(QRcodeUtils.readQRCode(base64));
+        try {
+            InteresovanjeService interesovanjeService = new InteresovanjeService();
+            //String xml = interesovanjeService.convertToXML();
+            String xml = interesovanjeService.zahtev();
+            XHtmlUtil.generateHTML(xml, Zahtev.class);
+            PdfUtil pdfUtil = new PdfUtil();
+            pdfUtil.generatePDF(xml, Zahtev.class);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Bean

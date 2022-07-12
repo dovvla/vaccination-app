@@ -2,7 +2,6 @@
 <Zahtev xmlns="http://tim.robot/zahtev_za_sertifikat"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:schemaLocation="http://tim.robot/zahtev_za_sertifikat zahtev_za_sertifikat.xsd">
-    <ID>123456789</ID>
     <Podaci_o_podnosiocu>
         <Ime>Nikola</Ime>
         <Prezime>Nikolic</Prezime>
@@ -14,4 +13,5 @@
     <Razlog_za_podnosenje>Putovanje</Razlog_za_podnosenje>
     <Mesto>Novi Sad</Mesto>
     <Datum>2021-05-04</Datum>
+    <Status>Neobradjen</Status>
 </Zahtev>

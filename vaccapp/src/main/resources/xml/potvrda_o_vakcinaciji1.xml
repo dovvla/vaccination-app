@@ -3,6 +3,7 @@
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:schemaLocation="http://tim.robot/potvrda_o_vakcinaciji potvrda_o_vakcinaciji.xsd">
     <Sifra_potvrde>ecc3e162-2346-45c6-859d-df658f48bca6</Sifra_potvrde>
+    <QRkod>nesto</QRkod>
     <Podaci_pacijenta>
         <Ime>Nikola</Ime>
         <Prezime>Nikolic</Prezime>
@@ -20,5 +21,4 @@
     <Zdravstvena_ustanova>Vakcinski punkt Novi Sad</Zdravstvena_ustanova>
     <Naziv_vakcine>Pfizer</Naziv_vakcine>
     <Datum>2021-05-25</Datum>
-    <QR_kod>www.exampleqr.com</QR_kod>
 </Potvrda>

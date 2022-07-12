@@ -5,7 +5,7 @@
     <Podaci_o_sertifikatu>
         <Broj>12345</Broj>
         <Datum_i_vreme>2021-05-26T18:13:51.0</Datum_i_vreme>
-        <QR_kod>www.exampleqr.com</QR_kod>
+        <QRkod>www.exampleqr.com</QRkod>
     </Podaci_o_sertifikatu>
     <Podaci_o_pacijentu>
         <Ime>Nikola</Ime>
