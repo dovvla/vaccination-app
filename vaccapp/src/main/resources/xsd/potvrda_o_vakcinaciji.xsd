@@ -6,6 +6,7 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="Sifra_potvrde" type="xs:string"/>
+                <xs:element name="QRkod" type="xs:string"/>
                 <xs:element name="Podaci_pacijenta">
                     <xs:complexType>
                         <xs:sequence>
