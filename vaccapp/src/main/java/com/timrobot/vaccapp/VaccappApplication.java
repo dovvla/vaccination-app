@@ -2,6 +2,7 @@ package com.timrobot.vaccapp;
 
 import com.timrobot.vaccapp.services.DemoService;
 import com.timrobot.vaccapp.services.DemoServiceImpl;
+import com.timrobot.vaccapp.utility.QRcodeUtils;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -29,6 +30,10 @@ public class VaccappApplication {
         demoService.RDFExample();
 
         SpringApplication.run(VaccappApplication.class, args);
+
+        String base64 = QRcodeUtils.convertURLToQR("wow");
+        System.out.println(base64);
+        System.out.println(QRcodeUtils.readQRCode(base64));
     }
 
     @Bean
