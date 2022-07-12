@@ -1,8 +1,11 @@
 package com.timrobot.vaccapp;
 
+import com.timrobot.vaccapp.models.ObrazacInteresovanja;
 import com.timrobot.vaccapp.services.DemoService;
 import com.timrobot.vaccapp.services.DemoServiceImpl;
+import com.timrobot.vaccapp.services.InteresovanjeService;
 import com.timrobot.vaccapp.utility.QRcodeUtils;
+import com.timrobot.vaccapp.utility.XHtmlUtil;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -15,10 +18,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+import javax.xml.datatype.DatatypeConfigurationException;
 import java.util.Properties;
 
 @SpringBootApplication
 public class VaccappApplication {
+
 
     public static void main(String[] args) {
         DemoService demoService = new DemoServiceImpl();
@@ -31,9 +36,17 @@ public class VaccappApplication {
 
         SpringApplication.run(VaccappApplication.class, args);
 
-        String base64 = QRcodeUtils.convertURLToQR("wow");
-        System.out.println(base64);
-        System.out.println(QRcodeUtils.readQRCode(base64));
+        //String base64 = QRcodeUtils.writeQRCode("wow");
+        //System.out.println(base64);
+        //System.out.println(QRcodeUtils.readQRCode(base64));
+        try {
+            InteresovanjeService interesovanjeService = new InteresovanjeService();
+            String xml = interesovanjeService.convertToXML();
+            XHtmlUtil.generateHTML(xml, ObrazacInteresovanja.class);
+
+        } catch (DatatypeConfigurationException e) {
+            e.printStackTrace();
+        }
     }
 
     @Bean

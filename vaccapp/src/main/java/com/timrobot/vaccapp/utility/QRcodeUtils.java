@@ -16,7 +16,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class QRcodeUtils {
-    public static String convertURLToQR(String url){
+    public static String writeQRCode(String url){
         int imageSize = 200;
         try {
             BitMatrix matrix = new MultiFormatWriter().encode(url, BarcodeFormat.QR_CODE,
