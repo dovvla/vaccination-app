@@ -51,14 +51,14 @@ public class XHtmlUtil {
         if (classOfDocument.equals(ObrazacInteresovanja.class))
             XSL_FILE = "classpath:xsl/iskazivanje_interesovanja_za_vakcinaciju.xsl";
         else if (classOfDocument.equals(Obrazac.class))
-            XSL_FILE = "classpath:static/xsl/saglasnost.xsl";
+            XSL_FILE = "classpath:xsl/saglasnost.xsl";
         else if (classOfDocument.equals(Potvrda.class))
-            XSL_FILE = "classpath:static/xsl/potvrda_o_vakcinaciji.xsl";
+            XSL_FILE = "classpath:xsl/potvrda_o_vakcinaciji.xsl";
         else if (classOfDocument.equals(Sertifikat.class))
-            XSL_FILE = "classpath:static/xsl/zeleni_sertifikat.xsl";
+            XSL_FILE = "classpath:xsl/zeleni_sertifikat.xsl";
         else if(classOfDocument.equals(Zahtev.class))
-            XSL_FILE = "classpath:static/xsl/zahtev_za_sertifikat.xsl";
+            XSL_FILE = "classpath:xsl/zahtev_za_sertifikat.xsl";
         else
-            XSL_FILE = "classpath:static/xsl/izvestaj_o_imunizaciji.xsl";
+            XSL_FILE = "classpath:xsl/izvestaj_o_imunizaciji.xsl";
     }
 }

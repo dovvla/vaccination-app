@@ -4,6 +4,7 @@ import com.timrobot.vaccapp.models.ObrazacInteresovanja;
 import com.timrobot.vaccapp.services.DemoService;
 import com.timrobot.vaccapp.services.DemoServiceImpl;
 import com.timrobot.vaccapp.services.InteresovanjeService;
+import com.timrobot.vaccapp.utility.PdfUtil;
 import com.timrobot.vaccapp.utility.QRcodeUtils;
 import com.timrobot.vaccapp.utility.XHtmlUtil;
 import io.swagger.v3.oas.models.Components;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import org.apache.xmlrpc.webserver.ServletWebServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -43,8 +45,10 @@ public class VaccappApplication {
             InteresovanjeService interesovanjeService = new InteresovanjeService();
             String xml = interesovanjeService.convertToXML();
             XHtmlUtil.generateHTML(xml, ObrazacInteresovanja.class);
+            PdfUtil pdfUtil = new PdfUtil();
+            pdfUtil.generatePDF(xml, ObrazacInteresovanja.class);
 
-        } catch (DatatypeConfigurationException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
