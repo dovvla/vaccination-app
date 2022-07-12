@@ -97,6 +97,23 @@ public class ObrazacInteresovanjaService {
                 .collect(Collectors.toList()));
     }
 
+    public EntityList<ObrazacInteresovanja> getAllForDateRangeInclusive(String startDate, String endDate) {
+        return new EntityList<>(dataAccessLayer
+                .getAllDocuments(folderId)
+                .stream()
+                .map(s -> (ObrazacInteresovanja) mapper.convertToObject(s, "iskazivanje_interesovanja_za_vakcinaciju", ObrazacInteresovanja.class))
+                .filter(obrazacInteresovanja -> !obrazacInteresovanja
+                        .getDatum()
+                        .toGregorianCalendar()
+                        .getTime()
+                        .before(stringToDate(startDate)) && !obrazacInteresovanja
+                        .getDatum()
+                        .toGregorianCalendar()
+                        .getTime()
+                        .after(stringToDate(endDate)))
+                .collect(Collectors.toList()));
+    }
+
 
     public ObrazacInteresovanja createObrazacInteresovanja(ObrazacInteresovanja obrazacInteresovanja) throws DatatypeConfigurationException {
         String documentId = obrazacInteresovanja

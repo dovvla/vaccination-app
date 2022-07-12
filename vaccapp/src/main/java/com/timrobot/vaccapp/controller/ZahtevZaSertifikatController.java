@@ -13,6 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+
 @RestController
 @RequestMapping("/api/zahtev-za-sertifikat")
 public class ZahtevZaSertifikatController {
@@ -54,6 +56,18 @@ public class ZahtevZaSertifikatController {
     public ResponseEntity<?> odbijZahtev(@PathVariable String id, @RequestParam String razlog) {
         if (!zahtevZaSertifikatService.odbijZahtev(id, razlog))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/prihvati/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+//    @PreAuthorize("hasRole('SLUZBENIK')")
+    public ResponseEntity<?> prihvatiZahtev(@PathVariable String id) {
+        try {
+            if (!zahtevZaSertifikatService.prihvatiZahtev(id))
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        } catch (DatatypeConfigurationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

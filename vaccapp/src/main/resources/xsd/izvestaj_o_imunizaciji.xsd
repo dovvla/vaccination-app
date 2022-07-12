@@ -13,7 +13,7 @@
                                 <xs:complexType>
                                     <xs:simpleContent>
                                         <xs:extension base="xs:date">
-                                            <xs:attribute name="property"/>
+                                            <xs:attribute name="property" use="required" fixed="pred:datum_od"/>
                                         </xs:extension>
                                     </xs:simpleContent>
                                 </xs:complexType>
@@ -22,7 +22,7 @@
                                 <xs:complexType>
                                     <xs:simpleContent>
                                         <xs:extension base="xs:date">
-                                            <xs:attribute name="property"/>
+                                            <xs:attribute name="property" use="required" fixed="pred:datum_do"/>
                                         </xs:extension>
                                     </xs:simpleContent>
                                 </xs:complexType>
@@ -57,7 +57,7 @@
                     <xs:complexType>
                         <xs:simpleContent>
                             <xs:extension base="xs:date">
-                                <xs:attribute name="property"/>
+                                <xs:attribute name="property" use="required" fixed="pred:datum_zahtevan"/>
                             </xs:extension>
                         </xs:simpleContent>
                     </xs:complexType>

@@ -6,10 +6,12 @@ import com.timrobot.vaccapp.models.Potvrda;
 import com.timrobot.vaccapp.models.Zahtev;
 import com.timrobot.vaccapp.utility.XMLMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Service
 public class PotvrdaOVakcinacijiService {
     private final String folderId = "/db/vacc-app/potvrda-o-vakcinaciji";
 

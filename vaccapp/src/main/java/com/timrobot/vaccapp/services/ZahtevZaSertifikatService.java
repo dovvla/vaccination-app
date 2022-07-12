@@ -11,8 +11,13 @@ import org.springframework.stereotype.Service;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -35,6 +40,9 @@ public class ZahtevZaSertifikatService {
 
     @Autowired
     private SaglasnostService saglasnostService;
+
+    @Autowired
+    private PotvrdaOVakcinacijiService potvrdaOVakcinacijiService;
 
     public Zahtev getXmlAsObject(String documentId) {
         String xmlString = dataAccessLayer
@@ -68,6 +76,35 @@ public class ZahtevZaSertifikatService {
                         .getPodaciOPodnosiocu()
                         .getJMBG()
                         .equals(id))
+                .collect(Collectors.toList()));
+    }
+
+    private Date stringToDate(String date) {
+        ZoneId defaultZoneId = ZoneId.systemDefault();
+
+        //creating the instance of LocalDate using the day, month, year info
+        LocalDate localDate = LocalDate.parse(date);
+
+        //local date + atStartOfDay() + default time zone + toInstant() = Date
+        return Date.from(localDate
+                .atStartOfDay(defaultZoneId)
+                .toInstant());
+    }
+
+    public EntityList<Zahtev> getAllForDateRangeInclusive(String startDate, String endDate) throws DatatypeConfigurationException {
+        return new EntityList<>(dataAccessLayer
+                .getAllDocuments(folderId)
+                .stream()
+                .map(s -> (Zahtev) mapper.convertToObject(s, "zahtev_za_sertifikat", Zahtev.class))
+                .filter(zahtev -> !zahtev
+                        .getDatum()
+                        .toGregorianCalendar()
+                        .getTime()
+                        .before(stringToDate(startDate)) && !zahtev
+                        .getDatum()
+                        .toGregorianCalendar()
+                        .getTime()
+                        .after(stringToDate(endDate)))
                 .collect(Collectors.toList()));
     }
 
@@ -114,41 +151,74 @@ public class ZahtevZaSertifikatService {
         return true;
     }
 
-//    public boolean prihvatiZahtev(String id) throws DatatypeConfigurationException {
-//        Zahtev zahtev = this.getXmlAsObject(id);
-//
-//        if (zahtev == null || zahtev.getStatus().equals("Odbijen") || zahtev.getStatus().equals("Prihvacen"))
-//            return false;
-//
-//        zahtev.setStatus("Prihvacen");
-//
-//        this.saveXmlFromText(zahtev);
-//
-//        String email = korisnikService.getAll().getItems().stream()
-//                .filter(k -> k.getJmbg().equals(zahtev.getPodaciOPodnosiocu().getJMBG()))
-//                .collect(Collectors.toList())
-//                .get(0).getEmail();
-//
-//        Sertifikat sertifikat = new Sertifikat();
-//        // fake test example
-//        TKovidTest tKovidTest = new TKovidTest();
-//        LocalDateTime localDatetime = LocalDateTime.now();
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-//        String formattedDate = localDatetime.format(formatter);
-//        XMLGregorianCalendar calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(formattedDate);
-//        tKovidTest.setDatumIVremeUzorkovanja(calendar);
-//        tKovidTest.setLaboratorija("MecenskaLab");
-//        tKovidTest.setNazivTesta("PCR");
-//        tKovidTest.setProizvodjacTesta("WHO");
-//        tKovidTest.setRezultat("Negativan");
-//        tKovidTest.setVrstaUzorka("Bris nosa");
-//        sertifikat.getKovidTest().add(tKovidTest);
-//        TDozaVakcinacije tDozaVakcinacije = new TDozaVakcinacije();
-//        Obrazac saglasnost = saglasnostService.getAllForUser(zahtev.getPodaciOPodnosiocu().getJMBG()).getItems().get(0);
-//        Potvrda potvrda =
-//
-//        emailService.sendSimpleMessage(email, "Prihvacen zahtev", "Zahtev za izdavanje zelenog sertifikata je prihvacen.");
-//
-//        return true;
-//    }
+    public boolean prihvatiZahtev(String id) throws DatatypeConfigurationException {
+        Zahtev zahtev = this.getXmlAsObject(id);
+
+        if (zahtev == null || zahtev.getStatus().equals("Odbijen") || zahtev.getStatus().equals("Prihvacen"))
+            return false;
+
+        zahtev.setStatus("Prihvacen");
+
+        this.saveXmlFromText(zahtev);
+
+        String email = korisnikService.getAll().getItems().stream()
+                .filter(k -> k.getJmbg().equals(zahtev.getPodaciOPodnosiocu().getJMBG()))
+                .collect(Collectors.toList())
+                .get(0).getEmail();
+
+        Sertifikat sertifikat = new Sertifikat();
+        // fake test example
+        TKovidTest tKovidTest = new TKovidTest();
+        LocalDateTime localDatetime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        String formattedDate = localDatetime.format(formatter);
+        XMLGregorianCalendar calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(formattedDate);
+        tKovidTest.setDatumIVremeUzorkovanja(calendar);
+        tKovidTest.setLaboratorija("MecenskaLab");
+        tKovidTest.setNazivTesta("PCR");
+        tKovidTest.setProizvodjacTesta("WHO");
+        tKovidTest.setRezultat("Negativan");
+        tKovidTest.setVrstaUzorka("Bris nosa");
+        sertifikat.getKovidTest().add(tKovidTest);
+        Obrazac saglasnost = saglasnostService.getAllForUser(zahtev.getPodaciOPodnosiocu().getJMBG()).getItems().get(0);
+        Potvrda potvrda = potvrdaOVakcinacijiService.getAllForUser(zahtev.getPodaciOPodnosiocu().getJMBG()).getItems().get(0);
+//        for (TDozaVakcine doza : potvrda.getDozaVakcine()) {
+//            TDozaVakcinacije tDozaVakcinacije = new TDozaVakcinacije();
+//            tDozaVakcinacije.setDatum(doza.getDatumDavanja());
+//            tDozaVakcinacije.setSerija(doza.getSerija());
+//            tDozaVakcinacije.setProizvodjac(saglasnost.getEvidencijaOVakcinaciji().getPodaciOIzvrsenimImunizacijama().getPrimljenaVakcina());
+//            tDozaVakcinacije.setZdravstvenaUstanova(potvrda.getZdravstvenaUstanova());
+//            tDozaVakcinacije.setTip(potvrda.getNazivVakcine());
+//        }
+        for (TPrimljenaVakcina doza : saglasnost.getEvidencijaOVakcinaciji().getPodaciOIzvrsenimImunizacijama().getPrimljenaVakcina()) {
+            TDozaVakcinacije tDozaVakcinacije = new TDozaVakcinacije();
+            tDozaVakcinacije.setDatum(doza.getDatumIzdavanja());
+            tDozaVakcinacije.setSerija(doza.getSerijaVakcine());
+            tDozaVakcinacije.setProizvodjac(doza.getProizvodjac());
+            tDozaVakcinacije.setZdravstvenaUstanova(potvrda.getZdravstvenaUstanova());
+            tDozaVakcinacije.setTip(doza.getNaziv());
+            sertifikat.getDozaVakcinacije().add(tDozaVakcinacije);
+        }
+        Sertifikat.PodaciOPacijentu podaciOPacijentu = new Sertifikat.PodaciOPacijentu();
+        podaciOPacijentu.setJMBG(zahtev.getPodaciOPodnosiocu().getJMBG());
+        podaciOPacijentu.setDatumRodjenja(zahtev.getPodaciOPodnosiocu().getDatumRodjenja());
+        podaciOPacijentu.setIme(zahtev.getPodaciOPodnosiocu().getIme());
+        podaciOPacijentu.setPol(zahtev.getPodaciOPodnosiocu().getPol());
+        podaciOPacijentu.setPrezime(zahtev.getPodaciOPodnosiocu().getPrezime());
+        sertifikat.setPodaciOPacijentu(podaciOPacijentu);
+        Sertifikat.PodaciOSertifikatu podaciOSertifikatu = new Sertifikat.PodaciOSertifikatu();
+        podaciOSertifikatu.setBroj(new BigInteger(32, new SecureRandom()));
+        podaciOSertifikatu.setDatumIVreme(calendar);
+        sertifikat.setPodaciOSertifikatu(podaciOSertifikatu);
+
+        // sertifikat se cuva u xml bazi
+        String sertifikatDocumentId = sertifikat.getPodaciOSertifikatu().getBroj() + ".xml";
+        dataAccessLayer.saveDocument(sertifikat, "/db/vacc-app/sertifikat", sertifikatDocumentId, Sertifikat.class);
+
+        // TO DO : dobaviti sacuvani sertifikat u XHTML & PDF formi za download u mejlu
+
+        emailService.sendSimpleMessage(email, "Prihvacen zahtev", "Zahtev za izdavanje zelenog sertifikata je prihvacen.");
+
+        return true;
+    }
 }
