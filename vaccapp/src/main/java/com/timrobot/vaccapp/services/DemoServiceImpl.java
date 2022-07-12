@@ -69,5 +69,6 @@ public class DemoServiceImpl implements DemoService {
         storeInXMLDBExample();
         retrieveFromXMLDBExample();
         RDFExample();
+        RDFExample();
     }
 }
