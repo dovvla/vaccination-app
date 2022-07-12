@@ -1,6 +1,7 @@
 package com.timrobot.vaccapp;
 
 import com.timrobot.vaccapp.models.ObrazacInteresovanja;
+import com.timrobot.vaccapp.models.Zahtev;
 import com.timrobot.vaccapp.services.DemoService;
 import com.timrobot.vaccapp.services.DemoServiceImpl;
 import com.timrobot.vaccapp.services.InteresovanjeService;
@@ -43,10 +44,11 @@ public class VaccappApplication {
         //System.out.println(QRcodeUtils.readQRCode(base64));
         try {
             InteresovanjeService interesovanjeService = new InteresovanjeService();
-            String xml = interesovanjeService.convertToXML();
-            XHtmlUtil.generateHTML(xml, ObrazacInteresovanja.class);
+            //String xml = interesovanjeService.convertToXML();
+            String xml = interesovanjeService.zahtev();
+            XHtmlUtil.generateHTML(xml, Zahtev.class);
             PdfUtil pdfUtil = new PdfUtil();
-            pdfUtil.generatePDF(xml, ObrazacInteresovanja.class);
+            pdfUtil.generatePDF(xml, Zahtev.class);
 
         } catch (Exception e) {
             e.printStackTrace();
