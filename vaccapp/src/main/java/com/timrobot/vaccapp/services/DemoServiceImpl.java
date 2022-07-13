@@ -1,14 +1,18 @@
 package com.timrobot.vaccapp.services;
 
+import com.timrobot.vaccapp.dao.DataAccessLayer;
 import com.timrobot.vaccapp.dao.DatabaseConnection;
 import com.timrobot.vaccapp.models.Izvestaj;
 import com.timrobot.vaccapp.utility.FusekiUtil;
 import com.timrobot.vaccapp.utility.XMLMapper;
 import org.apache.jena.vocabulary.RDF;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class DemoServiceImpl implements DemoService {
@@ -63,12 +67,42 @@ public class DemoServiceImpl implements DemoService {
         }
     }
 
-    public void main(String[] args) {
+//    @Autowired
+//    private DataAccessLayer dataAccessLayer;
+//
+//    @Autowired
+//    private XMLMapper mapper;
+//
+//    @Override
+//    public String regularSearchIzvestaji(String search) throws Exception {
+//        String searchQuery = String.format("xquery version \"3.1\";\n" +
+//                "\n" +
+//                "declare namespace izv=\"http://tim.robot/izvestaj_o_imunizaciji\";\n" +
+//                "import module namespace functx=\"http://www.functx.com\";\n" +
+//                "\n" +
+//                "declare function local:search($keyword as xs:string)\n" +
+//                "{\n" +
+//                "    let $izvestaji := collection(\"/db/apps/vaccapp\")\n" +
+//                "    let $rezultat :=\n" +
+//                "    (\n" +
+//                "        $izvestaji//izv:Izvestaj[contains(., $keyword)]\n" +
+//                "    )\n" +
+//                "\n" +
+//                " return\n" +
+//                "    functx:distinct-nodes($rezultat)\n" +
+//                "};\n" +
+//                "\n" +
+//                "local:search(\"%s\")", search);
+//
+//        List<String> found = dataAccessLayer.executeXPathQuery("/db/apps/vaccapp", searchQuery, "http://tim.robot/izvestaj_o_imunizaciji");
+//        return found.get(0);
+//    }
+
+    public void main(String[] args) throws Exception {
         unmarshalExample();
         marshalExample();
         storeInXMLDBExample();
         retrieveFromXMLDBExample();
-        RDFExample();
         RDFExample();
     }
 }

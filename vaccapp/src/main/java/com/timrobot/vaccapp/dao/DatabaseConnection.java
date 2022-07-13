@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -285,5 +286,47 @@ public class DatabaseConnection {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static List<String> executeXPathQuery(String folderId, String xpathExp, String namespace) throws Exception {
+
+        ResourceSet res = null;
+        Collection col = null;
+        String responseContent = "";
+        List<String> resources = new ArrayList<String>();
+
+        try {
+            ExistAuthenticationUtilities.ConnectionProperties conn = ExistAuthenticationUtilities.loadProperties();
+            Class<?> cl = Class.forName(conn.driver);
+            Database database = (Database) cl.newInstance();
+            database.setProperty("create-database", "true");
+            DatabaseManager.registerDatabase(database);
+            col = DatabaseManager.getCollection(conn.uri + folderId, conn.user, conn.password);
+            col.setProperty(OutputKeys.INDENT, "yes");
+
+            XPathQueryService xpathService = (XPathQueryService) col.getService("XPathQueryService", "2.0");
+            xpathService.setProperty("indent", "yes");
+
+            xpathService.setNamespace("", namespace);
+            res = xpathService.query(xpathExp);
+            ResourceIterator i = res.getIterator();
+            XMLResource resource = null;
+            while (i.hasMoreResources()) {
+                resource = (XMLResource) i.nextResource();
+                resources.add((String) resource.getContent());
+            }
+        } catch (Exception ignored) {
+        } finally {
+            if (col != null) {
+                try {
+                    col.close();
+                } catch (XMLDBException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+
+        return resources;
+
     }
 }

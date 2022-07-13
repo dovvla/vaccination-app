@@ -17,7 +17,9 @@ import org.apache.xmlrpc.webserver.ServletWebServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.event.EventListener;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
@@ -35,6 +37,7 @@ public class VaccappApplication {
         demoService.marshalExample();
         demoService.storeInXMLDBExample();
         demoService.retrieveFromXMLDBExample();
+        demoService.RDFExample();
         demoService.RDFExample();
 
         SpringApplication.run(VaccappApplication.class, args);
@@ -54,6 +57,21 @@ public class VaccappApplication {
             e.printStackTrace();
         }
     }
+
+//    @Autowired
+//    private DemoService demoServiceAW;
+//
+//    @EventListener(ApplicationReadyEvent.class)
+//    public void doSomethingAfterStartup() {
+//        System.out.println("HEY");
+//        try {
+//            System.out.println(demoServiceAW.search("0000"));
+//            System.out.println("noexc");
+//        } catch (Exception e) {
+//            System.out.println("exc");
+//            System.out.println(e.getMessage());
+//        }
+//    }
 
     @Bean
     public OpenAPI customOpenAPI() {

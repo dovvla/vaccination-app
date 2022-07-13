@@ -10,6 +10,8 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -117,5 +119,35 @@ public class SaglasnostService {
 
 
         return obrazac;
+    }
+
+    public List<Obrazac> regularSearchSaglasnost(String search) throws Exception {
+        String searchQuery = String.format("xquery version \"3.1\";\n" +
+                "\n" +
+                "declare namespace sagl=\"http://tim.robot/obrazac_saglasnosti_za_imunizaciju\";\n" +
+                "import module namespace functx=\"http://www.functx.com\";\n" +
+                "\n" +
+                "declare function local:search($keyword as xs:string)\n" +
+                "{\n" +
+                "    let $saglasnosti := collection(\"/db/vacc-app/saglasnost\")\n" +
+                "    let $rezultat :=\n" +
+                "    (\n" +
+                "        $saglasnosti//sagl:Obrazac[contains(., $keyword)]\n" +
+                "    )\n" +
+                "\n" +
+                " return\n" +
+                "    functx:distinct-nodes($rezultat)\n" +
+                "};\n" +
+                "\n" +
+                "local:search(\"%s\")", search);
+
+        List<String> matchingSaglasnostiXML = dataAccessLayer.executeXPathQuery(folderId, searchQuery, "http://tim.robot/obrazac_saglasnosti_za_imunizaciju");
+
+        List<Obrazac> matchingSaglasnosti = new ArrayList<>();
+        for (String XML : matchingSaglasnostiXML) {
+            matchingSaglasnosti.add((Obrazac) mapper.convertToObject(XML, "saglasnost", Obrazac.class));
+        }
+
+        return matchingSaglasnosti;
     }
 }

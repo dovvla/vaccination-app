@@ -2,6 +2,7 @@ package com.timrobot.vaccapp.services;
 
 import com.timrobot.vaccapp.dao.DataAccessLayer;
 import com.timrobot.vaccapp.models.EntityList;
+import com.timrobot.vaccapp.models.Obrazac;
 import com.timrobot.vaccapp.models.Sertifikat;
 import com.timrobot.vaccapp.models.Zahtev;
 import com.timrobot.vaccapp.utility.XMLMapper;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Service;
 import javax.xml.datatype.DatatypeConfigurationException;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,6 +54,36 @@ public class SertifikatService {
                         .getTime()
                         .after(stringToDate(endDate)))
                 .collect(Collectors.toList()));
+    }
+
+    public List<Sertifikat> regularSearchSertifikat(String search) throws Exception {
+        String searchQuery = String.format("xquery version \"3.1\";\n" +
+                "\n" +
+                "declare namespace sert=\"http://tim.robot/zeleni_sertifikat\";\n" +
+                "import module namespace functx=\"http://www.functx.com\";\n" +
+                "\n" +
+                "declare function local:search($keyword as xs:string)\n" +
+                "{\n" +
+                "    let $sertifikati := collection(\"/db/vacc-app/sertifikat\")\n" +
+                "    let $rezultat :=\n" +
+                "    (\n" +
+                "        $sertifikati//sert:Sertifikat[contains(., $keyword)]\n" +
+                "    )\n" +
+                "\n" +
+                " return\n" +
+                "    functx:distinct-nodes($rezultat)\n" +
+                "};\n" +
+                "\n" +
+                "local:search(\"%s\")", search);
+
+        List<String> matchingSertifikatiXML = dataAccessLayer.executeXPathQuery(folderId, searchQuery, "http://tim.robot/zeleni_sertifikat");
+
+        List<Sertifikat> matchingSertifikati = new ArrayList<>();
+        for (String XML : matchingSertifikatiXML) {
+            matchingSertifikati.add((Sertifikat) mapper.convertToObject(XML, "zeleni_sertifikat", Sertifikat.class));
+        }
+
+        return matchingSertifikati;
     }
 
 }
