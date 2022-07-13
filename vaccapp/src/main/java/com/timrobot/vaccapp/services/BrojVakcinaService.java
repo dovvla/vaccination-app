@@ -60,9 +60,11 @@ public class BrojVakcinaService {
     public BrojVakcina izmeniBrojVakcina(String vakcina, Integer broj) throws DatatypeConfigurationException {
         BrojVakcina brojVakcina = getXmlAsObject(vakcina);
         brojVakcina.setBroj(brojVakcina.getBroj() + broj);
-        if (brojVakcina.getBroj() < 0) brojVakcina.setBroj(0);
+        if (brojVakcina.getBroj() < 0)
+            brojVakcina.setBroj(0);
         saveXmlFromText(brojVakcina);
-        if (broj > 0) this.popuniNedostajece();
+        if (broj > 1)
+            this.popuniNedostajece();
         return brojVakcina;
     }
 
@@ -88,10 +90,11 @@ public class BrojVakcinaService {
             Optional<ObrazacInteresovanja> prioObrazacInteresovanja = obrasci
                     .stream()
                     .filter(obrazacInteresovanja -> obrazacInteresovanja
-                                                            .getZeljenaVakcina()
-                                                            .equals(brojVakcina.getVakcina()) || obrazacInteresovanja
-                                                            .getZeljenaVakcina()
-                                                            .equals("Bilo koja"))
+                            .getZeljenaVakcina()
+                            .equals(brojVakcina.getVakcina())
+                            || obrazacInteresovanja
+                                    .getZeljenaVakcina()
+                                    .equals("Bilo koja"))
                     .filter(obrazacInteresovanja -> termini
                             .stream()
                             .anyMatch(termin -> termin
@@ -100,13 +103,13 @@ public class BrojVakcinaService {
                                             .getLicniPodaci()
                                             .getJMBG())))
                     .min(obrazacInteresovanjaDateComparator);
-            if (brojVakcina.getBroj() > 0 && prioObrazacInteresovanja.isPresent()) {
+            if (brojVakcina.getBroj() > 1 && prioObrazacInteresovanja.isPresent()) {
                 obrazacInteresovanjaService.rezervisiTermin(prioObrazacInteresovanja.get());
                 reservedSomething = true;
             }
         }
-        if (reservedSomething) popuniNedostajece();
-
+        if (reservedSomething)
+            popuniNedostajece();
 
     }
 
@@ -115,7 +118,8 @@ public class BrojVakcinaService {
             for (BrojVakcina brojVakcina : this
                     .getAll()
                     .getItems()) {
-                if (brojVakcina.getBroj() > 0) return brojVakcina.getBroj();
+                if (brojVakcina.getBroj() > 0)
+                    return brojVakcina.getBroj();
             }
             return 0;
         }
@@ -126,7 +130,8 @@ public class BrojVakcinaService {
         for (BrojVakcina brojVakcina : this
                 .getAll()
                 .getItems()) {
-            if (brojVakcina.getBroj() > 0) return brojVakcina.getVakcina();
+            if (brojVakcina.getBroj() > 1)
+                return brojVakcina.getVakcina();
         }
         return "";
     }
