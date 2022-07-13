@@ -3,6 +3,7 @@ package com.timrobot.vaccapp.services;
 import com.timrobot.vaccapp.dao.DataAccessLayer;
 import com.timrobot.vaccapp.dao.DatabaseConnection;
 import com.timrobot.vaccapp.models.Izvestaj;
+import com.timrobot.vaccapp.models.Obrazac;
 import com.timrobot.vaccapp.utility.FusekiUtil;
 import com.timrobot.vaccapp.utility.XMLMapper;
 import org.apache.jena.vocabulary.RDF;
@@ -11,19 +12,25 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class DemoServiceImpl implements DemoService {
     private Izvestaj izvestaj = null;
+    private Obrazac saglasnost = null;
 
     public static final String IZVESTAJ_FILE_PATH = "./src/main/resources/xml/izvestaj_o_imunizaciji_1.xml";
+    public static final String SAGLASNOST_FILE_PATH = "./src/main/resources/xml/saglasnost1.xml";
 
     @Override
     public Izvestaj unmarshalExample() {
         System.out.println("Testing unmarshalling...");
         izvestaj = XMLMapper.<Izvestaj>unmarshal(Izvestaj.class, new File(IZVESTAJ_FILE_PATH), "izvestaj_o_imunizaciji.xsd");
+        saglasnost = XMLMapper.<Obrazac>unmarshal(Obrazac.class, new File(SAGLASNOST_FILE_PATH), "saglasnost.xsd");
         System.out.println(izvestaj);
         System.out.println("Unmarshalling tested.\n");
         return izvestaj;
@@ -40,6 +47,7 @@ public class DemoServiceImpl implements DemoService {
     public void storeInXMLDBExample() {
         System.out.println("Testing XML database storing...");
         DatabaseConnection.<Izvestaj>storeInXMLDB("/db/apps/vaccapp", "izvestajDBex.xml", Izvestaj.class, izvestaj, "izvestaj_o_imunizaciji.xsd");
+        DatabaseConnection.<Obrazac>storeInXMLDB("/db/vacc-app/saglasnost", "saglasnost1.xml", Obrazac.class, saglasnost, "saglasnost.xsd");
         System.out.println("XML database storing tested.\n");
     }
 
@@ -54,24 +62,33 @@ public class DemoServiceImpl implements DemoService {
 
     @Override
     public void RDFExample() {
-        String rdfFilePath = "./src/main/resources/rdf/izvestaj.rdf";
-
-        FusekiUtil.extractMetadataFromXML(IZVESTAJ_FILE_PATH, rdfFilePath);
-
-        String graphURI = "izvestaj";
-
+        byte[] encoded = new byte[0];
         try {
-            FusekiUtil.saveRDFToFuseki(rdfFilePath, graphURI);
+            encoded = Files.readAllBytes(Paths.get("./src/main/resources/xml/saglasnost1.xml"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        String xml = new String(encoded, StandardCharsets.UTF_8);
+
+        FusekiUtil.extractMetadataFromXML(xml);
+
+        String graphURI = "saglasnost";
+
+        try {
+            FusekiUtil.saveRDFToFuseki(graphURI);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // -------------------------------------------------------------------------------------------------
+
     }
 
-//    @Autowired
-//    private DataAccessLayer dataAccessLayer;
-//
-//    @Autowired
-//    private XMLMapper mapper;
+    @Autowired
+    private DataAccessLayer dataAccessLayer;
+
+    @Autowired
+    private XMLMapper mapper;
 //
 //    @Override
 //    public String regularSearchIzvestaji(String search) throws Exception {
@@ -97,6 +114,8 @@ public class DemoServiceImpl implements DemoService {
 //        List<String> found = dataAccessLayer.executeXPathQuery("/db/apps/vaccapp", searchQuery, "http://tim.robot/izvestaj_o_imunizaciji");
 //        return found.get(0);
 //    }
+
+
 
     public void main(String[] args) throws Exception {
         unmarshalExample();

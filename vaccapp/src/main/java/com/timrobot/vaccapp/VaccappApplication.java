@@ -5,6 +5,7 @@ import com.timrobot.vaccapp.models.Zahtev;
 import com.timrobot.vaccapp.services.DemoService;
 import com.timrobot.vaccapp.services.DemoServiceImpl;
 import com.timrobot.vaccapp.services.InteresovanjeService;
+import com.timrobot.vaccapp.services.SaglasnostService;
 import com.timrobot.vaccapp.utility.PdfUtil;
 import com.timrobot.vaccapp.utility.QRcodeUtils;
 import com.timrobot.vaccapp.utility.XHtmlUtil;
@@ -24,6 +25,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import javax.xml.datatype.DatatypeConfigurationException;
+import java.io.IOException;
 import java.util.Properties;
 
 @SpringBootApplication
@@ -61,17 +63,18 @@ public class VaccappApplication {
 //    @Autowired
 //    private DemoService demoServiceAW;
 //
-//    @EventListener(ApplicationReadyEvent.class)
-//    public void doSomethingAfterStartup() {
-//        System.out.println("HEY");
-//        try {
-//            System.out.println(demoServiceAW.search("0000"));
-//            System.out.println("noexc");
-//        } catch (Exception e) {
-//            System.out.println("exc");
-//            System.out.println(e.getMessage());
-//        }
-//    }
+
+    @Autowired
+    private SaglasnostService saglasnostService;
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void doSomethingAfterStartup() {
+        try {
+            saglasnostService.advancedSearchSaglasnost("Srba", "Hrvotic", "Pfizer", "2021-05-04", "<http://tim.robot/iskazivanje_interesovanja_za_vakcinaciju/iskazivanje_interesovanja_za_vakcinaciju_1>", true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Bean
     public OpenAPI customOpenAPI() {

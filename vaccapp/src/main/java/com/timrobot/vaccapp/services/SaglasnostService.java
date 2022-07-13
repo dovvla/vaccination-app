@@ -2,6 +2,7 @@ package com.timrobot.vaccapp.services;
 
 import com.timrobot.vaccapp.dao.DataAccessLayer;
 import com.timrobot.vaccapp.models.*;
+import com.timrobot.vaccapp.utility.FusekiUtil;
 import com.timrobot.vaccapp.utility.XMLMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,8 +10,13 @@ import org.springframework.stereotype.Service;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,6 +54,14 @@ public class SaglasnostService {
                 .collect(Collectors.toList()));
     }
 
+    public Obrazac getXmlAsObject(String documentId) {
+        String xmlString = dataAccessLayer
+                .getDocument(folderId, documentId)
+                .get();
+
+        return (Obrazac) mapper.convertToObject(xmlString, "saglasnost", Obrazac.class);
+    }
+
     public Obrazac putSaglasnost(Obrazac obrazac) {
         String documentId = obrazac
                                     .getPodaciOPacijentu()
@@ -55,6 +69,21 @@ public class SaglasnostService {
                                     .getJMBG()
                             + ".xml";
         dataAccessLayer.saveDocument(obrazac, folderId, documentId, Obrazac.class);
+
+        // ----------- RDF -------------
+        String saglasnostXML = mapper.convertToXml(obrazac, Obrazac.class);
+
+        FusekiUtil.extractMetadataFromXML(saglasnostXML);
+
+        String graphURI = "saglasnost";
+
+        try {
+            FusekiUtil.saveRDFToFuseki(graphURI);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // ----------- RDF -------------
+
         return obrazac;
     }
 
@@ -79,11 +108,11 @@ public class SaglasnostService {
                 .getPodaciOIzvrsenimImunizacijama()
                 .getPrimljenaVakcina()
                 .get(0)
-                .getNaziv());
+                .getNaziv().getValue());
         Potvrda.PodaciPacijenta podaciPacijenta = new Potvrda.PodaciPacijenta();
         podaciPacijenta.setIme(obrazac
                 .getPodaciOPacijentu()
-                .getIme());
+                .getIme().getValue());
         podaciPacijenta.setJMBG(obrazac
                 .getPodaciOPacijentu()
                 .getDrzavljanstvo()
@@ -93,7 +122,7 @@ public class SaglasnostService {
                 .getPol());
         podaciPacijenta.setPrezime(obrazac
                 .getPodaciOPacijentu()
-                .getPrezime());
+                .getPrezime().getValue());
         potvrda.setZdravstvenaUstanova(obrazac
                 .getEvidencijaOVakcinaciji()
                 .getZdravstvenaUstanova());
@@ -150,4 +179,52 @@ public class SaglasnostService {
 
         return matchingSaglasnosti;
     }
+
+    public List<Obrazac> advancedSearchSaglasnost(String ime, String prezime, String nazivVakcine, String datumIzdavanja, String hrefInteresovanje, boolean logicalAnd) throws IOException {
+        ArrayList<String> queries = new ArrayList<>();
+        if(!ime.trim().equals("")) {
+            queries.add("?s <http://tim.robot/rdf/predicate/ime> ?X . FILTER(str(?X) = \"" + ime + "\")");
+        }
+        if(!prezime.trim().equals("")) {
+            queries.add("?s <http://tim.robot/rdf/predicate/prezime> ?X . FILTER(str(?X) = \"" + prezime + "\")");
+        }
+        if(!nazivVakcine.trim().equals("")) {
+            queries.add("?s <http://tim.robot/rdf/predicate/naziv_vakcine> ?X . FILTER(str(?X) = \"" + nazivVakcine + "\")");
+        }
+        if(!datumIzdavanja.trim().equals("")) {
+            queries.add("?s <http://tim.robot/rdf/predicate/datum> ?X . FILTER(str(?X) = \"" + datumIzdavanja + "\")");
+        }
+        if(!hrefInteresovanje.trim().equals("")) {
+            queries.add("?s <http://tim.robot/rdf/predicate/fromObrazacInteresovanja> " + hrefInteresovanje + " .");
+        }
+        if(queries.isEmpty()) {
+            queries.add("?s ?p ?o");
+        }
+
+        HashSet<String> resultSubjects = new HashSet<>();
+        for (String query : queries) {
+            HashSet<String> result = FusekiUtil.queryRdf("saglasnost", query);
+
+            if (queries.indexOf(query) == 0) {
+                resultSubjects.addAll(result);
+            } else {
+                if (logicalAnd) {
+                    resultSubjects.retainAll(result);
+                } else {
+                    resultSubjects.addAll(result);
+                }
+            }
+        }
+
+        List<Obrazac> obrasci = new ArrayList<>();
+        for (String subject : resultSubjects) {
+            // subject je namespace
+            String[] splitNamespace = subject.split("/");
+            String documentId = splitNamespace[splitNamespace.length - 1];
+            obrasci.add(this.getXmlAsObject(documentId));
+        }
+
+        return obrasci;
+    }
+
 }

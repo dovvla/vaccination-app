@@ -1,11 +1,11 @@
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:h="http://www.w3.org/1999/xhtml">
   <rdf:Description rdf:about="">
-    <pred:datum_od xmlns:pred="http://tim.robot/rdf/predicate" rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral">2021-08-04</pred:datum_od>
+    <pred:datum_od xmlns:pred="http://tim.robot/rdf/predicate/" rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral">2021-08-04</pred:datum_od>
   </rdf:Description>
   <rdf:Description rdf:about="">
-    <pred:datum_do xmlns:pred="http://tim.robot/rdf/predicate" rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral">2021-09-04</pred:datum_do>
+    <pred:datum_do xmlns:pred="http://tim.robot/rdf/predicate/" rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral">2021-09-04</pred:datum_do>
   </rdf:Description>
   <rdf:Description rdf:about="">
-    <pred:datum_zahtevan xmlns:pred="http://tim.robot/rdf/predicate" rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral">2021-09-05</pred:datum_zahtevan>
+    <pred:datum_zahtevan xmlns:pred="http://tim.robot/rdf/predicate/" rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral">2021-09-05</pred:datum_zahtevan>
   </rdf:Description>
 </rdf:RDF>

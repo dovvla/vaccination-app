@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
     targetNamespace="http://tim.robot/potvrda_o_vakcinaciji"
-    xmlns:pov="http://tim.robot/potvrda_o_vakcinaciji">
+    xmlns:pov="http://tim.robot/potvrda_o_vakcinaciji" xmlns:pred="http://tim.robot/rdf/predicate/">
     <xs:element name="Potvrda">
         <xs:complexType>
             <xs:sequence>

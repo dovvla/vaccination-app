@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Obrazac xmlns="http://tim.robot/obrazac_saglasnosti_za_imunizaciju"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://tim.robot/obrazac_saglasnosti_za_imunizaciju saglasnost.xsd">
+ xsi:schemaLocation="http://tim.robot/obrazac_saglasnosti_za_imunizaciju saglasnost.xsd" about="http://tim.robot/obrazac_saglasnosti_za_imunizaciju/saglasnost1"
+ rel="pred:fromObrazacInteresovanja" href="http://tim.robot/iskazivanje_interesovanja_za_vakcinaciju/iskazivanje_interesovanja_za_vakcinaciju_1"
+ xmlns:pred="http://tim.robot/rdf/predicate/">
     <Podaci_o_pacijentu>
         <Drzavljanstvo>
             <JMBG>0505000111111</JMBG>
         </Drzavljanstvo>
-        <Prezime>Hrvotic</Prezime>
-        <Ime>Srba</Ime>
+        <Prezime property="pred:prezime" datatype="xs:string">Hrvotic</Prezime>
+        <Ime property="pred:ime" datatype="xs:string">Srba</Ime>
         <Ime_roditelja>Gojko</Ime_roditelja>
         <Pol>Muski</Pol>
         <Datum_rodjenja>2000-05-04</Datum_rodjenja>
@@ -28,7 +30,7 @@
     <Podaci_o_saglasnosti>
         <Saglasnost>SAGLASAN SAM</Saglasnost>
         <Naziv_imunoloskog_leka>SARS-CoV-2 Vakcinaciono sredstvo za imunizaciju ljudskog organizma, tzv. Pfizer</Naziv_imunoloskog_leka>
-        <Datum>2021-05-04</Datum>
+        <Datum property="pred:datum" datatype="xs:date">2021-05-04</Datum>
     </Podaci_o_saglasnosti>
     <Evidencija_o_vakcinaciji>
         <Zdravstvena_ustanova>Vakcinski punkt Novi Sad</Zdravstvena_ustanova>
@@ -41,7 +43,7 @@
         </Podaci_o_lekaru>
         <Podaci_o_izvrsenim_imunizacijama>
             <Primljena_vakcina>
-                <Naziv>Pfizer</Naziv>
+                <Naziv property="pred:naziv_vakcine" datatype="xs:string">Pfizer</Naziv>
                 <Datum_izdavanja>2021-05-04</Datum_izdavanja>
                 <Ekstremitet>DR</Ekstremitet>
                 <Serija_vakcine>EN1193</Serija_vakcine>
@@ -49,7 +51,7 @@
                 <Nezeljena_reakcija>Glavobolja, reuma</Nezeljena_reakcija>
             </Primljena_vakcina>
             <Primljena_vakcina>
-                <Naziv>Pfizer</Naziv>
+                <Naziv property="pred:naziv_vakcine" datatype="xs:string">Pfizer</Naziv>
                 <Datum_izdavanja>2021-05-25</Datum_izdavanja>
                 <Ekstremitet>DR</Ekstremitet>
                 <Serija_vakcine>EN1193</Serija_vakcine>
