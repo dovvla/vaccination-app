@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -225,6 +226,14 @@ public class SaglasnostService {
         }
 
         return obrasci;
+    }
+
+    public Map<String, String> getAllMetadataForDocumentForJSON(String documentId) throws IOException {
+        return FusekiUtil.getAllMetadataForDocument("saglasnost", "obrazac_saglasnosti_za_imunizaciju", documentId);
+    }
+
+    public String getAllMetadataForDocumentInRDF(String documentId) throws IOException {
+        return FusekiUtil.getAllMetadataForDocumentInRDF("saglasnost", "obrazac_saglasnosti_za_imunizaciju", documentId);
     }
 
 }

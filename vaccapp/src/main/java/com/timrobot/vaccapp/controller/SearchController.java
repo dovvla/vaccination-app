@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +43,17 @@ public class SearchController {
             rezultati.addAll(sertifikati);
             return new EntityList<>(rezultati);
         } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = "/saglasnost/advanced", produces = MediaType.APPLICATION_XML_VALUE)
+    public EntityList<Obrazac> advancedSearchSaglasnost(@RequestParam String ime, @RequestParam String prezime,
+                                                        @RequestParam String nazivVakcine, @RequestParam String datumIzdavanja,
+                                                        @RequestParam String hrefInteresovanje, @RequestParam Boolean logicalAnd) {
+        try {
+            return new EntityList<>(saglasnostService.advancedSearchSaglasnost(ime, prezime, nazivVakcine, datumIzdavanja, hrefInteresovanje, logicalAnd));
+        } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }

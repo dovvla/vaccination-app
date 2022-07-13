@@ -16,8 +16,10 @@ import org.apache.jena.update.UpdateRequest;
 
 import javax.xml.transform.TransformerException;
 import java.io.*;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 
 public class FusekiUtil {
 
@@ -94,5 +96,56 @@ public class FusekiUtil {
         return retval;
     }
 
+    public static HashMap<String, String> getAllMetadataForDocument(String graphURI, String namespace, String documentId) throws IOException {
+        FusekiAuthenticationUtilities.FusekiConnectionProperties conn = FusekiAuthenticationUtilities.loadProperties();
+
+        HashMap<String, String> retval = new HashMap<>();
+
+        String sparqlQuery = SparqlUtil.selectData(conn.dataEndpoint.trim() + "/" + graphURI, "<http://tim.robot/" + namespace + "/" + documentId + "> ?p ?o");
+        QueryExecution queryExec = QueryExecutionFactory.sparqlService(conn.queryEndpoint, sparqlQuery);
+        ResultSet results = queryExec.execSelect();
+        String p;
+        String o;
+        RDFNode predicate;
+        RDFNode object;
+        while (results.hasNext()) {
+            QuerySolution querySolution = results.next();
+            Iterator<String> variableBindings = querySolution.varNames();
+
+            p = variableBindings.next();
+            predicate = querySolution.get(p);
+            o = variableBindings.next();
+            object = querySolution.get(o);
+
+            int indexEOF = object.toString().indexOf("^");
+            if (indexEOF != -1) {
+                retval.put(predicate.toString(), object.toString().substring(0, indexEOF));
+            } else {
+                retval.put(predicate.toString(), object.toString());
+            }
+        }
+        queryExec.close();
+        return retval;
+    }
+
+    public static String getAllMetadataForDocumentInRDF(String graphURI, String namespace, String documentId) throws IOException {
+        HashMap<String, String> map = getAllMetadataForDocument(graphURI, namespace, documentId);
+
+        StringBuilder builder =
+                new StringBuilder("<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n" +
+                        "<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n" +
+                        "         xmlns:pred=\"http://tim.robot/" + graphURI + "/predicate/\">\n" +
+                        "\n" +
+                        "  <rdf:Description rdf:about=\"http://tim.robot/" + namespace + "/" + documentId + "\">\n");
+
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            String[] splitPredicate = entry.getKey().split("/");
+            String predicateVal = splitPredicate[splitPredicate.length - 1];
+            builder.append("\t\t<pred:").append(predicateVal).append(">").append(entry.getValue()).append("</pred:").append(predicateVal).append(">\n");
+        }
+
+        builder.append("  </rdf:Description>\n\n</rdf:RDF>");
+        return builder.toString();
+    }
 
 }
