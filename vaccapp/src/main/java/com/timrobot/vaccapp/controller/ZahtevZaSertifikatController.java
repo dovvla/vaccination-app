@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.transform.TransformerException;
 
 @RestController
 @RequestMapping("/api/zahtev-za-sertifikat")
@@ -65,7 +66,7 @@ public class ZahtevZaSertifikatController {
         try {
             if (!zahtevZaSertifikatService.prihvatiZahtev(id))
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        } catch (DatatypeConfigurationException e) {
+        } catch (DatatypeConfigurationException | TransformerException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);

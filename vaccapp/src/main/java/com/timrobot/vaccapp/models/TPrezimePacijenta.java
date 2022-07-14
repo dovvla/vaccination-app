@@ -17,12 +17,12 @@ import javax.xml.bind.annotation.XmlValue;
 
 
 /**
- * <p>Java class for TPrezime complex type.
+ * <p>Java class for TPrezimePacijenta complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="TPrezime"&gt;
+ * &lt;complexType name="TPrezimePacijenta"&gt;
  *   &lt;simpleContent&gt;
  *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
  *       &lt;attribute name="property" use="required" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" fixed="pred:prezime" /&gt;
@@ -35,10 +35,10 @@ import javax.xml.bind.annotation.XmlValue;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "TPrezime", propOrder = {
+@XmlType(name = "TPrezimePacijenta", namespace = "http://tim.robot/zeleni_sertifikat", propOrder = {
     "value"
 })
-public class TPrezime {
+public class TPrezimePacijenta {
 
     @XmlValue
     protected String value;

@@ -1,6 +1,7 @@
 package com.timrobot.vaccapp;
 
 import com.timrobot.vaccapp.models.ObrazacInteresovanja;
+import com.timrobot.vaccapp.models.Sertifikat;
 import com.timrobot.vaccapp.models.Zahtev;
 import com.timrobot.vaccapp.services.*;
 import com.timrobot.vaccapp.utility.PdfUtil;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.apache.xmlrpc.webserver.ServletWebServer;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -71,6 +73,9 @@ public class VaccappApplication {
     @Autowired
     private PotvrdaOVakcinacijiService potvrdaOVakcinacijiService;
 
+    @Autowired
+    private SertifikatService sertifikatService;
+
     @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() throws TransformerException {
         demoService.unmarshalExample();
@@ -86,6 +91,12 @@ public class VaccappApplication {
         }
         try {
             Object x = potvrdaOVakcinacijiService.advancedSearchPotvrda("2021-05-26", "Vakcinski punkt Novi Sad", false);
+            x = null;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            Object x = sertifikatService.advancedSearchSertifikat("Nikola", "Nikolic", "2021-05-26T18:13:51.0", "<http://tim.robot/zahtev_za_sertifikat/zahtev_za_sertifikat>", true);
             x = null;
         } catch (IOException e) {
             e.printStackTrace();

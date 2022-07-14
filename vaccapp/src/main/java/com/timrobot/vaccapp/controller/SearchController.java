@@ -68,4 +68,15 @@ public class SearchController {
         }
     }
 
+    @GetMapping(value = "/sertifikat/advanced", produces = MediaType.APPLICATION_XML_VALUE)
+    public EntityList<Sertifikat> advancedSearchSertifikat(@RequestParam String ime, @RequestParam String prezime,
+                                                           @RequestParam String datumIVremeIzdavanja,
+                                                           @RequestParam String hrefZahtev, @RequestParam Boolean logicalAnd) {
+        try {
+            return new EntityList<>(sertifikatService.advancedSearchSertifikat(ime, prezime, datumIVremeIzdavanja, hrefZahtev, logicalAnd));
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

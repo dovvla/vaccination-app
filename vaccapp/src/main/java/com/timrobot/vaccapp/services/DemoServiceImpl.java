@@ -5,6 +5,7 @@ import com.timrobot.vaccapp.dao.DatabaseConnection;
 import com.timrobot.vaccapp.models.Izvestaj;
 import com.timrobot.vaccapp.models.Obrazac;
 import com.timrobot.vaccapp.models.Potvrda;
+import com.timrobot.vaccapp.models.Sertifikat;
 import com.timrobot.vaccapp.utility.FusekiUtil;
 import com.timrobot.vaccapp.utility.XMLMapper;
 import org.apache.jena.vocabulary.RDF;
@@ -25,10 +26,12 @@ public class DemoServiceImpl implements DemoService {
     private Izvestaj izvestaj = null;
     private Obrazac saglasnost = null;
     private Potvrda potvrda = null;
+    private Sertifikat sertifikat = null;
 
     public static final String IZVESTAJ_FILE_PATH = "./src/main/resources/xml/izvestaj_o_imunizaciji_1.xml";
     public static final String SAGLASNOST_FILE_PATH = "./src/main/resources/xml/saglasnost1.xml";
     public static final String POTVRDA_FILE_PATH = "./src/main/resources/xml/potvrda_o_vakcinaciji1.xml";
+    public static final String SERTIFIKAT_FILE_PATH = "./src/main/resources/xml/zeleni_sertifikat1.xml";
 
     @Override
     public Izvestaj unmarshalExample() {
@@ -36,6 +39,7 @@ public class DemoServiceImpl implements DemoService {
         izvestaj = XMLMapper.<Izvestaj>unmarshal(Izvestaj.class, new File(IZVESTAJ_FILE_PATH), "izvestaj_o_imunizaciji.xsd");
         saglasnost = XMLMapper.<Obrazac>unmarshal(Obrazac.class, new File(SAGLASNOST_FILE_PATH), "saglasnost.xsd");
         potvrda = XMLMapper.<Potvrda>unmarshal(Potvrda.class, new File(POTVRDA_FILE_PATH), "potvrda_o_vakcinaciji.xsd");
+        sertifikat = XMLMapper.<Sertifikat>unmarshal(Sertifikat.class, new File(SERTIFIKAT_FILE_PATH), "zeleni_sertifikat.xsd");
         System.out.println(izvestaj);
         System.out.println("Unmarshalling tested.\n");
         return izvestaj;
@@ -54,6 +58,7 @@ public class DemoServiceImpl implements DemoService {
         DatabaseConnection.<Izvestaj>storeInXMLDB("/db/apps/vaccapp", "izvestajDBex.xml", Izvestaj.class, izvestaj, "izvestaj_o_imunizaciji.xsd");
         DatabaseConnection.<Obrazac>storeInXMLDB("/db/vacc-app/saglasnost", "saglasnost1.xml", Obrazac.class, saglasnost, "saglasnost.xsd");
         DatabaseConnection.<Potvrda>storeInXMLDB("/db/vacc-app/potvrda-o-vakcinaciji", "potvrda_o_vakcinaciji1.xml", Potvrda.class, potvrda, "potvrda_o_vakcinaciji.xsd");
+        DatabaseConnection.<Sertifikat>storeInXMLDB("/db/vacc-app/sertifikat", "zeleni_sertifikat1.xml", Sertifikat.class, sertifikat, "zeleni_sertifikat.xsd");
         System.out.println("XML database storing tested.\n");
     }
 
@@ -76,11 +81,11 @@ public class DemoServiceImpl implements DemoService {
 //        }
 //        String xml = new String(encoded, StandardCharsets.UTF_8);
         System.out.println(potvrda.getZdravstvenaUstanova().getValue());
-        String potvrdaXML = mapper.convertToXml(potvrda, Potvrda.class);
+        String sertifikatXML = mapper.convertToXml(sertifikat, Sertifikat.class);
 
-        FusekiUtil.extractMetadataFromXML(potvrdaXML);
+        FusekiUtil.extractMetadataFromXML(sertifikatXML);
 
-        String graphURI = "potvrda";
+        String graphURI = "sertifikat";
 
         try {
             FusekiUtil.saveRDFToFuseki(graphURI);

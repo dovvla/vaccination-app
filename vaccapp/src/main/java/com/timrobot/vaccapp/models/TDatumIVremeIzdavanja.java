@@ -14,19 +14,20 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java class for TPrezime complex type.
+ * <p>Java class for TDatumIVremeIzdavanja complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="TPrezime"&gt;
+ * &lt;complexType name="TDatumIVremeIzdavanja"&gt;
  *   &lt;simpleContent&gt;
- *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
- *       &lt;attribute name="property" use="required" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" fixed="pred:prezime" /&gt;
- *       &lt;attribute name="datatype" use="required" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" fixed="xs:string" /&gt;
+ *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;dateTime"&gt;
+ *       &lt;attribute name="property" use="required" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" fixed="pred:datum" /&gt;
+ *       &lt;attribute name="datatype" use="required" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" fixed="xs:dateTime" /&gt;
  *     &lt;/extension&gt;
  *   &lt;/simpleContent&gt;
  * &lt;/complexType&gt;
@@ -35,13 +36,14 @@ import javax.xml.bind.annotation.XmlValue;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "TPrezime", propOrder = {
+@XmlType(name = "TDatumIVremeIzdavanja", namespace = "http://tim.robot/zeleni_sertifikat", propOrder = {
     "value"
 })
-public class TPrezime {
+public class TDatumIVremeIzdavanja {
 
     @XmlValue
-    protected String value;
+    @XmlSchemaType(name = "dateTime")
+    protected XMLGregorianCalendar value;
     @XmlAttribute(name = "property", required = true)
     @XmlSchemaType(name = "anySimpleType")
     protected String property;
@@ -54,10 +56,10 @@ public class TPrezime {
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link XMLGregorianCalendar }
      *     
      */
-    public String getValue() {
+    public XMLGregorianCalendar getValue() {
         return value;
     }
 
@@ -66,10 +68,10 @@ public class TPrezime {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link XMLGregorianCalendar }
      *     
      */
-    public void setValue(String value) {
+    public void setValue(XMLGregorianCalendar value) {
         this.value = value;
     }
 
@@ -83,7 +85,7 @@ public class TPrezime {
      */
     public String getProperty() {
         if (property == null) {
-            return "pred:prezime";
+            return "pred:datum";
         } else {
             return property;
         }
@@ -111,7 +113,7 @@ public class TPrezime {
      */
     public String getDatatype() {
         if (datatype == null) {
-            return "xs:string";
+            return "xs:dateTime";
         } else {
             return datatype;
         }
