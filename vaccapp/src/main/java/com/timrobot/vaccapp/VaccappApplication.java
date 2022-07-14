@@ -2,10 +2,7 @@ package com.timrobot.vaccapp;
 
 import com.timrobot.vaccapp.models.ObrazacInteresovanja;
 import com.timrobot.vaccapp.models.Zahtev;
-import com.timrobot.vaccapp.services.DemoService;
-import com.timrobot.vaccapp.services.DemoServiceImpl;
-import com.timrobot.vaccapp.services.InteresovanjeService;
-import com.timrobot.vaccapp.services.SaglasnostService;
+import com.timrobot.vaccapp.services.*;
 import com.timrobot.vaccapp.utility.PdfUtil;
 import com.timrobot.vaccapp.utility.QRcodeUtils;
 import com.timrobot.vaccapp.utility.XHtmlUtil;
@@ -25,6 +22,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -35,12 +33,12 @@ public class VaccappApplication {
     public static void main(String[] args) {
         DemoService demoService = new DemoServiceImpl();
 
-        demoService.unmarshalExample();
-        demoService.marshalExample();
-        demoService.storeInXMLDBExample();
-        demoService.retrieveFromXMLDBExample();
-        demoService.RDFExample();
-        demoService.RDFExample();
+//        demoService.unmarshalExample();
+//        demoService.marshalExample();
+//        demoService.storeInXMLDBExample();
+//        demoService.retrieveFromXMLDBExample();
+//        demoService.RDFExample();
+//        demoService.RDFExample();
 
         SpringApplication.run(VaccappApplication.class, args);
 
@@ -67,10 +65,28 @@ public class VaccappApplication {
     @Autowired
     private SaglasnostService saglasnostService;
 
+    @Autowired
+    private DemoService demoService;
+
+    @Autowired
+    private PotvrdaOVakcinacijiService potvrdaOVakcinacijiService;
+
     @EventListener(ApplicationReadyEvent.class)
-    public void doSomethingAfterStartup() {
+    public void doSomethingAfterStartup() throws TransformerException {
+        demoService.unmarshalExample();
+        demoService.marshalExample();
+        demoService.storeInXMLDBExample();
+        demoService.retrieveFromXMLDBExample();
+        demoService.RDFExample();
+        demoService.RDFExample();
         try {
             saglasnostService.advancedSearchSaglasnost("Srba", "Hrvotic", "Pfizer", "2021-05-04", "<http://tim.robot/iskazivanje_interesovanja_za_vakcinaciju/iskazivanje_interesovanja_za_vakcinaciju_1>", true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            Object x = potvrdaOVakcinacijiService.advancedSearchPotvrda("2021-05-26", "Vakcinski punkt Novi Sad", false);
+            x = null;
         } catch (IOException e) {
             e.printStackTrace();
         }

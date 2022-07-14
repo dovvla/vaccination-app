@@ -4,12 +4,14 @@ import com.timrobot.vaccapp.dao.DataAccessLayer;
 import com.timrobot.vaccapp.dao.DatabaseConnection;
 import com.timrobot.vaccapp.models.Izvestaj;
 import com.timrobot.vaccapp.models.Obrazac;
+import com.timrobot.vaccapp.models.Potvrda;
 import com.timrobot.vaccapp.utility.FusekiUtil;
 import com.timrobot.vaccapp.utility.XMLMapper;
 import org.apache.jena.vocabulary.RDF;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -22,15 +24,18 @@ import java.util.List;
 public class DemoServiceImpl implements DemoService {
     private Izvestaj izvestaj = null;
     private Obrazac saglasnost = null;
+    private Potvrda potvrda = null;
 
     public static final String IZVESTAJ_FILE_PATH = "./src/main/resources/xml/izvestaj_o_imunizaciji_1.xml";
     public static final String SAGLASNOST_FILE_PATH = "./src/main/resources/xml/saglasnost1.xml";
+    public static final String POTVRDA_FILE_PATH = "./src/main/resources/xml/potvrda_o_vakcinaciji1.xml";
 
     @Override
     public Izvestaj unmarshalExample() {
         System.out.println("Testing unmarshalling...");
         izvestaj = XMLMapper.<Izvestaj>unmarshal(Izvestaj.class, new File(IZVESTAJ_FILE_PATH), "izvestaj_o_imunizaciji.xsd");
         saglasnost = XMLMapper.<Obrazac>unmarshal(Obrazac.class, new File(SAGLASNOST_FILE_PATH), "saglasnost.xsd");
+        potvrda = XMLMapper.<Potvrda>unmarshal(Potvrda.class, new File(POTVRDA_FILE_PATH), "potvrda_o_vakcinaciji.xsd");
         System.out.println(izvestaj);
         System.out.println("Unmarshalling tested.\n");
         return izvestaj;
@@ -48,6 +53,7 @@ public class DemoServiceImpl implements DemoService {
         System.out.println("Testing XML database storing...");
         DatabaseConnection.<Izvestaj>storeInXMLDB("/db/apps/vaccapp", "izvestajDBex.xml", Izvestaj.class, izvestaj, "izvestaj_o_imunizaciji.xsd");
         DatabaseConnection.<Obrazac>storeInXMLDB("/db/vacc-app/saglasnost", "saglasnost1.xml", Obrazac.class, saglasnost, "saglasnost.xsd");
+        DatabaseConnection.<Potvrda>storeInXMLDB("/db/vacc-app/potvrda-o-vakcinaciji", "potvrda_o_vakcinaciji1.xml", Potvrda.class, potvrda, "potvrda_o_vakcinaciji.xsd");
         System.out.println("XML database storing tested.\n");
     }
 
@@ -61,18 +67,20 @@ public class DemoServiceImpl implements DemoService {
     }
 
     @Override
-    public void RDFExample() {
-        byte[] encoded = new byte[0];
-        try {
-            encoded = Files.readAllBytes(Paths.get("./src/main/resources/xml/saglasnost1.xml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String xml = new String(encoded, StandardCharsets.UTF_8);
+    public void RDFExample() throws TransformerException {
+//        byte[] encoded = new byte[0];
+//        try {
+//            encoded = Files.readAllBytes(Paths.get("./src/main/resources/xml/saglasnost1.xml"));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        String xml = new String(encoded, StandardCharsets.UTF_8);
+        System.out.println(potvrda.getZdravstvenaUstanova().getValue());
+        String potvrdaXML = mapper.convertToXml(potvrda, Potvrda.class);
 
-        FusekiUtil.extractMetadataFromXML(xml);
+        FusekiUtil.extractMetadataFromXML(potvrdaXML);
 
-        String graphURI = "saglasnost";
+        String graphURI = "potvrda";
 
         try {
             FusekiUtil.saveRDFToFuseki(graphURI);

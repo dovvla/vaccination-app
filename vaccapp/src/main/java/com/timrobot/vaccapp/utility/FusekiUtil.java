@@ -5,6 +5,8 @@ import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.RDFNode;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import org.apache.jena.rdf.model.Model;
@@ -14,18 +16,48 @@ import org.apache.jena.update.UpdateFactory;
 import org.apache.jena.update.UpdateProcessor;
 import org.apache.jena.update.UpdateRequest;
 
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.w3c.dom.Element;
+
 public class FusekiUtil {
 
-    public static void extractMetadataFromXML(String xmlFile) {
+    private static String addPredicateNamespaceToXML(String xml) throws TransformerException {
+        Source source = new StreamSource(new StringReader(xml));
+        DOMResult result = new DOMResult();
+        TransformerFactory.newInstance().newTransformer().transform(source, result);
+        Document document = (Document) result.getNode();
+        Element element = ((Document) result.getNode()).getDocumentElement();
+        element.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "xmlns:pred", "http://tim.robot/rdf/predicate/");
+
+        DOMSource source2 = new DOMSource(element);
+        StreamResult result2 = new StreamResult(new StringWriter());
+        TransformerFactory.newInstance().newTransformer().transform(source2, result2);
+
+        return result2.getWriter().toString();
+    }
+
+    public static void extractMetadataFromXML(String xmlFile) throws TransformerException {
         // Automatic extraction of RDF triples from XML file
         String rdfFilePath = "./src/main/resources/rdf/metadata.rdf";
+
+        xmlFile = addPredicateNamespaceToXML(xmlFile);
 
         MetadataExtractor metadataExtractor = null;
         try {

@@ -58,4 +58,14 @@ public class SearchController {
         }
     }
 
+    @GetMapping(value = "/potvrda/advanced", produces = MediaType.APPLICATION_XML_VALUE)
+    public EntityList<Potvrda> advancedSearchPotvrda(@RequestParam String datum, @RequestParam String zdravstvenaUstanova,
+                                                     @RequestParam Boolean logicalAnd) {
+        try {
+            return new EntityList<>(potvrdaOVakcinacijiService.advancedSearchPotvrda(datum, zdravstvenaUstanova, logicalAnd));
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

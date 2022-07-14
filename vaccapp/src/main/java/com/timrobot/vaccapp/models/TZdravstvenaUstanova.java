@@ -17,15 +17,15 @@ import javax.xml.bind.annotation.XmlValue;
 
 
 /**
- * <p>Java class for TPrezime complex type.
+ * <p>Java class for TZdravstvenaUstanova complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="TPrezime"&gt;
+ * &lt;complexType name="TZdravstvenaUstanova"&gt;
  *   &lt;simpleContent&gt;
  *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema&gt;string"&gt;
- *       &lt;attribute name="property" use="required" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" fixed="pred:prezime" /&gt;
+ *       &lt;attribute name="property" use="required" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" fixed="pred:zdravstvena_ustanova" /&gt;
  *       &lt;attribute name="datatype" use="required" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" fixed="xs:string" /&gt;
  *     &lt;/extension&gt;
  *   &lt;/simpleContent&gt;
@@ -35,10 +35,10 @@ import javax.xml.bind.annotation.XmlValue;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "TPrezime", propOrder = {
+@XmlType(name = "TZdravstvenaUstanova", namespace = "http://tim.robot/potvrda_o_vakcinaciji", propOrder = {
     "value"
 })
-public class TPrezime {
+public class TZdravstvenaUstanova {
 
     @XmlValue
     protected String value;
@@ -83,7 +83,7 @@ public class TPrezime {
      */
     public String getProperty() {
         if (property == null) {
-            return "pred:prezime";
+            return "pred:zdravstvena_ustanova";
         } else {
             return property;
         }

@@ -31,7 +31,7 @@
                     </xs:complexType>
                 </xs:element>
                 <xs:element maxOccurs="2" type="pov:TDoza_vakcine" name="Doza_vakcine"/>
-                <xs:element name="Zdravstvena_ustanova" type="xs:string"/>
+                <xs:element name="Zdravstvena_ustanova" type="pov:TZdravstvenaUstanova"/>
                 <xs:element name="Naziv_vakcine">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
@@ -43,8 +43,9 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element name="Datum" type="xs:date"/>
+                <xs:element name="Datum" type="pov:TDatum"/>
             </xs:sequence>
+            <xs:attribute name="about" type="xs:string" use="required"/>
         </xs:complexType>
     </xs:element>
     <xs:complexType name="TDoza_vakcine">
@@ -52,5 +53,21 @@
             <xs:element name="Datum_davanja" type="xs:date"/>
             <xs:element name="Serija" type="xs:string"/>
         </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TDatum">
+        <xs:simpleContent>
+            <xs:extension base="xs:date">
+                <xs:attribute name="property" use="required" fixed="pred:datum"/>
+                <xs:attribute name="datatype" use="required" fixed="xs:date"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="TZdravstvenaUstanova">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="property" use="required" fixed="pred:zdravstvena_ustanova"/>
+                <xs:attribute name="datatype" use="required" fixed="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
     </xs:complexType>
 </xs:schema>

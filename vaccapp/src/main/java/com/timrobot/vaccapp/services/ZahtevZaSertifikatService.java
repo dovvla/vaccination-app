@@ -195,7 +195,7 @@ public class ZahtevZaSertifikatService {
             tDozaVakcinacije.setDatum(doza.getDatumIzdavanja());
             tDozaVakcinacije.setSerija(doza.getSerijaVakcine());
             tDozaVakcinacije.setProizvodjac(doza.getProizvodjac());
-            tDozaVakcinacije.setZdravstvenaUstanova(potvrda.getZdravstvenaUstanova());
+            tDozaVakcinacije.setZdravstvenaUstanova(potvrda.getZdravstvenaUstanova().getValue());
             tDozaVakcinacije.setTip(doza.getNaziv().getValue());
             sertifikat.getDozaVakcinacije().add(tDozaVakcinacije);
         }

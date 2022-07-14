@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -63,7 +64,7 @@ public class SaglasnostService {
         return (Obrazac) mapper.convertToObject(xmlString, "saglasnost", Obrazac.class);
     }
 
-    public Obrazac putSaglasnost(Obrazac obrazac) {
+    public Obrazac putSaglasnost(Obrazac obrazac) throws TransformerException {
         String documentId = obrazac
                                     .getPodaciOPacijentu()
                                     .getDrzavljanstvo()
@@ -99,11 +100,15 @@ public class SaglasnostService {
                         .newXMLGregorianCalendar(iso);
     }
 
-    public Obrazac imunizujGradjanina(Obrazac obrazac) throws DatatypeConfigurationException {
+    public Obrazac imunizujGradjanina(Obrazac obrazac) throws DatatypeConfigurationException, TransformerException {
 
         Potvrda potvrda = new Potvrda();
 
-        potvrda.setDatum(localDateTimeToXMLDate(LocalDateTime.now()));
+        TDatum datum = new TDatum();
+        datum.setDatatype("xs:date");
+        datum.setProperty("pred:datum");
+        datum.setValue(localDateTimeToXMLDate(LocalDateTime.now()));
+        potvrda.setDatum(datum);
         potvrda.setNazivVakcine(obrazac
                 .getEvidencijaOVakcinaciji()
                 .getPodaciOIzvrsenimImunizacijama()
@@ -124,9 +129,13 @@ public class SaglasnostService {
         podaciPacijenta.setPrezime(obrazac
                 .getPodaciOPacijentu()
                 .getPrezime().getValue());
-        potvrda.setZdravstvenaUstanova(obrazac
+        TZdravstvenaUstanova tZdravstvenaUstanova = new TZdravstvenaUstanova();
+        tZdravstvenaUstanova.setDatatype("xs:string");
+        tZdravstvenaUstanova.setProperty("pred:zdravstvena_ustanova");
+        tZdravstvenaUstanova.setValue(obrazac
                 .getEvidencijaOVakcinaciji()
                 .getZdravstvenaUstanova());
+        potvrda.setZdravstvenaUstanova(tZdravstvenaUstanova);
 
         obrazac
                 .getEvidencijaOVakcinaciji()
