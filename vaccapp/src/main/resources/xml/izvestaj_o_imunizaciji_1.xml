@@ -2,7 +2,7 @@
 <Izvestaj xmlns="http://tim.robot/izvestaj_o_imunizaciji"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:schemaLocation="http://tim.robot/izvestaj_o_imunizaciji izvestaj_o_imunizaciji.xsd"
- xmlns:pred="http://tim.robot/rdf/predicate">
+ xmlns:pred="http://tim.robot/rdf/predicate/">
     <Period_izvestaja>
         <Datum_od property="pred:datum_od">2021-08-04</Datum_od>
         <Datum_do property="pred:datum_do">2021-09-04</Datum_do>

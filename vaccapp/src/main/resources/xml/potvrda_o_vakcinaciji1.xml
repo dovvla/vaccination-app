@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Potvrda xmlns="http://tim.robot/potvrda_o_vakcinaciji"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://tim.robot/potvrda_o_vakcinaciji potvrda_o_vakcinaciji.xsd">
+ xsi:schemaLocation="http://tim.robot/potvrda_o_vakcinaciji potvrda_o_vakcinaciji.xsd"
+         xmlns:pred="http://tim.robot/rdf/predicate/"
+ about="http://tim.robot/potvrda_o_vakcinaciji/potvrda_o_vakcinaciji1">
     <Sifra_potvrde>ecc3e162-2346-45c6-859d-df658f48bca6</Sifra_potvrde>
     <QRkod>nesto</QRkod>
     <Podaci_pacijenta>
@@ -18,7 +20,7 @@
         <Datum_davanja>2021-05-25</Datum_davanja>
         <Serija>EN1193</Serija>
     </Doza_vakcine>
-    <Zdravstvena_ustanova>Vakcinski punkt Novi Sad</Zdravstvena_ustanova>
+    <Zdravstvena_ustanova datatype="xs:string" property="pred:zdravstvena_ustanova">Vakcinski punkt Novi Sad</Zdravstvena_ustanova>
     <Naziv_vakcine>Pfizer</Naziv_vakcine>
-    <Datum>2021-05-25</Datum>
+    <Datum property="pred:datum" datatype="xs:date">2021-05-25</Datum>
 </Potvrda>

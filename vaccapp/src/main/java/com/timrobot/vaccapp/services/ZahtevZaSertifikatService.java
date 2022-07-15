@@ -4,6 +4,7 @@ import com.timrobot.vaccapp.dao.DataAccessLayer;
 import com.timrobot.vaccapp.exceptions.ResourceAlreadyExistsException;
 import com.timrobot.vaccapp.models.*;
 import com.timrobot.vaccapp.utility.EmailServiceImpl;
+import com.timrobot.vaccapp.utility.FusekiUtil;
 import com.timrobot.vaccapp.utility.XMLMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.transform.TransformerException;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.time.LocalDate;
@@ -151,7 +154,7 @@ public class ZahtevZaSertifikatService {
         return true;
     }
 
-    public boolean prihvatiZahtev(String id) throws DatatypeConfigurationException {
+    public boolean prihvatiZahtev(String id) throws DatatypeConfigurationException, TransformerException {
         Zahtev zahtev = this.getXmlAsObject(id);
 
         if (zahtev == null || zahtev.getStatus().equals("Odbijen") || zahtev.getStatus().equals("Prihvacen"))
@@ -195,25 +198,54 @@ public class ZahtevZaSertifikatService {
             tDozaVakcinacije.setDatum(doza.getDatumIzdavanja());
             tDozaVakcinacije.setSerija(doza.getSerijaVakcine());
             tDozaVakcinacije.setProizvodjac(doza.getProizvodjac());
-            tDozaVakcinacije.setZdravstvenaUstanova(potvrda.getZdravstvenaUstanova());
-            tDozaVakcinacije.setTip(doza.getNaziv());
+            tDozaVakcinacije.setZdravstvenaUstanova(potvrda.getZdravstvenaUstanova().getValue());
+            tDozaVakcinacije.setTip(doza.getNaziv().getValue());
             sertifikat.getDozaVakcinacije().add(tDozaVakcinacije);
         }
         Sertifikat.PodaciOPacijentu podaciOPacijentu = new Sertifikat.PodaciOPacijentu();
         podaciOPacijentu.setJMBG(zahtev.getPodaciOPodnosiocu().getJMBG());
         podaciOPacijentu.setDatumRodjenja(zahtev.getPodaciOPodnosiocu().getDatumRodjenja());
-        podaciOPacijentu.setIme(zahtev.getPodaciOPodnosiocu().getIme());
+        TImePacijenta tImePacijenta = new TImePacijenta();
+        tImePacijenta.setDatatype("xs:string");
+        tImePacijenta.setProperty("pred:ime");
+        tImePacijenta.setValue(zahtev.getPodaciOPodnosiocu().getIme());
+        podaciOPacijentu.setIme(tImePacijenta);
         podaciOPacijentu.setPol(zahtev.getPodaciOPodnosiocu().getPol());
-        podaciOPacijentu.setPrezime(zahtev.getPodaciOPodnosiocu().getPrezime());
+        TPrezimePacijenta tPrezimePacijenta = new TPrezimePacijenta();
+        tPrezimePacijenta.setDatatype("xs:string");
+        tPrezimePacijenta.setProperty("pred:prezime");
+        tPrezimePacijenta.setValue(zahtev.getPodaciOPodnosiocu().getPrezime());
+        podaciOPacijentu.setPrezime(tPrezimePacijenta);
         sertifikat.setPodaciOPacijentu(podaciOPacijentu);
         Sertifikat.PodaciOSertifikatu podaciOSertifikatu = new Sertifikat.PodaciOSertifikatu();
         podaciOSertifikatu.setBroj(new BigInteger(32, new SecureRandom()));
-        podaciOSertifikatu.setDatumIVreme(calendar);
+        TDatumIVremeIzdavanja tDatumIVremeIzdavanja = new TDatumIVremeIzdavanja();
+        tDatumIVremeIzdavanja.setDatatype("xs:dateTime");
+        tDatumIVremeIzdavanja.setProperty("pred:datum");
+        tDatumIVremeIzdavanja.setValue(calendar);
+        podaciOSertifikatu.setDatumIVreme(tDatumIVremeIzdavanja);
         sertifikat.setPodaciOSertifikatu(podaciOSertifikatu);
 
         // sertifikat se cuva u xml bazi
         String sertifikatDocumentId = sertifikat.getPodaciOSertifikatu().getBroj() + ".xml";
+        sertifikat.setAbout("http://tim.robot/zeleni_sertifikat/" + sertifikat.getPodaciOSertifikatu().getBroj());
+        sertifikat.setRel("pred:fromZahtev");
+        sertifikat.setHref("http://tim.robot/zahtev_za_sertifikat/" + id);
         dataAccessLayer.saveDocument(sertifikat, "/db/vacc-app/sertifikat", sertifikatDocumentId, Sertifikat.class);
+
+        // ----------- RDF -------------
+        String sertifikatXML = mapper.convertToXml(sertifikat, Sertifikat.class);
+
+        FusekiUtil.extractMetadataFromXML(sertifikatXML);
+
+        String graphURI = "sertifikat";
+
+        try {
+            FusekiUtil.saveRDFToFuseki(graphURI);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // ----------- RDF -------------
 
         // TO DO : dobaviti sacuvani sertifikat u XHTML & PDF formi za download u mejlu
 

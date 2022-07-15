@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Sertifikat xmlns="http://tim.robot/zeleni_sertifikat"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://tim.robot/zeleni_sertifikat zeleni_sertifikat.xsd">
+ xsi:schemaLocation="http://tim.robot/zeleni_sertifikat zeleni_sertifikat.xsd"
+ about="http://tim.robot/zeleni_sertifikat/zeleni_sertifikat1" rel="pred:fromZahtev"
+ href="http://tim.robot/zahtev_za_sertifikat/zahtev_za_sertifikat1">
     <Podaci_o_sertifikatu>
         <Broj>12345</Broj>
-        <Datum_i_vreme>2021-05-26T18:13:51.0</Datum_i_vreme>
+        <Datum_i_vreme datatype="xs:dateTime" property="pred:datum">2021-05-26T18:13:51.0</Datum_i_vreme>
         <QRkod>www.exampleqr.com</QRkod>
     </Podaci_o_sertifikatu>
     <Podaci_o_pacijentu>
-        <Ime>Nikola</Ime>
-        <Prezime>Nikolic</Prezime>
+        <Ime property="pred:ime" datatype="xs:string">Nikola</Ime>
+        <Prezime datatype="xs:string" property="pred:prezime">Nikolic</Prezime>
         <Pol>Musko</Pol>
         <Datum_rodjenja>1995-05-04</Datum_rodjenja>
         <JMBG>0405995666666</JMBG>

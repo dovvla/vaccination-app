@@ -4,9 +4,14 @@ import com.timrobot.vaccapp.models.EntityList;
 import com.timrobot.vaccapp.models.Obrazac;
 import com.timrobot.vaccapp.services.SaglasnostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.io.IOException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/saglasnost")
@@ -47,6 +52,24 @@ public class SaglasnostController {
             return ResponseEntity
                     .badRequest()
                     .body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/metadata-json/{id}")
+    public Map<String, String> getJsonMetadataForDocument(@PathVariable String id) {
+        try {
+            return saglasnostService.getAllMetadataForDocumentForJSON(id);
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = "/metadata-rdf/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+    public String getRDFMetadataForDocument(@PathVariable String id) {
+        try {
+            return saglasnostService.getAllMetadataForDocumentInRDF(id);
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
 }

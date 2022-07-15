@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
     targetNamespace="http://tim.robot/zeleni_sertifikat"
-    xmlns:zs="http://tim.robot/zeleni_sertifikat">
+    xmlns:zs="http://tim.robot/zeleni_sertifikat" xmlns:pred="http://tim.robot/rdf/predicate/">
 
     <xs:element name="Sertifikat">
         <xs:complexType>
@@ -10,7 +10,7 @@
                     <xs:complexType>
                         <xs:sequence>
                             <xs:element name="Broj" type="xs:positiveInteger"/>
-                            <xs:element name="Datum_i_vreme" type="xs:dateTime"/>
+                            <xs:element name="Datum_i_vreme" type="zs:TDatumIVremeIzdavanja"/>
                             <xs:element name="QRkod" type="xs:string"/>
                         </xs:sequence>
                     </xs:complexType>
@@ -18,8 +18,8 @@
                 <xs:element name="Podaci_o_pacijentu">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="Ime" type="xs:string"/>
-                            <xs:element name="Prezime" type="xs:string"/>
+                            <xs:element name="Ime" type="zs:TImePacijenta"/>
+                            <xs:element name="Prezime" type="zs:TPrezimePacijenta"/>
                             <xs:element name="Pol">
                                 <xs:simpleType>
                                     <xs:restriction base="xs:string">
@@ -49,6 +49,9 @@
                 <xs:element maxOccurs="2" minOccurs="0" type="zs:TDoza_vakcinacije" name="Doza_vakcinacije"/>
                 <xs:element maxOccurs="unbounded" minOccurs="0" type="zs:TKovid_test" name="Kovid_test"/>
             </xs:sequence>
+            <xs:attribute name="about" type="xs:string" use="required"/>
+            <xs:attribute fixed="pred:fromZahtev" name="rel" type="xs:string"/>
+            <xs:attribute name="href" type="xs:string"/>
         </xs:complexType>
     </xs:element>
 
@@ -87,5 +90,30 @@
                 <xs:element name="Laboratorija" type="xs:string"/>
             </xs:sequence>
         </xs:complexType>
-   
+
+    <xs:complexType name="TDatumIVremeIzdavanja">
+        <xs:simpleContent>
+            <xs:extension base="xs:dateTime">
+                <xs:attribute name="property" use="required" fixed="pred:datum"/>
+                <xs:attribute name="datatype" use="required" fixed="xs:dateTime"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="TImePacijenta">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="property" use="required" fixed="pred:ime"/>
+                <xs:attribute name="datatype" use="required" fixed="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="TPrezimePacijenta">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="property" use="required" fixed="pred:prezime"/>
+                <xs:attribute name="datatype" use="required" fixed="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
 </xs:schema>

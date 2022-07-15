@@ -108,16 +108,16 @@ public class IzvestajService {
                         !prvaDoza.getDatumIzdavanja().toGregorianCalendar().getTime().after(datumDo.toGregorianCalendar().getTime())) {
                     prvih++;
                     ukupan++;
-                    if (prvaDoza.getNaziv().toLowerCase().contains("pfizer")) {
+                    if (prvaDoza.getNaziv().getValue().toLowerCase().contains("pfizer")) {
                         pfizer++;
                     }
-                    if (prvaDoza.getNaziv().toLowerCase().contains("sinopharm")) {
+                    if (prvaDoza.getNaziv().getValue().toLowerCase().contains("sinopharm")) {
                         sinopharm++;
                     }
-                    if (prvaDoza.getNaziv().toLowerCase().contains("sputnik")) {
+                    if (prvaDoza.getNaziv().getValue().toLowerCase().contains("sputnik")) {
                         sputnik++;
                     }
-                    if (prvaDoza.getNaziv().toLowerCase().contains("az")) {
+                    if (prvaDoza.getNaziv().getValue().toLowerCase().contains("az")) {
                         az++;
                     }
                 }
@@ -126,16 +126,16 @@ public class IzvestajService {
                         !drugaDoza.getDatumIzdavanja().toGregorianCalendar().getTime().after(datumDo.toGregorianCalendar().getTime())) {
                     drugih++;
                     ukupan++;
-                    if (drugaDoza.getNaziv().toLowerCase().contains("pfizer")) {
+                    if (drugaDoza.getNaziv().getValue().toLowerCase().contains("pfizer")) {
                         pfizer++;
                     }
-                    if (drugaDoza.getNaziv().toLowerCase().contains("sinopharm")) {
+                    if (drugaDoza.getNaziv().getValue().toLowerCase().contains("sinopharm")) {
                         sinopharm++;
                     }
-                    if (drugaDoza.getNaziv().toLowerCase().contains("sputnik")) {
+                    if (drugaDoza.getNaziv().getValue().toLowerCase().contains("sputnik")) {
                         sputnik++;
                     }
-                    if (drugaDoza.getNaziv().toLowerCase().contains("az")) {
+                    if (drugaDoza.getNaziv().getValue().toLowerCase().contains("az")) {
                         az++;
                     }
                 }
