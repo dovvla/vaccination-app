@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import UnregisteredPage from '../views/UnregisteredPage'
 import Login from '../views/Login'
 import Logout from '../views/Logout'
+import SluzbenikPage from '../views/SluzbenikPage'
+import Izvestaj from '../components/Izvestaj'
 
 Vue.use(VueRouter)
 
@@ -28,24 +30,24 @@ const routes = [
 		name: "Logout",
 		component: Logout
 	},
-	// {
-	// 	path: "/AdminPage",
-	// 	name: "AdminPage",
-	// 	component: AdminPage,
-	// 	children: [
-	// 		{
-	// 			path: "CreateCSR",
-	// 			name: "CreateCSRAdmin",
-	// 			component: CreateCSR,
-	// 			meta: {
-	// 				roles: [Role.Admin]
-	// 			},
-	// 		},
-	// 	],
-	// 	meta: {
-	// 		roles: [Role.Admin]
-	// 	},
-	// },
+	{
+		path: "/SluzbenikPage",
+		name: "SluzbenikPage",
+		component: SluzbenikPage,
+		children: [
+			{
+				path: "Izvestaj",
+				name: "Izvestaj",
+				component: Izvestaj,
+				// meta: {
+				// 	roles: [Role.Sluzbenik]
+				// },
+			},
+		],
+		// meta: {
+		// 	roles: [Role.Sluzbenik]
+		// },
+	},
 	{
 		path: '*',
 		redirect: "/Login"
