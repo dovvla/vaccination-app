@@ -1,12 +1,17 @@
 package com.timrobot.vaccapp.controller;
 
 import com.timrobot.vaccapp.models.EntityList;
+import com.timrobot.vaccapp.models.Korisnik;
 import com.timrobot.vaccapp.models.Obrazac;
+import com.timrobot.vaccapp.services.KorisnikService;
 import com.timrobot.vaccapp.services.SaglasnostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -18,6 +23,10 @@ import java.util.Map;
 public class SaglasnostController {
     @Autowired
     private SaglasnostService saglasnostService;
+
+
+    @Autowired
+    private KorisnikService korisnikService;
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_XML_VALUE)
     public EntityList<Obrazac> getAll() {
@@ -32,6 +41,10 @@ public class SaglasnostController {
     @PostMapping(value = "", produces = MediaType.APPLICATION_XML_VALUE, consumes = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<?> putSaglanost(@RequestBody Obrazac obrazac) {
         try {
+            Authentication auth = SecurityContextHolder
+                    .getContext().getAuthentication();
+            Korisnik korisnik = korisnikService.getKorisnikByEmail( ((User) auth.getPrincipal()).getUsername());
+            if(obrazac.getPodaciOPacijentu().getDrzavljanstvo().getJMBG()==null) {saglasnostService.popuniKorisnika(obrazac, korisnik);}
             return ResponseEntity.ok(saglasnostService.putSaglasnost(obrazac));
         }
         catch (Exception e) {

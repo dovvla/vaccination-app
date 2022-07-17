@@ -66,4 +66,13 @@ public class KorisnikService {
         return new EntityList<>(lk);
 
     }
+
+    public Korisnik getKorisnikByEmail(String email) throws Exception {
+        return  dataAccessLayer
+                .getAllDocuments(folderId)
+                .stream()
+                .map(s -> (Korisnik) mapper.convertToObject(s, "korisnik", Korisnik.class))
+                .filter(korisnik -> korisnik.getEmail().equals(email))
+                .findFirst().orElseThrow(Exception::new);
+    }
 }

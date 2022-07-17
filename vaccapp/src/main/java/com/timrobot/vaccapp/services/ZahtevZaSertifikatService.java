@@ -3,11 +3,10 @@ package com.timrobot.vaccapp.services;
 import com.timrobot.vaccapp.dao.DataAccessLayer;
 import com.timrobot.vaccapp.exceptions.ResourceAlreadyExistsException;
 import com.timrobot.vaccapp.models.*;
-import com.timrobot.vaccapp.utility.EmailServiceImpl;
-import com.timrobot.vaccapp.utility.FusekiUtil;
-import com.timrobot.vaccapp.utility.XMLMapper;
+import com.timrobot.vaccapp.utility.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xml.sax.SAXException;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -111,7 +110,7 @@ public class ZahtevZaSertifikatService {
                 .collect(Collectors.toList()));
     }
 
-    public Zahtev createZahtev(Zahtev zahtev) throws DatatypeConfigurationException {
+    public Zahtev createZahtev(Zahtev zahtev) throws DatatypeConfigurationException, IOException, SAXException {
         String identifikator = UUID.randomUUID().toString();
         String documentId = identifikator + ".xml";
         zahtev.setIdentifikator(identifikator);
@@ -252,5 +251,15 @@ public class ZahtevZaSertifikatService {
         emailService.sendSimpleMessage(email, "Prihvacen zahtev", "Zahtev za izdavanje zelenog sertifikata je prihvacen.");
 
         return true;
+    }
+
+    public void popuniKorisnika(Zahtev zahtev, Korisnik korisnik) throws DatatypeConfigurationException {
+        zahtev.getPodaciOPodnosiocu().setIme(korisnik.getIme());
+        zahtev.getPodaciOPodnosiocu().setJMBG(korisnik.getJmbg());
+        zahtev.getPodaciOPodnosiocu().setBrojPasosa(korisnik.getBrojPasosa());
+        zahtev.getPodaciOPodnosiocu().setPol(korisnik.getPol().equals("Muski") ? "Musko" : "Zensko");
+        zahtev.getPodaciOPodnosiocu().setDatumRodjenja(korisnik.getDatumRodjenja());
+        zahtev.getPodaciOPodnosiocu().setPrezime(korisnik.getPrezime());
+        zahtev.setDatum(saglasnostService.localDateTimeToXMLDate(LocalDateTime.now()));
     }
 }

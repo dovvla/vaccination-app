@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,9 +33,7 @@ public class TerminService {
     }
 
     public Termin saveXmlFromText(Termin termin) {
-        String documentId = termin
-                                    .getDatumVreme()
-                                    .toString() + ".xml";
+        String documentId = UUID.randomUUID() + ".xml";
         dataAccessLayer.saveDocument(termin, folderId, documentId, Termin.class);
         return termin;
     }
