@@ -57,7 +57,8 @@ public class VaccappApplication {
            // PdfUtil pdfUtil = new PdfUtil();
             //pdfUtil.generatePDF(xml, Sertifikat.class);
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -78,7 +79,7 @@ public class VaccappApplication {
     @Autowired
     private SertifikatService sertifikatService;
 
-    @EventListener(ApplicationReadyEvent.class)
+//    @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() throws TransformerException {
         demoService.unmarshalExample();
         demoService.marshalExample();
@@ -88,19 +89,22 @@ public class VaccappApplication {
         demoService.RDFExample();
         try {
             saglasnostService.advancedSearchSaglasnost("Srba", "Hrvotic", "Pfizer", "2021-05-04", "<http://tim.robot/iskazivanje_interesovanja_za_vakcinaciju/iskazivanje_interesovanja_za_vakcinaciju_1>", true);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
         try {
             Object x = potvrdaOVakcinacijiService.advancedSearchPotvrda("2021-05-26", "Vakcinski punkt Novi Sad", false);
             x = null;
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
         try {
             Object x = sertifikatService.advancedSearchSertifikat("Nikola", "Nikolic", "2021-05-26T18:13:51.0", "<http://tim.robot/zahtev_za_sertifikat/zahtev_za_sertifikat>", true);
             x = null;
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -108,7 +112,7 @@ public class VaccappApplication {
     @Bean
     public OpenAPI customOpenAPI() {
         final String securitySchemeName = "bearerAuth";
-        final String apiTitle = String.format("%s API", "homebot");
+        final String apiTitle = String.format("%s API", "vaccapp");
         return new OpenAPI()
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(
@@ -129,11 +133,11 @@ public class VaccappApplication {
     @Bean
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
+        mailSender.setHost("127.0.0.1");
+        mailSender.setPort(1025);
 
-        mailSender.setUsername("my.gmail@gmail.com");
-        mailSender.setPassword("password");
+        mailSender.setUsername("tim10isamrs2021");
+        mailSender.setPassword("tim10psw2021");
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

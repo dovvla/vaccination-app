@@ -33,11 +33,20 @@ public class BrojVakcinaService {
     private TerminService terminService;
 
     public BrojVakcina getXmlAsObject(String documentId) {
+        try {
         String xmlString = dataAccessLayer
                 .getDocument(folderId, documentId)
                 .get();
 
-        return (BrojVakcina) mapper.convertToObject(xmlString, "broj_vakcina", BrojVakcina.class);
+            return (BrojVakcina) mapper.convertToObject(xmlString, "broj_vakcina", BrojVakcina.class);
+        }
+        catch (Exception ignored) {
+            BrojVakcina brojVakcina = new BrojVakcina();
+            brojVakcina.setBroj(0);
+            brojVakcina.setVakcina(documentId);
+            saveXmlFromText(brojVakcina);
+            return brojVakcina;
+        }
     }
 
     public BrojVakcina saveXmlFromText(BrojVakcina brojVakcina) {

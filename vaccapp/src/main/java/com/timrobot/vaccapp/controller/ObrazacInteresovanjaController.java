@@ -8,6 +8,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+
 @RestController
 @RequestMapping("/api/interesovanje")
 public class ObrazacInteresovanjaController {
@@ -31,9 +33,9 @@ public class ObrazacInteresovanjaController {
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_XML_VALUE, consumes = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<?> createObrazacInteresovanja(@RequestBody ObrazacInteresovanja obrazacInteresovanja) {
+    public ResponseEntity<?> createObrazacInteresovanja(@RequestBody ObrazacInteresovanja obrazacInteresovanja) throws DatatypeConfigurationException {
         try {
-            return ResponseEntity.ok(obrazacInteresovanjaService.createObrazacInteresovanja(obrazacInteresovanja));
+        return ResponseEntity.ok(obrazacInteresovanjaService.createObrazacInteresovanja(obrazacInteresovanja));
         }
         catch (Exception e) {
             return ResponseEntity

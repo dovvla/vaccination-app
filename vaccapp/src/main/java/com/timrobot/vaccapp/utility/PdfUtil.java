@@ -19,7 +19,7 @@ import java.io.*;
 public class PdfUtil {
     public static final String FOX_XCONF = "classpath:xsl_fo/fop.xconf";
     public static String XSL_FILE;
-    public static String PDF_FILE = "document.pdf";
+    public static String PDF_FILE = "src/main/resources/static/documents/";
     private final FopFactory fopFactory;
     private final TransformerFactory transformerFactory;
 
@@ -49,7 +49,27 @@ public class PdfUtil {
         }
         return null;
     }
+    public ByteArrayInputStream generatePDF(String documentXml, Class<?> classOfDocument, String path) {
+        try {
+            setXSLFile(classOfDocument);
 
+            File xslFile = ResourceUtils.getFile(XSL_FILE);
+            StreamSource transformSource = new StreamSource(xslFile);
+            StreamSource source = new StreamSource(new ByteArrayInputStream(documentXml.getBytes()));
+            FOUserAgent userAgent = fopFactory.newFOUserAgent();
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            Transformer xslFoTransformer = transformerFactory.newTransformer(transformSource);
+            Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, userAgent, outStream);
+            Result res = new SAXResult(fop.getDefaultHandler());
+            xslFoTransformer.transform(source, res);
+            OutputStream outputStream = new FileOutputStream(PDF_FILE+path);
+            outStream.writeTo(outputStream);
+            outputStream.close();
+            return new ByteArrayInputStream(outStream.toByteArray());
+        } catch (Exception ignored) {
+        }
+        return null;
+    }
     private void setXSLFile(Class<?> classOfDocument) {
         if (classOfDocument.equals(ObrazacInteresovanja.class))
             XSL_FILE = "classpath:xsl_fo/iskazivanje_interesovanja_za_vakcinaciju.xsl";

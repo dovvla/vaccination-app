@@ -70,6 +70,17 @@ public class SaglasnostService {
                                     .getDrzavljanstvo()
                                     .getJMBG()
                             + ".xml";
+
+        obrazac.setAbout("http://tim.robot/obrazac_saglasnosti_za_imunizaciju/" + obrazac
+                .getPodaciOPacijentu()
+                .getDrzavljanstvo()
+                .getJMBG());
+        obrazac.setRel("pred:fromObrazacInteresovanja");
+        obrazac.setHref("http://tim.robot/iskazivanje_interesovanja_za_vakcinaciju/" + obrazac
+                .getPodaciOPacijentu()
+                .getDrzavljanstvo()
+                .getJMBG());
+
         dataAccessLayer.saveDocument(obrazac, folderId, documentId, Obrazac.class);
 
         // ----------- RDF -------------
@@ -245,4 +256,24 @@ public class SaglasnostService {
         return FusekiUtil.getAllMetadataForDocumentInRDF("saglasnost", "obrazac_saglasnosti_za_imunizaciju", documentId);
     }
 
+    public void popuniKorisnika(Obrazac obrazac, Korisnik korisnik) throws DatatypeConfigurationException {
+        obrazac.getPodaciOPacijentu().getDrzavljanstvo().setJMBG(korisnik.getJmbg());
+        obrazac.getPodaciOPacijentu().setPol(korisnik.getPol());
+        obrazac.getPodaciOPacijentu().getIme().setValue(korisnik.getIme());
+        obrazac.getPodaciOPacijentu().getIme().setDatatype("xs:string");
+        obrazac.getPodaciOPacijentu().getPrezime().setDatatype("xs:string");
+        obrazac.getPodaciOPacijentu().getPrezime().setProperty("pred:prezime");
+        obrazac.getPodaciOPacijentu().getIme().setProperty("pred:ime");
+        obrazac.getPodaciOPacijentu().getPrezime().setValue(korisnik.getPrezime());
+        obrazac.getPodaciOPacijentu().setDatumRodjenja(korisnik.getDatumRodjenja());
+        obrazac.getPodaciOPacijentu().setGrad(korisnik.getGrad());
+        obrazac.getPodaciOPacijentu().setImejl(korisnik.getEmail());
+        obrazac.getPodaciOPacijentu().setTelefonFiksni(korisnik.getFiksniTelefon());
+        obrazac.getPodaciOPacijentu().setTelefonMobilni(korisnik.getMobilniTelefon());
+        obrazac.getPodaciOPacijentu().setImeRoditelja(korisnik.getImeRoditelja());
+        obrazac.getPodaciOPacijentu().setMestoRodjenja(korisnik.getMestoRodjenja());
+        obrazac.getPodaciOSaglasnosti().getDatum().setValue(localDateTimeToXMLDate(LocalDateTime.now()));
+        obrazac.getPodaciOSaglasnosti().getDatum().setDatatype("xs:date");
+        obrazac.getPodaciOSaglasnosti().getDatum().setProperty("pred:datum");
+    }
 }
