@@ -1,20 +1,25 @@
 package com.timrobot.vaccapp.services;
 
 import com.timrobot.vaccapp.dao.DataAccessLayer;
-import com.timrobot.vaccapp.models.EntityList;
-import com.timrobot.vaccapp.models.Obrazac;
-import com.timrobot.vaccapp.models.Potvrda;
-import com.timrobot.vaccapp.models.TDozaVakcine;
+import com.timrobot.vaccapp.models.*;
+import com.timrobot.vaccapp.utility.FusekiUtil;
 import com.timrobot.vaccapp.utility.XMLMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.transform.TransformerException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,13 +56,36 @@ public class SaglasnostService {
                 .collect(Collectors.toList()));
     }
 
-    public Obrazac putSaglasnost(Obrazac obrazac) {
+    public Obrazac getXmlAsObject(String documentId) {
+        String xmlString = dataAccessLayer
+                .getDocument(folderId, documentId)
+                .get();
+
+        return (Obrazac) mapper.convertToObject(xmlString, "saglasnost", Obrazac.class);
+    }
+
+    public Obrazac putSaglasnost(Obrazac obrazac) throws TransformerException {
         String documentId = obrazac
                                     .getPodaciOPacijentu()
                                     .getDrzavljanstvo()
                                     .getJMBG()
                             + ".xml";
         dataAccessLayer.saveDocument(obrazac, folderId, documentId, Obrazac.class);
+
+        // ----------- RDF -------------
+        String saglasnostXML = mapper.convertToXml(obrazac, Obrazac.class);
+
+        FusekiUtil.extractMetadataFromXML(saglasnostXML);
+
+        String graphURI = "saglasnost";
+
+        try {
+            FusekiUtil.saveRDFToFuseki(graphURI);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // ----------- RDF -------------
+
         return obrazac;
     }
 
@@ -72,21 +100,25 @@ public class SaglasnostService {
                         .newXMLGregorianCalendar(iso);
     }
 
-    public Obrazac imunizujGradjanina(Obrazac obrazac) throws DatatypeConfigurationException {
+    public Obrazac imunizujGradjanina(Obrazac obrazac) throws DatatypeConfigurationException, TransformerException {
 
         Potvrda potvrda = new Potvrda();
 
-        potvrda.setDatum(localDateTimeToXMLDate(LocalDateTime.now()));
+        TDatum datum = new TDatum();
+        datum.setDatatype("xs:date");
+        datum.setProperty("pred:datum");
+        datum.setValue(localDateTimeToXMLDate(LocalDateTime.now()));
+        potvrda.setDatum(datum);
         potvrda.setNazivVakcine(obrazac
                 .getEvidencijaOVakcinaciji()
                 .getPodaciOIzvrsenimImunizacijama()
                 .getPrimljenaVakcina()
                 .get(0)
-                .getNaziv());
+                .getNaziv().getValue());
         Potvrda.PodaciPacijenta podaciPacijenta = new Potvrda.PodaciPacijenta();
         podaciPacijenta.setIme(obrazac
                 .getPodaciOPacijentu()
-                .getIme());
+                .getIme().getValue());
         podaciPacijenta.setJMBG(obrazac
                 .getPodaciOPacijentu()
                 .getDrzavljanstvo()
@@ -96,10 +128,14 @@ public class SaglasnostService {
                 .getPol());
         podaciPacijenta.setPrezime(obrazac
                 .getPodaciOPacijentu()
-                .getPrezime());
-        potvrda.setZdravstvenaUstanova(obrazac
+                .getPrezime().getValue());
+        TZdravstvenaUstanova tZdravstvenaUstanova = new TZdravstvenaUstanova();
+        tZdravstvenaUstanova.setDatatype("xs:string");
+        tZdravstvenaUstanova.setProperty("pred:zdravstvena_ustanova");
+        tZdravstvenaUstanova.setValue(obrazac
                 .getEvidencijaOVakcinaciji()
                 .getZdravstvenaUstanova());
+        potvrda.setZdravstvenaUstanova(tZdravstvenaUstanova);
 
         obrazac
                 .getEvidencijaOVakcinaciji()
@@ -123,4 +159,90 @@ public class SaglasnostService {
 
         return obrazac;
     }
+
+    public List<Obrazac> regularSearchSaglasnost(String search) throws Exception {
+        String searchQuery = String.format("xquery version \"3.1\";\n" +
+                "\n" +
+                "declare namespace sagl=\"http://tim.robot/obrazac_saglasnosti_za_imunizaciju\";\n" +
+                "import module namespace functx=\"http://www.functx.com\";\n" +
+                "\n" +
+                "declare function local:search($keyword as xs:string)\n" +
+                "{\n" +
+                "    let $saglasnosti := collection(\"/db/vacc-app/saglasnost\")\n" +
+                "    let $rezultat :=\n" +
+                "    (\n" +
+                "        $saglasnosti//sagl:Obrazac[contains(., $keyword)]\n" +
+                "    )\n" +
+                "\n" +
+                " return\n" +
+                "    functx:distinct-nodes($rezultat)\n" +
+                "};\n" +
+                "\n" +
+                "local:search(\"%s\")", search);
+
+        List<String> matchingSaglasnostiXML = dataAccessLayer.executeXPathQuery(folderId, searchQuery, "http://tim.robot/obrazac_saglasnosti_za_imunizaciju");
+
+        List<Obrazac> matchingSaglasnosti = new ArrayList<>();
+        for (String XML : matchingSaglasnostiXML) {
+            matchingSaglasnosti.add((Obrazac) mapper.convertToObject(XML, "saglasnost", Obrazac.class));
+        }
+
+        return matchingSaglasnosti;
+    }
+
+    public List<Obrazac> advancedSearchSaglasnost(String ime, String prezime, String nazivVakcine, String datumIzdavanja, String hrefInteresovanje, boolean logicalAnd) throws IOException {
+        ArrayList<String> queries = new ArrayList<>();
+        if(!ime.trim().equals("")) {
+            queries.add("?s <http://tim.robot/rdf/predicate/ime> ?X . FILTER(str(?X) = \"" + ime + "\")");
+        }
+        if(!prezime.trim().equals("")) {
+            queries.add("?s <http://tim.robot/rdf/predicate/prezime> ?X . FILTER(str(?X) = \"" + prezime + "\")");
+        }
+        if(!nazivVakcine.trim().equals("")) {
+            queries.add("?s <http://tim.robot/rdf/predicate/naziv_vakcine> ?X . FILTER(str(?X) = \"" + nazivVakcine + "\")");
+        }
+        if(!datumIzdavanja.trim().equals("")) {
+            queries.add("?s <http://tim.robot/rdf/predicate/datum> ?X . FILTER(str(?X) = \"" + datumIzdavanja + "\")");
+        }
+        if(!hrefInteresovanje.trim().equals("")) {
+            queries.add("?s <http://tim.robot/rdf/predicate/fromObrazacInteresovanja> " + hrefInteresovanje + " .");
+        }
+        if(queries.isEmpty()) {
+            queries.add("?s ?p ?o");
+        }
+
+        HashSet<String> resultSubjects = new HashSet<>();
+        for (String query : queries) {
+            HashSet<String> result = FusekiUtil.queryRdf("saglasnost", query);
+
+            if (queries.indexOf(query) == 0) {
+                resultSubjects.addAll(result);
+            } else {
+                if (logicalAnd) {
+                    resultSubjects.retainAll(result);
+                } else {
+                    resultSubjects.addAll(result);
+                }
+            }
+        }
+
+        List<Obrazac> obrasci = new ArrayList<>();
+        for (String subject : resultSubjects) {
+            // subject je namespace
+            String[] splitNamespace = subject.split("/");
+            String documentId = splitNamespace[splitNamespace.length - 1];
+            obrasci.add(this.getXmlAsObject(documentId));
+        }
+
+        return obrasci;
+    }
+
+    public Map<String, String> getAllMetadataForDocumentForJSON(String documentId) throws IOException {
+        return FusekiUtil.getAllMetadataForDocument("saglasnost", "obrazac_saglasnosti_za_imunizaciju", documentId);
+    }
+
+    public String getAllMetadataForDocumentInRDF(String documentId) throws IOException {
+        return FusekiUtil.getAllMetadataForDocumentInRDF("saglasnost", "obrazac_saglasnosti_za_imunizaciju", documentId);
+    }
+
 }

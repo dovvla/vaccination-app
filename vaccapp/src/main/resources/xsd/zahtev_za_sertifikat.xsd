@@ -6,6 +6,7 @@
     <xs:element name="Zahtev">
         <xs:complexType>
             <xs:sequence>
+                <xs:element name="Identifikator" type="xs:string"/>
                 <xs:element name="Podaci_o_podnosiocu">
                     <xs:complexType>
                         <xs:sequence>

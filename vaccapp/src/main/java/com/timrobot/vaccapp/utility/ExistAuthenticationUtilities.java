@@ -9,6 +9,7 @@ import java.util.Properties;
  */
 public class ExistAuthenticationUtilities {
 
+//    private static String connectionUri = "xmldb:exist://%1$s:%2$s/exist-4.6.1/xmlrpc";
     private static String connectionUri = "xmldb:exist://%1$s:%2$s/exist/xmlrpc";
 
     /**

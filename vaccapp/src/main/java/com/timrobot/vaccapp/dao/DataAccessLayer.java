@@ -32,4 +32,9 @@ public class DataAccessLayer {
     public List<String> getAllDocuments(String folderId) {
         return DatabaseConnection.retrieveAllFromXMLDB(folderId);
     }
+
+    public List<String> executeXPathQuery(String folderId, String xpathExp, String namespace) throws Exception {
+        return DatabaseConnection.executeXPathQuery(folderId, xpathExp, namespace);
+    }
+
 }
