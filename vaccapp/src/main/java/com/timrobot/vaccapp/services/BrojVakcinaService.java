@@ -33,11 +33,20 @@ public class BrojVakcinaService {
     private TerminService terminService;
 
     public BrojVakcina getXmlAsObject(String documentId) {
-        String xmlString = dataAccessLayer
-                .getDocument(folderId, documentId)
-                .get();
+        try {
+            String xmlString = dataAccessLayer
+                    .getDocument(folderId, documentId)
+                    .get();
 
-        return (BrojVakcina) mapper.convertToObject(xmlString, "broj_vakcina", BrojVakcina.class);
+            return (BrojVakcina) mapper.convertToObject(xmlString, "broj_vakcina", BrojVakcina.class);
+        }
+        catch (Exception ignored) {
+            BrojVakcina brojVakcina = new BrojVakcina();
+            brojVakcina.setBroj(0);
+            brojVakcina.setVakcina(documentId);
+            saveXmlFromText(brojVakcina);
+            return brojVakcina;
+        }
     }
 
     public BrojVakcina saveXmlFromText(BrojVakcina brojVakcina) {
@@ -47,6 +56,12 @@ public class BrojVakcinaService {
     }
 
     public EntityList<BrojVakcina> getAll() {
+        this.getXmlAsObject("Pfizer");
+        this.getXmlAsObject("Sputnik");
+        this.getXmlAsObject("Sinopharm");
+        this.getXmlAsObject("AZ");
+        this.getXmlAsObject("Moderna");
+
         ArrayList<BrojVakcina> termins = (ArrayList<BrojVakcina>) dataAccessLayer
                 .getAllDocuments(folderId)
                 .stream()

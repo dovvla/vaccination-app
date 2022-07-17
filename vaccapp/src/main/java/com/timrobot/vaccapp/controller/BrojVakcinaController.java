@@ -26,13 +26,11 @@ public class BrojVakcinaController {
         return brojVakcinaService.getAll();
     }
 
-    @PostMapping(value = "", consumes = MediaType.APPLICATION_XML_VALUE)
+    @GetMapping(value = "/update")
     // @PreAuthorize("hasRole('SLUZBENIK')")
-    public ResponseEntity<?> updateBrojVakcina(@RequestBody List<BrojVakcina> brojVakcina) {
+    public ResponseEntity<?> updateBrojVakcina(@RequestParam String vakcina, @RequestParam Integer broj) {
         try {
-            for (BrojVakcina brojVakcine : brojVakcina) {
-                brojVakcinaService.saveXmlFromText(brojVakcine);
-            }
+            brojVakcinaService.izmeniBrojVakcina(vakcina, broj);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }

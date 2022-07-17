@@ -5,6 +5,7 @@ import Login from '../views/Login'
 import Logout from '../views/Logout'
 import SluzbenikPage from '../views/SluzbenikPage'
 import Izvestaj from '../components/Izvestaj'
+import BrojVakcinaUpdate from '../components/BrojVakcinaUpdate'
 
 Vue.use(VueRouter)
 
@@ -39,6 +40,14 @@ const routes = [
 				path: "Izvestaj",
 				name: "Izvestaj",
 				component: Izvestaj,
+				// meta: {
+				// 	roles: [Role.Sluzbenik]
+				// },
+			},
+			{
+				path: "BrojVakcinaUpdate",
+				name: "BrojVakcinaUpdate",
+				component: BrojVakcinaUpdate,
 				// meta: {
 				// 	roles: [Role.Sluzbenik]
 				// },
