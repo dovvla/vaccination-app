@@ -77,6 +77,40 @@
 
         <br>
 
+        <b-form inline style="margin-left:25px;">
+            <label></label>
+            <label for="dd"> Napredna pretraga potvrda: </label>
+            <div>
+            <b-form-input
+                type="text"
+                v-model="datumPotvrdaInput"
+                style="margin-left: 10px;"
+                placeholder="Datum (yyyy-mm-dd)"
+            />
+            </div>
+
+            <div>
+            <b-form-input
+                type="text"
+                v-model="zdravstvenaUstanovaPotvrdaInput"
+                style="margin-left: 10px;"
+                placeholder="Zdravstvena ustanova"
+            />
+            </div>
+
+            <label style="margin-left:10px;">Logički operator:</label>
+            <b-form-select placeholder="Real Estate Name"
+                        class="mb-2 mr-sm-2 mb-sm-0"
+                        v-model="operatorPotvrdaInput"
+                        :options="operatorOptions"
+                        style="margin-left:10px;">
+            </b-form-select>
+
+            <b-button @click="onPotvrdaSearch" class="mb-2 mr-sm-2 mb-sm-0" style="margin-left: 10px;">Pretraži potvrde</b-button>
+        </b-form>
+
+        <br>
+
         <h2>Saglasnosti</h2>
         <br>
         <b-table striped hover :items="obrazacResults" :fields="obrazacResultsFields">
@@ -295,6 +329,9 @@
                 hrefInteresovanjeOptions: [],
                 operatorSaglasnostInput: 'AND',
                 operatorOptions: ['AND', 'OR'],
+                datumPotvrdaInput: '',
+                zdravstvenaUstanovaPotvrdaInput: '',
+                operatorPotvrdaInput: 'AND',
             }
         },
         methods: {
@@ -441,7 +478,35 @@
                     let stripNS = require('xml2js').processors.stripPrefix;
                     parseString(response.data, { tagNameProcessors: [stripNS] }, (err, result) => {
                         this.obrazacResults = result.entityList.Obrazac;
+                        this.potvrdaResults = [];
+                        this.sertifikatResults = [];
                         this.fixIdentifiersInAboutAndHref(this.obrazacResults);
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                }); 
+            },
+
+            onPotvrdaSearch() {
+                this.obrazacResults = [];
+                this.potvrdaResults = [];
+                this.sertifikatResults = [];
+
+                let queryParams = `datum=${this.datumPotvrdaInput}&zdravstvenaUstanova=${this.zdravstvenaUstanovaPotvrdaInput}` +
+                                    `&logicalAnd=${this.operatorPotvrdaInput === 'AND' ? 'true' : 'false'}`;
+
+                this.axios.get(`/api/search/potvrda/advanced?${queryParams}`, {
+                        headers: {
+                            Authorization: "Bearer " + sessionStorage.getItem('token'),
+                        },
+                    })
+                .then((response) => {
+                    let parseString = require('xml2js').parseString;
+                    let stripNS = require('xml2js').processors.stripPrefix;
+                    parseString(response.data, { tagNameProcessors: [stripNS] }, (err, result) => {
+                        this.potvrdaResults = result.entityList.Potvrda;
+                        this.fixIdentifiersInAboutAndHref(this.potvrdaResults);
                     });
                 })
                 .catch(error => {
