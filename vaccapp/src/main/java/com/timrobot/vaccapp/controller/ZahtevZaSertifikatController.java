@@ -31,16 +31,21 @@ public class ZahtevZaSertifikatController {
     private KorisnikService korisnikService;
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_XML_VALUE)
+    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTENI_RADNIK') or hasAuthority('SLUZBENIK')")
+
     public EntityList<Zahtev> getAll() {
         return zahtevZaSertifikatService.getAll();
     }
 
     @GetMapping(value = "/user/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTENI_RADNIK') or hasAuthority('SLUZBENIK')")
+
     public EntityList<Zahtev> getAllForUser(@PathVariable String id) {
         return zahtevZaSertifikatService.getAllForUser(id);
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_XML_VALUE, consumes = MediaType.APPLICATION_XML_VALUE)
+    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTENI_RADNIK') or hasAuthority('SLUZBENIK')")
     public ResponseEntity<?> createZahtevZaZeleni(@RequestBody Zahtev zahtev) {
         try {
             Authentication auth = SecurityContextHolder

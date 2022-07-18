@@ -7,6 +7,7 @@ import com.timrobot.vaccapp.services.KorisnikService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -30,15 +31,17 @@ public class KorisnikController {
     }
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_XML_VALUE)
+    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTENI_RADNIK') or hasAuthority('SLUZBENIK')")
     public EntityList<Korisnik> getAllKorisnici() {
         return korisnikService.getAll();
     }
 
     @GetMapping(value = "/me", produces = MediaType.APPLICATION_XML_VALUE)
+    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTENI_RADNIK') or hasAuthority('SLUZBENIK')")
     public Korisnik  getMe() throws Exception {
         Authentication auth = SecurityContextHolder
                 .getContext().getAuthentication();
-        return korisnikService.getKorisnikByEmail( ((User) auth.getPrincipal()).getUsername());
+        return korisnikService.getKorisnikByEmail((String) auth.getPrincipal());
     }
 
 }

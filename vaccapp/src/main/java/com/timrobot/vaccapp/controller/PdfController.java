@@ -1,6 +1,7 @@
 package com.timrobot.vaccapp.controller;
 
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +14,8 @@ import java.io.IOException;
 @RequestMapping("/api/pdf")
 public class PdfController {
     @GetMapping(value="printing/",produces= MediaType.APPLICATION_PDF_VALUE)
+    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTENI_RADNIK') or hasAuthority('SLUZBENIK')")
+
     public  @ResponseBody byte[]  print(@RequestParam("file") String file, HttpServletResponse response) {
 
         try {
