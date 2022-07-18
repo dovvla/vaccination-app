@@ -5,6 +5,7 @@ import com.timrobot.vaccapp.exceptions.ResourceAlreadyExistsException;
 import com.timrobot.vaccapp.models.*;
 import com.timrobot.vaccapp.utility.EmailServiceImpl;
 import com.timrobot.vaccapp.utility.FusekiUtil;
+import com.timrobot.vaccapp.utility.QRcodeUtils;
 import com.timrobot.vaccapp.utility.XMLMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -225,6 +226,8 @@ public class ZahtevZaSertifikatService {
         tDatumIVremeIzdavanja.setValue(calendar);
         podaciOSertifikatu.setDatumIVreme(tDatumIVremeIzdavanja);
         sertifikat.setPodaciOSertifikatu(podaciOSertifikatu);
+
+        sertifikat.getPodaciOSertifikatu().setQRkod(QRcodeUtils.writeQRCode("http://localhost:8081/api/sertifikat/" + sertifikat.getPodaciOSertifikatu().getBroj() + "/xhtml"));
 
         // sertifikat se cuva u xml bazi
         String sertifikatDocumentId = sertifikat.getPodaciOSertifikatu().getBroj() + ".xml";

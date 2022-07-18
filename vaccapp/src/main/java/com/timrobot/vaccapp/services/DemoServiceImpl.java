@@ -7,6 +7,7 @@ import com.timrobot.vaccapp.models.Obrazac;
 import com.timrobot.vaccapp.models.Potvrda;
 import com.timrobot.vaccapp.models.Sertifikat;
 import com.timrobot.vaccapp.utility.FusekiUtil;
+import com.timrobot.vaccapp.utility.QRcodeUtils;
 import com.timrobot.vaccapp.utility.XMLMapper;
 import org.apache.jena.vocabulary.RDF;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,7 @@ public class DemoServiceImpl implements DemoService {
         saglasnost = XMLMapper.<Obrazac>unmarshal(Obrazac.class, new File(SAGLASNOST_FILE_PATH), "saglasnost.xsd");
         potvrda = XMLMapper.<Potvrda>unmarshal(Potvrda.class, new File(POTVRDA_FILE_PATH), "potvrda_o_vakcinaciji.xsd");
         sertifikat = XMLMapper.<Sertifikat>unmarshal(Sertifikat.class, new File(SERTIFIKAT_FILE_PATH), "zeleni_sertifikat.xsd");
+//        sertifikat.getPodaciOSertifikatu().setQRkod(QRcodeUtils.writeQRCode(sertifikat.getPodaciOSertifikatu().getQRkod()));
         System.out.println(izvestaj);
         System.out.println("Unmarshalling tested.\n");
         return izvestaj;

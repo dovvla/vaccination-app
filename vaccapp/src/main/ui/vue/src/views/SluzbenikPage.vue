@@ -7,6 +7,7 @@
       <b-navbar-nav>
         <b-nav-item href="/SluzbenikPage/Izvestaj">Izveštaj</b-nav-item>
         <b-nav-item href="/SluzbenikPage/BrojVakcinaUpdate">Evidencija dostupnih vakcina</b-nav-item>
+        <b-nav-item href="/SluzbenikPage/Search">Pretraga</b-nav-item>
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->
