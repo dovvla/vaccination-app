@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import UnregisteredPage from "../views/UnregisteredPage";
+import GradjaninPage from "../views/GradjaninPage";
 import Login from "../views/Login";
 import Logout from "../views/Logout";
 import Register from "../components/Register";
@@ -13,9 +14,9 @@ import MedicinskiRadnikHome from "../components/MedicinskiRadnikHome";
 Vue.use(VueRouter);
 
 const Role = {
-  Gradjanin: "???",
-  Radnik: "???",
-  Sluzbenik: "???",
+  Gradjanin: "Gradjanin",
+  Radnik: "Zdravstveni_radnik",
+  Sluzbenik: "Sluzbenik",
 };
 
 const routes = [
@@ -23,6 +24,33 @@ const routes = [
     path: "/",
     name: UnregisteredPage,
     component: UnregisteredPage,
+  },
+  {
+    path: "/GradjaninPage",
+    name: GradjaninPage,
+    component: GradjaninPage,
+    children: [
+      {
+        path: "interesovanje",
+        name: "Interesovanje",
+        component: Interesovanje,
+      },
+      {
+        path: "saglasnost",
+        name: "Saglasnost",
+        component: Saglasnost,
+      },
+      {
+        path: "zahtev",
+        name: "ZahtevZaSertifikat",
+        component: ZahtevZaSertifikat,
+      },
+      {
+        path: "moji-dokumenti",
+        name: "MojiDokumenti",
+        component: MojiDokumenti,
+      },
+    ],
   },
   {
     path: "/Login",
@@ -38,26 +66,6 @@ const routes = [
     path: "/register",
     name: "Register",
     component: Register,
-  },
-  {
-    path: "/interesovanje",
-    name: "Interesovanje",
-    component: Interesovanje,
-  },
-  {
-    path: "/saglasnost",
-    name: "Saglasnost",
-    component: Saglasnost,
-  },
-  {
-    path: "/zahtev",
-    name: "ZahtevZaSertifikat",
-    component: ZahtevZaSertifikat,
-  },
-  {
-    path: "/moji-dokumenti",
-    name: "MojiDokumenti",
-    component: MojiDokumenti,
   },
   {
     path: "/medicinski-radnik-home",
@@ -100,7 +108,7 @@ router.beforeEach((to, from, next) => {
   if (roles) {
     const userRole = JSON.parse(
       atob(sessionStorage.getItem("token").split(".")[1])
-    ).role;
+    ).role[0].authority;
     if (roles.length && !roles.includes(userRole)) {
       return next({ path: "Login" });
     }

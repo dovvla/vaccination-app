@@ -1,9 +1,13 @@
 package com.timrobot.vaccapp.controller;
 
+import com.timrobot.vaccapp.models.EntityList;
+import com.timrobot.vaccapp.models.Potvrda;
+import com.timrobot.vaccapp.models.Zahtev;
 import com.timrobot.vaccapp.services.PotvrdaOVakcinacijiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +23,21 @@ public class PotvrdaController {
 
     @Autowired
     private PotvrdaOVakcinacijiService potvrdaOVakcinacijiService;
+
+    @GetMapping(value = "", produces = MediaType.APPLICATION_XML_VALUE)
+    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTENI_RADNIK') or hasAuthority('SLUZBENIK')")
+
+    public EntityList<Potvrda> getAll() {
+        return potvrdaOVakcinacijiService.getAll();
+    }
+
+    @GetMapping(value = "/user/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTENI_RADNIK') or hasAuthority('SLUZBENIK')")
+
+    public EntityList<Potvrda> getAllForUser(@PathVariable String id) {
+        return potvrdaOVakcinacijiService.getAllForUser(id);
+    }
+
 
     @GetMapping("/metadata-json/{id}")
     public Map<String, String> getJsonMetadataForDocument(@PathVariable String id) {

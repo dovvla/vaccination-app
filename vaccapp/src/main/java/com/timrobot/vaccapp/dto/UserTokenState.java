@@ -1,5 +1,8 @@
 package com.timrobot.vaccapp.dto;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class UserTokenState {
     private String accessToken;
 

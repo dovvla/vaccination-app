@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -39,6 +40,7 @@ public class SaglasnostController {
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_XML_VALUE, consumes = MediaType.APPLICATION_XML_VALUE)
+    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTENI_RADNIK') or hasAuthority('SLUZBENIK')")
     public ResponseEntity<?> putSaglanost(@RequestBody Obrazac obrazac) {
         try {
             Authentication auth = SecurityContextHolder
@@ -57,6 +59,8 @@ public class SaglasnostController {
     }
 
     @PostMapping(value = "/imunizuj", produces = MediaType.APPLICATION_XML_VALUE, consumes = MediaType.APPLICATION_XML_VALUE)
+    @PreAuthorize("hasAuthority('ZDRAVSTENI_RADNIK')")
+
     public ResponseEntity<?> imunizujGradjanina(@RequestBody Obrazac obrazac) {
         try {
             return ResponseEntity.ok(saglasnostService.imunizujGradjanina(obrazac));

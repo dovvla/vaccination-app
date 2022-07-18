@@ -139,7 +139,7 @@ public class ObrazacInteresovanjaService {
         emailService.sendSimpleMessage(obrazacInteresovanja
                         .getLicniPodaci()
                         .getImejl(), "Iskazano interesovanje",
-                "Dobicete prvi slobodan termin koji bude dostupan " + obrazacInteresovanja);
+                "Dobicete prvi slobodan termin koji bude dostupan " + obrazacToString(obrazacInteresovanja));
 
         if (brojVakcinaService.getBrojVakcina(obrazacInteresovanja.getZeljenaVakcina()) > 1) {
             this.rezervisiTermin(obrazacInteresovanja);
@@ -159,6 +159,33 @@ public class ObrazacInteresovanjaService {
         return DatatypeFactory
                 .newInstance()
                 .newXMLGregorianCalendar(iso);
+    }
+    public String obrazacToString(ObrazacInteresovanja obrazacInteresovanja) {
+        return "ObrazacInteresovanja " +
+               "licniPodaci: " + licniPodacitoString(obrazacInteresovanja.getLicniPodaci()) +
+               ", zeljenaLokacijaVakcinacije:'" + obrazacInteresovanja.getZeljenaLokacijaVakcinacije() + '\'' +
+               ", zeljenaVakcina:'" + obrazacInteresovanja.getZeljenaVakcina() + '\'' +
+               ", davalacKrvi:'" + obrazacInteresovanja.getDavalacKrvi() + '\'' +
+               ", datum:" + obrazacInteresovanja.getDatum() +
+               ' ';
+    }
+    public String licniPodacitoString(ObrazacInteresovanja.LicniPodaci licniPodaci) {
+        return "LicniPodaci " +
+               "drzavljanstvo:'" + licniPodaci.getDrzavljanstvo() + '\'' +
+               ", jmbg:'" + licniPodaci.getJMBG() + '\'' +
+               ", ime:" + licniPodaci.getIme() + '\'' +
+               ", prezime:'" + licniPodaci.getPrezime() + '\'' +
+               ", imejl:'" + licniPodaci.getImejl() + '\'' +
+               ", brojMobilnogTelefona:'" + licniPodaci.getBrojMobilnogTelefona() + '\'' +
+               ", brojFiksnogTelefona:'" + licniPodaci.getBrojFiksnogTelefona() + '\'' +
+               ' ';
+    }
+    public String terminToString(Termin termin) {
+        return "Termin " +
+               "datumVreme:" + termin.getDatumVreme() +
+               ", jmbg:'" + termin.getJmbg() + '\'' +
+               ", vakcina:'" + termin.getVakcina() + '\'' +
+               ' ';
     }
 
     public void rezervisiTermin(ObrazacInteresovanja obrazacInteresovanja) throws DatatypeConfigurationException {
@@ -180,7 +207,7 @@ public class ObrazacInteresovanjaService {
         terminService.saveXmlFromText(termin);
         emailService.sendSimpleMessage(obrazacInteresovanja
                 .getLicniPodaci()
-                .getImejl(), "Termin vase vakcinacije", termin.toString());
+                .getImejl(), "Termin vase vakcinacije", terminToString(termin));
         brojVakcinaService.izmeniBrojVakcina(obrazacInteresovanja.getZeljenaVakcina(), -2);
     }
 
@@ -206,7 +233,7 @@ public class ObrazacInteresovanjaService {
         terminService.saveXmlFromText(termin);
         emailService.sendSimpleMessage(obrazacInteresovanja
                 .getLicniPodaci()
-                .getImejl(), "Termin vase vakcinacije", termin.toString());
+                .getImejl(), "Termin vase vakcinacije", terminToString(termin));
         brojVakcinaService.izmeniBrojVakcina(obrazacInteresovanja.getZeljenaVakcina(), 0);
     }
 }
