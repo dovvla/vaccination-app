@@ -37,6 +37,9 @@
             <b-button style="margin: 0 10px" @click="preuzmiHtmlZahtev(zahtev)"
               >Preuzmi zahtev {{ index + 1 }} kao xhtml</b-button
             >
+            <b-button style="margin: 0 10px" @click="pregledajPotvrdu(zahtev)"
+              >Pregledaj zahtev {{ index + 1 }}</b-button
+            >
           </div>
         </div>
       </b-col>
@@ -80,6 +83,9 @@ export default {
     },
     preuzmiHtmlZahtev(zahtev) {
       //   this.trenutniDokument = `/documents/zahtev-zeleni_${zahtev}.pdf`;
+    },
+    pregledajPotvrdu(zahtev){
+      //this.trenutniDokument = `/documents/potvrda-o-vakcinaciji_${zahtev}.pdf`;
     },
   },
   mounted() {
