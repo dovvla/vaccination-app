@@ -14,8 +14,6 @@ import java.io.IOException;
 @RequestMapping("/api/pdf")
 public class PdfController {
     @GetMapping(value="printing/",produces= MediaType.APPLICATION_PDF_VALUE)
-    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTENI_RADNIK') or hasAuthority('SLUZBENIK')")
-
     public  @ResponseBody byte[]  print(@RequestParam("file") String file, HttpServletResponse response) {
 
         try {
