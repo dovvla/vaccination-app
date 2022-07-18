@@ -2,10 +2,7 @@ package com.timrobot.vaccapp.services;
 
 import com.timrobot.vaccapp.dao.DataAccessLayer;
 import com.timrobot.vaccapp.dao.DatabaseConnection;
-import com.timrobot.vaccapp.models.Izvestaj;
-import com.timrobot.vaccapp.models.Obrazac;
-import com.timrobot.vaccapp.models.Potvrda;
-import com.timrobot.vaccapp.models.Sertifikat;
+import com.timrobot.vaccapp.models.*;
 import com.timrobot.vaccapp.utility.FusekiUtil;
 import com.timrobot.vaccapp.utility.QRcodeUtils;
 import com.timrobot.vaccapp.utility.XMLMapper;
@@ -28,11 +25,13 @@ public class DemoServiceImpl implements DemoService {
     private Obrazac saglasnost = null;
     private Potvrda potvrda = null;
     private Sertifikat sertifikat = null;
+    private ObrazacInteresovanja obrazacInteresovanja = null;
 
     public static final String IZVESTAJ_FILE_PATH = "./src/main/resources/xml/izvestaj_o_imunizaciji_1.xml";
     public static final String SAGLASNOST_FILE_PATH = "./src/main/resources/xml/saglasnost1.xml";
     public static final String POTVRDA_FILE_PATH = "./src/main/resources/xml/potvrda_o_vakcinaciji1.xml";
     public static final String SERTIFIKAT_FILE_PATH = "./src/main/resources/xml/zeleni_sertifikat1.xml";
+    public static final String INTERESOVANJE_FILE_PATH = "./src/main/resources/xml/iskazivanje_interesovanja_za_vakcinaciju_1.xml";
 
     @Override
     public Izvestaj unmarshalExample() {
@@ -42,6 +41,7 @@ public class DemoServiceImpl implements DemoService {
         potvrda = XMLMapper.<Potvrda>unmarshal(Potvrda.class, new File(POTVRDA_FILE_PATH), "potvrda_o_vakcinaciji.xsd");
         sertifikat = XMLMapper.<Sertifikat>unmarshal(Sertifikat.class, new File(SERTIFIKAT_FILE_PATH), "zeleni_sertifikat.xsd");
 //        sertifikat.getPodaciOSertifikatu().setQRkod(QRcodeUtils.writeQRCode(sertifikat.getPodaciOSertifikatu().getQRkod()));
+        obrazacInteresovanja = XMLMapper.<ObrazacInteresovanja>unmarshal(ObrazacInteresovanja.class, new File(INTERESOVANJE_FILE_PATH), "iskazivanje_interesovanja_za_vakcinaciju.xsd");
         System.out.println(izvestaj);
         System.out.println("Unmarshalling tested.\n");
         return izvestaj;
@@ -61,6 +61,7 @@ public class DemoServiceImpl implements DemoService {
         DatabaseConnection.<Obrazac>storeInXMLDB("/db/vacc-app/saglasnost", "saglasnost1.xml", Obrazac.class, saglasnost, "saglasnost.xsd");
         DatabaseConnection.<Potvrda>storeInXMLDB("/db/vacc-app/potvrda-o-vakcinaciji", "potvrda_o_vakcinaciji1.xml", Potvrda.class, potvrda, "potvrda_o_vakcinaciji.xsd");
         DatabaseConnection.<Sertifikat>storeInXMLDB("/db/vacc-app/sertifikat", "zeleni_sertifikat1.xml", Sertifikat.class, sertifikat, "zeleni_sertifikat.xsd");
+        DatabaseConnection.<ObrazacInteresovanja>storeInXMLDB("/db/vacc-app/obrazac-interesovanja", "iskazivanje_interesovanja_za_vakcinaciju_1.xml", ObrazacInteresovanja.class, obrazacInteresovanja, "iskazivanje_interesovanja_za_vakcinaciju.xsd");
         System.out.println("XML database storing tested.\n");
     }
 

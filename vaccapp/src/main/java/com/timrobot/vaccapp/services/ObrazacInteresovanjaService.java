@@ -39,12 +39,12 @@ public class ObrazacInteresovanjaService {
         @Autowired
         private EmailServiceImpl emailService;
 
-        public Korisnik getXmlAsObject(String documentId) {
+        public ObrazacInteresovanja getXmlAsObject(String documentId) {
                 String xmlString = dataAccessLayer
                                 .getDocument(folderId, documentId)
                                 .get();
 
-                return (Korisnik) mapper.convertToObject(xmlString, "iskazivanje_interesovanja_za_vakcinaciju",
+                return (ObrazacInteresovanja) mapper.convertToObject(xmlString, "iskazivanje_interesovanja_za_vakcinaciju",
                                 ObrazacInteresovanja.class);
         }
 

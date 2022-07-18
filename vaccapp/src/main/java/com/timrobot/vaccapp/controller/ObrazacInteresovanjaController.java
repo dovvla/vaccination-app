@@ -2,11 +2,17 @@ package com.timrobot.vaccapp.controller;
 
 import com.timrobot.vaccapp.models.EntityList;
 import com.timrobot.vaccapp.models.ObrazacInteresovanja;
+import com.timrobot.vaccapp.models.Zahtev;
 import com.timrobot.vaccapp.services.ObrazacInteresovanjaService;
+import com.timrobot.vaccapp.utility.XHtmlUtil;
+import com.timrobot.vaccapp.utility.XMLMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequestMapping("/api/interesovanje")
@@ -41,5 +47,19 @@ public class ObrazacInteresovanjaController {
                     .body(e.getMessage());
         }
 
+    }
+
+    @Autowired
+    private XMLMapper xmlMapper;
+
+    @GetMapping(value = "/{id}/show", produces = MediaType.APPLICATION_XML_VALUE)
+    public String getInteresovanjeXHTML(@PathVariable String id) {
+        ObrazacInteresovanja obrazacInteresovanja = obrazacInteresovanjaService.getXmlAsObject(id);
+        String xml = xmlMapper.convertToXml(obrazacInteresovanja, ObrazacInteresovanja.class);
+        ByteArrayInputStream xhtml = XHtmlUtil.generateHTML(xml, ObrazacInteresovanja.class);
+        int n = xhtml.available();
+        byte[] bytes = new byte[n];
+        xhtml.read(bytes, 0, n);
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 }

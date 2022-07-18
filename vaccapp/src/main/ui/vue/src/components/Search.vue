@@ -26,6 +26,9 @@
             <template #cell(prikaziDokument)="row">
                 <button class="btn btn-primary" @click="onShow(row, 'saglasnost')">Prikaži</button>
             </template>
+            <template #cell(prikaziPovezaniDokument)="row">
+                <button class="btn btn-primary" @click="onShowLinked(row, 'interesovanje')">Prikaži interesovanje</button>
+            </template>
             <template #cell(skiniXHTML)="row">
                 <button class="btn btn-primary" @click="onXHTML(row, 'saglasnost')">XHTML</button>
             </template>
@@ -70,6 +73,9 @@
             <template #cell(prikaziDokument)="row">
                 <button class="btn btn-primary" @click="onShow(row, 'sertifikat')">Prikaži</button>
             </template>
+            <template #cell(prikaziPovezaniDokument)="row">
+                <button class="btn btn-primary" @click="onShowLinked(row, 'zahtev-za-sertifikat')">Prikaži zahtev</button>
+            </template>
             <template #cell(skiniXHTML)="row">
                 <button class="btn btn-primary" @click="onXHTML(row, 'sertifikat')">XHTML</button>
             </template>
@@ -113,6 +119,11 @@
                         key: 'prikaziDokument',
                         headerTitle: 'Prikaz',
                         label: 'Prikaz'
+                    },
+                    {
+                        key: 'prikaziPovezaniDokument',
+                        headerTitle: 'Prikaz obrasca interesovanja',
+                        label: 'Prikaz obrasca interesovanja'
                     },
                     {
                         key: 'skiniXHTML',
@@ -188,6 +199,11 @@
                         label: 'Prikaz'
                     },
                     {
+                        key: 'prikaziPovezaniDokument',
+                        headerTitle: 'Prikaz zahteva',
+                        label: 'Prikaz zahteva'
+                    },
+                    {
                         key: 'skiniXHTML',
                         headerTitle: 'XHTML',
                         label: 'XHTML'
@@ -257,6 +273,21 @@
 
             onShow(row, type) {
                 this.axios.get(`/api/${type}/${row.item.$.about}/show`, {
+                        headers: {
+                            Authorization: "Bearer " + sessionStorage.getItem('token'),
+                        },
+                    })
+                .then((response) => {
+                    this.XHTML = response.data;
+                    this.showXHTMLModal();
+                })
+                .catch(error => {
+                    console.log(error);
+                }); 
+            },
+
+            onShowLinked(row, type) {
+                this.axios.get(`/api/${type}/${row.item.$.href}/show`, {
                         headers: {
                             Authorization: "Bearer " + sessionStorage.getItem('token'),
                         },
