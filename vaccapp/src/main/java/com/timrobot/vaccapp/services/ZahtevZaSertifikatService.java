@@ -256,4 +256,6 @@ public class ZahtevZaSertifikatService {
 
         return true;
     }
+
+
 }

@@ -20,6 +20,63 @@
 
         <br>
 
+        <b-form inline style="margin-left:25px;">
+            <label></label>
+            <label for="dd"> Napredna pretraga saglasnosti: </label>
+            <div>
+            <b-form-input
+                type="text"
+                v-model="imeSaglasnostInput"
+                style="margin-left: 10px;"
+                placeholder="Ime"
+            />
+            </div>
+
+            <div>
+            <b-form-input
+                type="text"
+                v-model="prezimeSaglasnostInput"
+                style="margin-left: 10px;"
+                placeholder="Prezime"
+            />
+            </div>
+
+            <label style="margin-left:10px;">Naziv vakcine:</label>
+            <b-form-select placeholder="Naziv vakcine"
+                        class="mb-2 mr-sm-2 mb-sm-0"
+                        v-model="nazivVakcineSaglasnostInput"
+                        :options="nazivVakcineOptions"
+                        style="margin-left:10px;">
+            </b-form-select>
+
+            <b-form-input
+                type="text"
+                v-model="datumIzdavanjaSaglasnostInput"
+                style="margin-left: 10px;"
+                placeholder="Datum izdavanja (yyyy-mm-dd)"
+            />
+
+            <label style="margin-left:10px;">Obrazac interesovanja:</label>
+            <b-form-select placeholder="Real Estate Name"
+                        class="mb-2 mr-sm-2 mb-sm-0"
+                        v-model="hrefInteresovanjeSaglasnostInput"
+                        :options="hrefInteresovanjeOptions"
+                        style="margin-left:10px;">
+            </b-form-select>
+
+            <label style="margin-left:10px;">Logički operator:</label>
+            <b-form-select placeholder="Real Estate Name"
+                        class="mb-2 mr-sm-2 mb-sm-0"
+                        v-model="operatorSaglasnostInput"
+                        :options="operatorOptions"
+                        style="margin-left:10px;">
+            </b-form-select>
+
+            <b-button @click="onSaglasnostSearch" class="mb-2 mr-sm-2 mb-sm-0" style="margin-left: 10px;">Pretraži saglasnosti</b-button>
+        </b-form>
+
+        <br>
+
         <h2>Saglasnosti</h2>
         <br>
         <b-table striped hover :items="obrazacResults" :fields="obrazacResultsFields">
@@ -228,7 +285,16 @@
                 minDate: new Date(),
                 dateFrom: new Date(),
                 dateTo: new Date(new Date().setDate(new Date().getDate() + 1)),
-                XHTML: ''
+                XHTML: '',
+                imeSaglasnostInput: '',
+                prezimeSaglasnostInput: '',
+                nazivVakcineSaglasnostInput: '',
+                nazivVakcineOptions: ['', "Pfizer", "Sputnik", "Sinopharm", "AZ", "Moderna"],
+                datumIzdavanjaSaglasnostInput: '',
+                hrefInteresovanjeSaglasnostInput: '',
+                hrefInteresovanjeOptions: [],
+                operatorSaglasnostInput: 'AND',
+                operatorOptions: ['AND', 'OR'],
             }
         },
         methods: {
@@ -325,10 +391,68 @@
                 this.$refs['xhtml-modal'].show()
             },
 
+            populateSearchOptions() {
+                this.hrefInteresovanjeOptions = [''];
+
+                this.axios.get(`/api/interesovanje`, {
+                        headers: {
+                            Authorization: "Bearer " + sessionStorage.getItem('token'),
+                        },
+                    })
+                .then((response) => {
+                    let parseString = require('xml2js').parseString;
+                    let stripNS = require('xml2js').processors.stripPrefix;
+                    parseString(response.data, { tagNameProcessors: [stripNS] }, (err, result) => {
+                        result.entityList.Obrazac_interesovanja.forEach(obj => {
+                            this.hrefInteresovanjeOptions.push("http://tim.robot/iskazivanje_interesovanja_za_vakcinaciju/" + obj.Licni_podaci[0].JMBG[0]);
+                        });
+
+                        this.hrefInteresovanjeOptions = this.hrefInteresovanjeOptions.filter(this.onlyUnique);
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                }); 
+            },
+
+            onlyUnique(value, index, self) {
+                return self.indexOf(value) === index;
+            },
+
+            onSaglasnostSearch() {
+                this.obrazacResults = [];
+
+                let hrefQuery = this.hrefInteresovanjeSaglasnostInput;
+                if (this.hrefInteresovanjeSaglasnostInput) {
+                    hrefQuery = `<${this.hrefInteresovanjeSaglasnostInput}>`
+                }
+
+                let queryParams = `ime=${this.imeSaglasnostInput}&prezime=${this.prezimeSaglasnostInput}&nazivVakcine=${this.nazivVakcineSaglasnostInput}&` +
+                                    `datumIzdavanja=${this.datumIzdavanjaSaglasnostInput}&hrefInteresovanje=${hrefQuery}` +
+                                    `&logicalAnd=${this.operatorSaglasnostInput === 'AND' ? 'true' : 'false'}`;
+
+                this.axios.get(`/api/search/saglasnost/advanced?${queryParams}`, {
+                        headers: {
+                            Authorization: "Bearer " + sessionStorage.getItem('token'),
+                        },
+                    })
+                .then((response) => {
+                    let parseString = require('xml2js').parseString;
+                    let stripNS = require('xml2js').processors.stripPrefix;
+                    parseString(response.data, { tagNameProcessors: [stripNS] }, (err, result) => {
+                        this.obrazacResults = result.entityList.Obrazac;
+                        this.fixIdentifiersInAboutAndHref(this.obrazacResults);
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                }); 
+            }
+
         },
 
         mounted() {
-
+            this.populateSearchOptions();
         }
     }
 </script>
