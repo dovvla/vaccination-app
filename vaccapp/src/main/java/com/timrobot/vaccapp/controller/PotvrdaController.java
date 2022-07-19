@@ -12,6 +12,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,7 @@ public class PotvrdaController {
     private PotvrdaOVakcinacijiService potvrdaOVakcinacijiService;
 
     @GetMapping("/metadata-json/{id}")
+    @PreAuthorize("hasAuthority('SLUZBENIK')")
     public ResponseEntity<?> getJsonMetadataForDocument(@PathVariable String id) {
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -52,6 +54,7 @@ public class PotvrdaController {
     }
 
     @GetMapping(value = "/metadata-rdf/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+    @PreAuthorize("hasAuthority('SLUZBENIK')")
     public ResponseEntity<String> getRDFMetadataForDocument(@PathVariable String id) {
         try {
             String rdf = potvrdaOVakcinacijiService.getAllMetadataForDocumentInRDF(id);
@@ -68,6 +71,7 @@ public class PotvrdaController {
     private XMLMapper xmlMapper;
 
     @GetMapping(value = "/{id}/show", produces = MediaType.APPLICATION_XML_VALUE)
+    @PreAuthorize("hasAuthority('SLUZBENIK')")
     public String getPotvrdaXHTML(@PathVariable String id) {
         Potvrda potvrda = potvrdaOVakcinacijiService.getXmlAsObject(id);
         String xml = xmlMapper.convertToXml(potvrda, Potvrda.class);
@@ -79,6 +83,7 @@ public class PotvrdaController {
     }
 
     @GetMapping(value = "/{id}/xhtml", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @PreAuthorize("hasAuthority('SLUZBENIK')")
     public void downloadPotvrdaXHTML(@PathVariable String id, HttpServletResponse response) {
         try {
             Potvrda potvrda = potvrdaOVakcinacijiService.getXmlAsObject(id);
@@ -94,6 +99,7 @@ public class PotvrdaController {
     }
 
     @GetMapping(value = "/{id}/pdf", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @PreAuthorize("hasAuthority('SLUZBENIK')")
     public void downloadPotvrdaPDF(@PathVariable String id, HttpServletResponse response) {
         try {
             Potvrda potvrda = potvrdaOVakcinacijiService.getXmlAsObject(id);

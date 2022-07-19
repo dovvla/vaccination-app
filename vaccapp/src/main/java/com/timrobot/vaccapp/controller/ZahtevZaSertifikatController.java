@@ -52,13 +52,13 @@ public class ZahtevZaSertifikatController {
     }
 
     @GetMapping(value = "/neobradjeni", produces = MediaType.APPLICATION_XML_VALUE)
-//    @PreAuthorize("hasRole('SLUZBENIK')")
+    @PreAuthorize("hasAuthority('SLUZBENIK')")
     public EntityList<Zahtev> getAllNeobradjen() {
         return zahtevZaSertifikatService.getAllNeobradjen();
     }
 
     @GetMapping(value = "/odbij/{id}", produces = MediaType.APPLICATION_XML_VALUE)
-//    @PreAuthorize("hasRole('SLUZBENIK')")
+    @PreAuthorize("hasAuthority('SLUZBENIK')")
     public ResponseEntity<?> odbijZahtev(@PathVariable String id, @RequestParam String razlog) {
         if (!zahtevZaSertifikatService.odbijZahtev(id, razlog))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
@@ -66,7 +66,7 @@ public class ZahtevZaSertifikatController {
     }
 
     @GetMapping(value = "/prihvati/{id}", produces = MediaType.APPLICATION_XML_VALUE)
-//    @PreAuthorize("hasRole('SLUZBENIK')")
+    @PreAuthorize("hasAuthority('SLUZBENIK')")
     public ResponseEntity<?> prihvatiZahtev(@PathVariable String id) {
         try {
             if (!zahtevZaSertifikatService.prihvatiZahtev(id))

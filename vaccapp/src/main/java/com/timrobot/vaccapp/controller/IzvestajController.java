@@ -10,6 +10,7 @@ import com.timrobot.vaccapp.utility.XMLMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +44,7 @@ public class IzvestajController {
 //    }
 
     @GetMapping(value = "/{startDate}/{endDate}", produces = MediaType.APPLICATION_XML_VALUE)
+    @PreAuthorize("hasAuthority('SLUZBENIK')")
     public String getIzvestajXHTMLForDates(@PathVariable String startDate, @PathVariable String endDate) {
         try {
             Izvestaj izvestaj = izvestajService.getOrCreateIzvestajForDateRange(startDate, endDate);
@@ -58,6 +60,7 @@ public class IzvestajController {
     }
 
     @GetMapping(value = "/{startDate}/{endDate}/xhtml", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @PreAuthorize("hasAuthority('SLUZBENIK')")
     public void downloadIzvestajXHTMLForDates(@PathVariable String startDate, @PathVariable String endDate, HttpServletResponse response) {
         try {
             Izvestaj izvestaj = izvestajService.getOrCreateIzvestajForDateRange(startDate, endDate);
@@ -73,6 +76,7 @@ public class IzvestajController {
     }
 
     @GetMapping(value = "/{startDate}/{endDate}/pdf", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @PreAuthorize("hasAuthority('SLUZBENIK')")
     public void downloadIzvestajPDFForDates(@PathVariable String startDate, @PathVariable String endDate, HttpServletResponse response) {
         try {
             Izvestaj izvestaj = izvestajService.getOrCreateIzvestajForDateRange(startDate, endDate);

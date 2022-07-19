@@ -26,12 +26,14 @@ public class DemoServiceImpl implements DemoService {
     private Potvrda potvrda = null;
     private Sertifikat sertifikat = null;
     private ObrazacInteresovanja obrazacInteresovanja = null;
+    private Zahtev zahtev = null;
 
     public static final String IZVESTAJ_FILE_PATH = "./src/main/resources/xml/izvestaj_o_imunizaciji_1.xml";
     public static final String SAGLASNOST_FILE_PATH = "./src/main/resources/xml/saglasnost1.xml";
     public static final String POTVRDA_FILE_PATH = "./src/main/resources/xml/potvrda_o_vakcinaciji1.xml";
     public static final String SERTIFIKAT_FILE_PATH = "./src/main/resources/xml/zeleni_sertifikat1.xml";
     public static final String INTERESOVANJE_FILE_PATH = "./src/main/resources/xml/iskazivanje_interesovanja_za_vakcinaciju_1.xml";
+    public static final String ZAHTEV_FILE_PATH = "./src/main/resources/xml/zahtev_za_sertifikat1.xml";
 
     @Override
     public Izvestaj unmarshalExample() {
@@ -40,8 +42,9 @@ public class DemoServiceImpl implements DemoService {
         saglasnost = XMLMapper.<Obrazac>unmarshal(Obrazac.class, new File(SAGLASNOST_FILE_PATH), "saglasnost.xsd");
         potvrda = XMLMapper.<Potvrda>unmarshal(Potvrda.class, new File(POTVRDA_FILE_PATH), "potvrda_o_vakcinaciji.xsd");
         sertifikat = XMLMapper.<Sertifikat>unmarshal(Sertifikat.class, new File(SERTIFIKAT_FILE_PATH), "zeleni_sertifikat.xsd");
-//        sertifikat.getPodaciOSertifikatu().setQRkod(QRcodeUtils.writeQRCode(sertifikat.getPodaciOSertifikatu().getQRkod()));
+        sertifikat.getPodaciOSertifikatu().setQRkod(QRcodeUtils.writeQRCode(sertifikat.getPodaciOSertifikatu().getQRkod()));
         obrazacInteresovanja = XMLMapper.<ObrazacInteresovanja>unmarshal(ObrazacInteresovanja.class, new File(INTERESOVANJE_FILE_PATH), "iskazivanje_interesovanja_za_vakcinaciju.xsd");
+        zahtev = XMLMapper.<Zahtev>unmarshal(Zahtev.class, new File(ZAHTEV_FILE_PATH), "zahtev_za_sertifikat.xsd");
         System.out.println(izvestaj);
         System.out.println("Unmarshalling tested.\n");
         return izvestaj;
@@ -62,6 +65,7 @@ public class DemoServiceImpl implements DemoService {
         DatabaseConnection.<Potvrda>storeInXMLDB("/db/vacc-app/potvrda-o-vakcinaciji", "potvrda_o_vakcinaciji1.xml", Potvrda.class, potvrda, "potvrda_o_vakcinaciji.xsd");
         DatabaseConnection.<Sertifikat>storeInXMLDB("/db/vacc-app/sertifikat", "zeleni_sertifikat1.xml", Sertifikat.class, sertifikat, "zeleni_sertifikat.xsd");
         DatabaseConnection.<ObrazacInteresovanja>storeInXMLDB("/db/vacc-app/obrazac-interesovanja", "iskazivanje_interesovanja_za_vakcinaciju_1.xml", ObrazacInteresovanja.class, obrazacInteresovanja, "iskazivanje_interesovanja_za_vakcinaciju.xsd");
+        DatabaseConnection.<Zahtev>storeInXMLDB("/db/vacc-app/zahtev-zeleni", "zahtev_za_sertifikat1.xml", Zahtev.class, zahtev, "zahtev_za_sertifikat.xsd");
         System.out.println("XML database storing tested.\n");
     }
 

@@ -252,7 +252,9 @@ public class ZahtevZaSertifikatService {
 
         // TO DO : dobaviti sacuvani sertifikat u XHTML & PDF formi za download u mejlu
 
-        emailService.sendSimpleMessage(email, "Prihvacen zahtev", "Zahtev za izdavanje zelenog sertifikata je prihvacen.");
+        emailService.sendSimpleMessage(email, "Prihvacen zahtev", "Zahtev za izdavanje zelenog sertifikata je prihvacen. " +
+                "\n\n<a href=\"http://localhost:8081/api/sertifikat/" + sertifikat.getPodaciOSertifikatu().getBroj() + "/xhtml\">XHTML</a> " +
+                "<a href=\"http://localhost:8081/api/sertifikat/" + sertifikat.getPodaciOSertifikatu().getBroj() + "/pdf\">PDF</a> " );
 
         return true;
     }

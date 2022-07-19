@@ -111,6 +111,55 @@
 
         <br>
 
+        <b-form inline style="margin-left:25px;">
+            <label></label>
+            <label for="dd"> Napredna pretraga sertifikata: </label>
+            <div>
+            <b-form-input
+                type="text"
+                v-model="imeSertifikatInput"
+                style="margin-left: 10px;"
+                placeholder="Ime"
+            />
+            </div>
+
+            <div>
+            <b-form-input
+                type="text"
+                v-model="prezimeSertifikatInput"
+                style="margin-left: 10px;"
+                placeholder="Prezime"
+            />
+            </div>
+
+            <b-form-input
+                type="text"
+                v-model="datumIVremeIzdavanjaSertifikatInput"
+                style="margin-left: 10px;"
+                placeholder="Datum izdavanja (yyyy-mm-dd)"
+            />
+
+            <label style="margin-left:10px;">Zahtev za sertifikat:</label>
+            <b-form-select placeholder="Real Estate Name"
+                        class="mb-2 mr-sm-2 mb-sm-0"
+                        v-model="hrefZahtevSertifikatInput"
+                        :options="hrefZahtevOptions"
+                        style="margin-left:10px;">
+            </b-form-select>
+
+            <label style="margin-left:10px;">Logički operator:</label>
+            <b-form-select placeholder="Real Estate Name"
+                        class="mb-2 mr-sm-2 mb-sm-0"
+                        v-model="operatorSertifikatInput"
+                        :options="operatorOptions"
+                        style="margin-left:10px;">
+            </b-form-select>
+
+            <b-button @click="onSertifikatSearch" class="mb-2 mr-sm-2 mb-sm-0" style="margin-left: 10px;">Pretraži sertifikate</b-button>
+        </b-form>
+
+        <br>
+
         <h2>Saglasnosti</h2>
         <br>
         <b-table striped hover :items="obrazacResults" :fields="obrazacResultsFields">
@@ -332,6 +381,12 @@
                 datumPotvrdaInput: '',
                 zdravstvenaUstanovaPotvrdaInput: '',
                 operatorPotvrdaInput: 'AND',
+                imeSertifikatInput: '',
+                prezimeSertifikatInput: '',
+                datumIVremeIzdavanjaSertifikatInput: '',
+                hrefZahtevSertifikatInput: '',
+                hrefZahtevOptions: [],
+                operatorSertifikatInput: 'AND',
             }
         },
         methods: {
@@ -430,6 +485,7 @@
 
             populateSearchOptions() {
                 this.hrefInteresovanjeOptions = [''];
+                this.hrefZahtevOptions = [''];
 
                 this.axios.get(`/api/interesovanje`, {
                         headers: {
@@ -445,6 +501,26 @@
                         });
 
                         this.hrefInteresovanjeOptions = this.hrefInteresovanjeOptions.filter(this.onlyUnique);
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                }); 
+
+                this.axios.get(`/api/zahtev-za-sertifikat`, {
+                        headers: {
+                            Authorization: "Bearer " + sessionStorage.getItem('token'),
+                        },
+                    })
+                .then((response) => {
+                    let parseString = require('xml2js').parseString;
+                    let stripNS = require('xml2js').processors.stripPrefix;
+                    parseString(response.data, { tagNameProcessors: [stripNS] }, (err, result) => {
+                        result.entityList.Zahtev.forEach(obj => {
+                            this.hrefZahtevOptions.push("http://tim.robot/zahtev_za_sertifikat/" + obj.Identifikator[0]);
+                        });
+
+                        this.hrefZahtevOptions = this.hrefZahtevOptions.filter(this.onlyUnique);
                     });
                 })
                 .catch(error => {
@@ -512,7 +588,39 @@
                 .catch(error => {
                     console.log(error);
                 }); 
-            }
+            },
+
+            onSertifikatSearch() {
+                this.obrazacResults = [];
+                this.potvrdaResults = [];
+                this.sertifikatResults = [];
+
+                let hrefQuery = this.hrefZahtevSertifikatInput;
+                if (this.hrefZahtevSertifikatInput) {
+                    hrefQuery = `<${this.hrefZahtevSertifikatInput}>`
+                }
+
+                let queryParams = `ime=${this.imeSertifikatInput}&prezime=${this.prezimeSertifikatInput}&` +
+                                    `datumIVremeIzdavanja=${this.datumIVremeIzdavanjaSertifikatInput}&hrefZahtev=${hrefQuery}` +
+                                    `&logicalAnd=${this.operatorSertifikatInput === 'AND' ? 'true' : 'false'}`;
+
+                this.axios.get(`/api/search/sertifikat/advanced?${queryParams}`, {
+                        headers: {
+                            Authorization: "Bearer " + sessionStorage.getItem('token'),
+                        },
+                    })
+                .then((response) => {
+                    let parseString = require('xml2js').parseString;
+                    let stripNS = require('xml2js').processors.stripPrefix;
+                    parseString(response.data, { tagNameProcessors: [stripNS] }, (err, result) => {
+                        this.sertifikatResults = result.entityList.Sertifikat;
+                        this.fixIdentifiersInAboutAndHref(this.sertifikatResults);
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                }); 
+            },
 
         },
 

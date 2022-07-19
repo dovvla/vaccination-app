@@ -27,7 +27,7 @@ public class BrojVakcinaController {
     }
 
     @GetMapping(value = "/update")
-    // @PreAuthorize("hasRole('SLUZBENIK')")
+    @PreAuthorize("hasAuthority('SLUZBENIK')")
     public ResponseEntity<?> updateBrojVakcina(@RequestParam String vakcina, @RequestParam Integer broj) {
         try {
             brojVakcinaService.izmeniBrojVakcina(vakcina, broj);

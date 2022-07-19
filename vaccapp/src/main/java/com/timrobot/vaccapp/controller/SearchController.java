@@ -10,6 +10,7 @@ import com.timrobot.vaccapp.utility.XMLMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,6 +38,7 @@ public class SearchController {
     private SertifikatService sertifikatService;
 
     @GetMapping(value = "/regular", produces = MediaType.APPLICATION_XML_VALUE)
+    @PreAuthorize("hasAuthority('SLUZBENIK')")
     public EntityList<Object> regularSearch(@RequestParam String query) {
         try {
             List<Obrazac> saglasnosti = saglasnostService.regularSearchSaglasnost(query);
@@ -102,6 +104,7 @@ public class SearchController {
 //    }
 
     @GetMapping(value = "/saglasnost/advanced", produces = MediaType.APPLICATION_XML_VALUE)
+    @PreAuthorize("hasAuthority('SLUZBENIK')")
     public EntityList<Obrazac> advancedSearchSaglasnost(@RequestParam String ime, @RequestParam String prezime,
                                                         @RequestParam String nazivVakcine, @RequestParam String datumIzdavanja,
                                                         @RequestParam String hrefInteresovanje, @RequestParam Boolean logicalAnd) {
@@ -113,6 +116,7 @@ public class SearchController {
     }
 
     @GetMapping(value = "/potvrda/advanced", produces = MediaType.APPLICATION_XML_VALUE)
+    @PreAuthorize("hasAuthority('SLUZBENIK')")
     public EntityList<Potvrda> advancedSearchPotvrda(@RequestParam String datum, @RequestParam String zdravstvenaUstanova,
                                                      @RequestParam Boolean logicalAnd) {
         try {
@@ -123,6 +127,7 @@ public class SearchController {
     }
 
     @GetMapping(value = "/sertifikat/advanced", produces = MediaType.APPLICATION_XML_VALUE)
+    @PreAuthorize("hasAuthority('SLUZBENIK')")
     public EntityList<Sertifikat> advancedSearchSertifikat(@RequestParam String ime, @RequestParam String prezime,
                                                            @RequestParam String datumIVremeIzdavanja,
                                                            @RequestParam String hrefZahtev, @RequestParam Boolean logicalAnd) {
