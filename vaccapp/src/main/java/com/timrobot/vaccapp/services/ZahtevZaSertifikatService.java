@@ -121,6 +121,7 @@ public class ZahtevZaSertifikatService {
         String identifikator = UUID.randomUUID().toString();
         String documentId = identifikator + ".xml";
         zahtev.setIdentifikator(identifikator);
+        zahtev.setStatus("Neobradjen");
 
         dataAccessLayer.saveDocument(zahtev, folderId, documentId, Zahtev.class);
 

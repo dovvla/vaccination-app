@@ -13,6 +13,7 @@ import Interesovanje from "../components/Interesovanje";
 import Saglasnost from "../components/Saglasnost";
 import ZahtevZaSertifikat from "../components/ZahtevZaSertifikat";
 import MojiDokumenti from "../components/MojiDokumenti";
+import SluzbenikHome from "../components/SluzbenikHome";
 import MedicinskiRadnikHome from "../components/MedicinskiRadnikHome";
 
 Vue.use(VueRouter);
@@ -120,6 +121,11 @@ const routes = [
 		name: "MedicinskiRadnikHome",
 		component: MedicinskiRadnikHome,
 	},
+  {
+    path: "/sluzbenik-home",
+    name: "SluzbenikHome",
+    component: SluzbenikHome,
+  },
 	{
 		path: '*',
 		redirect: "/Login"
