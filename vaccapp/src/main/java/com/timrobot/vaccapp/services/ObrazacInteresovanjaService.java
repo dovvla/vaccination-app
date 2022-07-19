@@ -22,6 +22,79 @@ import java.util.stream.Collectors;
 
 @Service
 public class ObrazacInteresovanjaService {
+        private final String folderId = "/db/vacc-app/obrazac-interesovanja";
+
+        @Autowired
+        private DataAccessLayer dataAccessLayer;
+
+        @Autowired
+        private XMLMapper mapper;
+
+        @Autowired
+        private TerminService terminService;
+
+        @Autowired
+        private BrojVakcinaService brojVakcinaService;
+
+        @Autowired
+        private EmailServiceImpl emailService;
+
+        public ObrazacInteresovanja getXmlAsObject(String documentId) {
+                String xmlString = dataAccessLayer
+                                .getDocument(folderId, documentId)
+                                .get();
+
+                return (ObrazacInteresovanja) mapper.convertToObject(xmlString, "iskazivanje_interesovanja_za_vakcinaciju",
+                                ObrazacInteresovanja.class);
+        }
+
+        public EntityList<ObrazacInteresovanja> getAll() {
+
+                return new EntityList<>(dataAccessLayer
+                                .getAllDocuments(folderId)
+                                .stream()
+                                .map(s -> (ObrazacInteresovanja) mapper.convertToObject(s,
+                                                "iskazivanje_interesovanja_za_vakcinaciju", ObrazacInteresovanja.class))
+                                .collect(Collectors.toList()));
+        }
+
+        public EntityList<ObrazacInteresovanja> getAllForUser(String id) {
+                return new EntityList<>(dataAccessLayer
+                                .getAllDocuments(folderId)
+                                .stream()
+                                .map(s -> (ObrazacInteresovanja) mapper.convertToObject(s,
+                                                "iskazivanje_interesovanja_za_vakcinaciju", ObrazacInteresovanja.class))
+                                .filter(obrazacInteresovanja -> obrazacInteresovanja
+                                                .getLicniPodaci()
+                                                .getJMBG()
+                                                .equals(id))
+                                .collect(Collectors.toList()));
+        }
+
+        private Date stringToDate(String date) {
+                ZoneId defaultZoneId = ZoneId.systemDefault();
+
+                // creating the instance of LocalDate using the day, month, year info
+                LocalDate localDate = LocalDate.parse(date);
+
+                // local date + atStartOfDay() + default time zone + toInstant() = Date
+                return Date.from(localDate
+                                .atStartOfDay(defaultZoneId)
+                                .toInstant());
+        }
+
+        public EntityList<ObrazacInteresovanja> getAllForDateRange(String startDate, String endDate) {
+                return new EntityList<>(dataAccessLayer
+                                .getAllDocuments(folderId)
+                                .stream()
+                                .map(s -> (ObrazacInteresovanja) mapper.convertToObject(s,
+                                                "iskazivanje_interesovanja_za_vakcinaciju", ObrazacInteresovanja.class))
+                                .filter(obrazacInteresovanja -> obrazacInteresovanja
+                                                .getDatum()
+                                                .toGregorianCalendar()
+                                                .getTime()
+                                                .after(stringToDate(startDate))
+/*=======
     private final String folderId = "/db/vacc-app/obrazac-interesovanja";
 
     @Autowired
@@ -94,6 +167,7 @@ public class ObrazacInteresovanjaService {
                                                         .toGregorianCalendar()
                                                         .getTime()
                                                         .after(stringToDate(startDate))
+*/ //>>>>>>> main
                                                 && obrazacInteresovanja
                                                         .getDatum()
                                                         .toGregorianCalendar()

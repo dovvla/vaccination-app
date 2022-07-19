@@ -26,7 +26,6 @@ public class InteresovanjeService {
 
     private XMLMapper mapper;
 
-
 //    public String convertToXML() throws DatatypeConfigurationException {
 //        mapper = new XMLMapper();
 //        ObrazacInteresovanja obrazacInteresovanja = new ObrazacInteresovanja();
@@ -71,6 +70,7 @@ public class InteresovanjeService {
 //        return mapper.convertToXml(zahtev, Zahtev.class);
 //    }
 //
+
 //    public String sertifikat(){
 //        try
 //        {
@@ -125,7 +125,7 @@ public class InteresovanjeService {
 //            return "";
 //        }
 //    }
-//
+
 //    public String potvrda(){
 //        try{
 //            mapper = new XMLMapper();
@@ -159,7 +159,7 @@ public class InteresovanjeService {
 //            return "";
 //        }
 //    }
-//
+
 //    public String saglasnost(){
 //        try {
 //            mapper = new XMLMapper();
@@ -232,6 +232,7 @@ public class InteresovanjeService {
 //            return "";
 //        }
 //    }
+
 //
 //    public String izvestaj(){
 //        try {

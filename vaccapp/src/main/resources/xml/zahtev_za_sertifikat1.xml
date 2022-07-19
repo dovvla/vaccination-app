@@ -2,6 +2,7 @@
 <Zahtev xmlns="http://tim.robot/zahtev_za_sertifikat"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:schemaLocation="http://tim.robot/zahtev_za_sertifikat zahtev_za_sertifikat.xsd">
+    <Identifikator>ecc3e162-2346-45c6-859d-df658f48bca6</Identifikator>
     <Podaci_o_podnosiocu>
         <Ime>Nikola</Ime>
         <Prezime>Nikolic</Prezime>

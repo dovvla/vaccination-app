@@ -72,7 +72,7 @@ public class IzvestajService {
         Izvestaj.Datum datum = new Izvestaj.Datum();
         datum.setProperty("pred:datum_zahtevan");
         datum.setValue(calendar);
-        izvestaj.getDatum().setValue(calendar);
+        izvestaj.setDatum(datum);
         Izvestaj.PeriodIzvestaja periodIzvestaja = new Izvestaj.PeriodIzvestaja();
         Izvestaj.PeriodIzvestaja.DatumOd izvestajDatumOd = new Izvestaj.PeriodIzvestaja.DatumOd();
         izvestajDatumOd.setProperty("pred:datum_od");
