@@ -49,4 +49,21 @@ public class EmailServiceImpl {
         emailSender.send(message);
 
     }
+
+    public void sendMessageWithAttachmentsForSertifikat(
+            String to, String subject, String body) throws MessagingException {
+
+
+        MimeMessage message = emailSender.createMimeMessage();
+
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+        message.setFrom("tim@robot.com");
+        helper.setTo(to);
+        helper.setSubject(subject);
+        message.setText(body, "UTF-8", "html");
+
+        emailSender.send(message);
+
+    }
 }

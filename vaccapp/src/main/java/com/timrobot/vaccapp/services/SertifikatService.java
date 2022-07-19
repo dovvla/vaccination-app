@@ -104,8 +104,11 @@ public class SertifikatService {
         if(!prezime.trim().equals("")) {
             queries.add("?s <http://tim.robot/rdf/predicate/prezime> ?X . FILTER(str(?X) = \"" + prezime + "\")");
         }
+//        if(!datumIVremeIzdavanja.trim().equals("")) {
+//            queries.add("?s <http://tim.robot/rdf/predicate/datum> ?X . FILTER(str(?X) = \"" + datumIVremeIzdavanja + "\")");
+//        }
         if(!datumIVremeIzdavanja.trim().equals("")) {
-            queries.add("?s <http://tim.robot/rdf/predicate/datum> ?X . FILTER(str(?X) = \"" + datumIVremeIzdavanja + "\")");
+            queries.add("?s <http://tim.robot/rdf/predicate/datum> ?X . FILTER(regex(str(?X), \"^" + datumIVremeIzdavanja + "\"))");
         }
         if(!hrefZahtev.trim().equals("")) {
             queries.add("?s <http://tim.robot/rdf/predicate/fromZahtev> " + hrefZahtev + " .");

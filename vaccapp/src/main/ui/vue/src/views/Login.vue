@@ -52,14 +52,24 @@ export default {
       this.axios
         .post(
           "api/auth/login",
+          `<?xml version="1.0" encoding="UTF-8"?>
+              <jwtAuthenticationRequest>
+                <email>${this.username}</email>
+                <password>${this.password}</password>
+              </jwtAuthenticationRequest>`,
           {
-            email: this.username,
-            password: this.password,
-          },
-          { withCredentials: true }
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/xml",
+            },
+          }
         )
         .then((response) => {
-          sessionStorage.setItem("token", response.data.accessToken);
+          let accessToken = response.data
+            .split("<accessToken>")[1]
+            .split("</accessToken>")[0];
+          console.log(accessToken);
+          sessionStorage.setItem("token", accessToken);
           this.findUserRole();
         })
         .catch((error) => {
@@ -71,14 +81,15 @@ export default {
     findUserRole() {
       var userRole = JSON.parse(
         atob(sessionStorage.getItem("token").split(".")[1])
-      ).role;
-      if (userRole == "???") {
+      ).role[0].authority;
+      console.log(userRole);
+      if (userRole == "Sluzbenik") {
         this.$router.push("SluzbenikPage");
       }
-      if (userRole == "???") {
+      if (userRole == "Gradjanin") {
         this.$router.push("GradjaninPage");
       }
-      if (userRole == "???") {
+      if (userRole == "Zdravstveni_radnik") {
         this.$router.push("RadnikPage");
       }
     },

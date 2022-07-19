@@ -22,6 +22,79 @@ import java.util.stream.Collectors;
 
 @Service
 public class ObrazacInteresovanjaService {
+        private final String folderId = "/db/vacc-app/obrazac-interesovanja";
+
+        @Autowired
+        private DataAccessLayer dataAccessLayer;
+
+        @Autowired
+        private XMLMapper mapper;
+
+        @Autowired
+        private TerminService terminService;
+
+        @Autowired
+        private BrojVakcinaService brojVakcinaService;
+
+        @Autowired
+        private EmailServiceImpl emailService;
+
+        public ObrazacInteresovanja getXmlAsObject(String documentId) {
+                String xmlString = dataAccessLayer
+                                .getDocument(folderId, documentId)
+                                .get();
+
+                return (ObrazacInteresovanja) mapper.convertToObject(xmlString, "iskazivanje_interesovanja_za_vakcinaciju",
+                                ObrazacInteresovanja.class);
+        }
+
+        public EntityList<ObrazacInteresovanja> getAll() {
+
+                return new EntityList<>(dataAccessLayer
+                                .getAllDocuments(folderId)
+                                .stream()
+                                .map(s -> (ObrazacInteresovanja) mapper.convertToObject(s,
+                                                "iskazivanje_interesovanja_za_vakcinaciju", ObrazacInteresovanja.class))
+                                .collect(Collectors.toList()));
+        }
+
+        public EntityList<ObrazacInteresovanja> getAllForUser(String id) {
+                return new EntityList<>(dataAccessLayer
+                                .getAllDocuments(folderId)
+                                .stream()
+                                .map(s -> (ObrazacInteresovanja) mapper.convertToObject(s,
+                                                "iskazivanje_interesovanja_za_vakcinaciju", ObrazacInteresovanja.class))
+                                .filter(obrazacInteresovanja -> obrazacInteresovanja
+                                                .getLicniPodaci()
+                                                .getJMBG()
+                                                .equals(id))
+                                .collect(Collectors.toList()));
+        }
+
+        private Date stringToDate(String date) {
+                ZoneId defaultZoneId = ZoneId.systemDefault();
+
+                // creating the instance of LocalDate using the day, month, year info
+                LocalDate localDate = LocalDate.parse(date);
+
+                // local date + atStartOfDay() + default time zone + toInstant() = Date
+                return Date.from(localDate
+                                .atStartOfDay(defaultZoneId)
+                                .toInstant());
+        }
+
+        public EntityList<ObrazacInteresovanja> getAllForDateRange(String startDate, String endDate) {
+                return new EntityList<>(dataAccessLayer
+                                .getAllDocuments(folderId)
+                                .stream()
+                                .map(s -> (ObrazacInteresovanja) mapper.convertToObject(s,
+                                                "iskazivanje_interesovanja_za_vakcinaciju", ObrazacInteresovanja.class))
+                                .filter(obrazacInteresovanja -> obrazacInteresovanja
+                                                .getDatum()
+                                                .toGregorianCalendar()
+                                                .getTime()
+                                                .after(stringToDate(startDate))
+/*=======
     private final String folderId = "/db/vacc-app/obrazac-interesovanja";
 
     @Autowired
@@ -94,6 +167,7 @@ public class ObrazacInteresovanjaService {
                                                         .toGregorianCalendar()
                                                         .getTime()
                                                         .after(stringToDate(startDate))
+*/ //>>>>>>> main
                                                 && obrazacInteresovanja
                                                         .getDatum()
                                                         .toGregorianCalendar()
@@ -139,7 +213,7 @@ public class ObrazacInteresovanjaService {
         emailService.sendSimpleMessage(obrazacInteresovanja
                         .getLicniPodaci()
                         .getImejl(), "Iskazano interesovanje",
-                "Dobicete prvi slobodan termin koji bude dostupan " + obrazacInteresovanja);
+                "Dobicete prvi slobodan termin koji bude dostupan " + obrazacToString(obrazacInteresovanja));
 
         if (brojVakcinaService.getBrojVakcina(obrazacInteresovanja.getZeljenaVakcina()) > 1) {
             this.rezervisiTermin(obrazacInteresovanja);
@@ -159,6 +233,33 @@ public class ObrazacInteresovanjaService {
         return DatatypeFactory
                 .newInstance()
                 .newXMLGregorianCalendar(iso);
+    }
+    public String obrazacToString(ObrazacInteresovanja obrazacInteresovanja) {
+        return "ObrazacInteresovanja " +
+               "licniPodaci: " + licniPodacitoString(obrazacInteresovanja.getLicniPodaci()) +
+               ", zeljenaLokacijaVakcinacije:'" + obrazacInteresovanja.getZeljenaLokacijaVakcinacije() + '\'' +
+               ", zeljenaVakcina:'" + obrazacInteresovanja.getZeljenaVakcina() + '\'' +
+               ", davalacKrvi:'" + obrazacInteresovanja.getDavalacKrvi() + '\'' +
+               ", datum:" + obrazacInteresovanja.getDatum() +
+               ' ';
+    }
+    public String licniPodacitoString(ObrazacInteresovanja.LicniPodaci licniPodaci) {
+        return "LicniPodaci " +
+               "drzavljanstvo:'" + licniPodaci.getDrzavljanstvo() + '\'' +
+               ", jmbg:'" + licniPodaci.getJMBG() + '\'' +
+               ", ime:" + licniPodaci.getIme() + '\'' +
+               ", prezime:'" + licniPodaci.getPrezime() + '\'' +
+               ", imejl:'" + licniPodaci.getImejl() + '\'' +
+               ", brojMobilnogTelefona:'" + licniPodaci.getBrojMobilnogTelefona() + '\'' +
+               ", brojFiksnogTelefona:'" + licniPodaci.getBrojFiksnogTelefona() + '\'' +
+               ' ';
+    }
+    public String terminToString(Termin termin) {
+        return "Termin " +
+               "datumVreme:" + termin.getDatumVreme() +
+               ", jmbg:'" + termin.getJmbg() + '\'' +
+               ", vakcina:'" + termin.getVakcina() + '\'' +
+               ' ';
     }
 
     public void rezervisiTermin(ObrazacInteresovanja obrazacInteresovanja) throws DatatypeConfigurationException {
@@ -180,7 +281,7 @@ public class ObrazacInteresovanjaService {
         terminService.saveXmlFromText(termin);
         emailService.sendSimpleMessage(obrazacInteresovanja
                 .getLicniPodaci()
-                .getImejl(), "Termin vase vakcinacije", termin.toString());
+                .getImejl(), "Termin vase vakcinacije", terminToString(termin));
         brojVakcinaService.izmeniBrojVakcina(obrazacInteresovanja.getZeljenaVakcina(), -2);
     }
 
@@ -206,7 +307,7 @@ public class ObrazacInteresovanjaService {
         terminService.saveXmlFromText(termin);
         emailService.sendSimpleMessage(obrazacInteresovanja
                 .getLicniPodaci()
-                .getImejl(), "Termin vase vakcinacije", termin.toString());
+                .getImejl(), "Termin vase vakcinacije", terminToString(termin));
         brojVakcinaService.izmeniBrojVakcina(obrazacInteresovanja.getZeljenaVakcina(), 0);
     }
 }
