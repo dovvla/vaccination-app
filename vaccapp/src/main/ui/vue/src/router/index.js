@@ -8,6 +8,7 @@ import Interesovanje from "../components/Interesovanje";
 import Saglasnost from "../components/Saglasnost";
 import ZahtevZaSertifikat from "../components/ZahtevZaSertifikat";
 import MojiDokumenti from "../components/MojiDokumenti";
+import SluzbenikHome from "../components/SluzbenikHome"
 
 Vue.use(VueRouter);
 
@@ -57,6 +58,11 @@ const routes = [
     path: "/moji-dokumenti",
     name: "MojiDokumenti",
     component: MojiDokumenti,
+  },
+  {
+    path: "/sluzbenik-home",
+    name: "SluzbenikHome",
+    component: SluzbenikHome,
   },
   // {
   // 	path: "/AdminPage",
