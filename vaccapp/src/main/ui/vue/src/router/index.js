@@ -7,12 +7,7 @@ import SluzbenikPage from '../views/SluzbenikPage'
 import Izvestaj from '../components/Izvestaj'
 import BrojVakcinaUpdate from '../components/BrojVakcinaUpdate'
 import Search from '../components/Search'
-import Vue from "vue";
-import VueRouter from "vue-router";
-import UnregisteredPage from "../views/UnregisteredPage";
 import GradjaninPage from "../views/GradjaninPage";
-import Login from "../views/Login";
-import Logout from "../views/Logout";
 import Register from "../components/Register";
 import Interesovanje from "../components/Interesovanje";
 import Saglasnost from "../components/Saglasnost";
@@ -29,7 +24,6 @@ const Role = {
 };
 
 const routes = [
-/*
 	{
 		path: "/",
 		name: UnregisteredPage,
@@ -80,87 +74,58 @@ const routes = [
 		// },
 	},
 	{
+		path: "/GradjaninPage",
+		name: GradjaninPage,
+		component: GradjaninPage,
+		children: [
+			{
+				path: "interesovanje",
+				name: "Interesovanje",
+				component: Interesovanje,
+			},
+			{
+				path: "saglasnost",
+				name: "Saglasnost",
+				component: Saglasnost,
+			},
+			{
+				path: "zahtev",
+				name: "ZahtevZaSertifikat",
+				component: ZahtevZaSertifikat,
+			},
+			{
+				path: "moji-dokumenti",
+				name: "MojiDokumenti",
+				component: MojiDokumenti,
+			},
+		],
+	},
+	{
+		path: "/Login",
+		name: "Login",
+		component: Login,
+	},
+	{
+		path: "/Logout",
+		name: "Logout",
+		component: Logout,
+	},
+	{
+		path: "/register",
+		name: "Register",
+		component: Register,
+	},
+	{
+		path: "/medicinski-radnik-home",
+		name: "MedicinskiRadnikHome",
+		component: MedicinskiRadnikHome,
+	},
+	{
 		path: '*',
 		redirect: "/Login"
 	}
 
 ]
-*/
-  {
-    path: "/",
-    name: UnregisteredPage,
-    component: UnregisteredPage,
-  },
-  {
-    path: "/GradjaninPage",
-    name: GradjaninPage,
-    component: GradjaninPage,
-    children: [
-      {
-        path: "interesovanje",
-        name: "Interesovanje",
-        component: Interesovanje,
-      },
-      {
-        path: "saglasnost",
-        name: "Saglasnost",
-        component: Saglasnost,
-      },
-      {
-        path: "zahtev",
-        name: "ZahtevZaSertifikat",
-        component: ZahtevZaSertifikat,
-      },
-      {
-        path: "moji-dokumenti",
-        name: "MojiDokumenti",
-        component: MojiDokumenti,
-      },
-    ],
-  },
-  {
-    path: "/Login",
-    name: "Login",
-    component: Login,
-  },
-  {
-    path: "/Logout",
-    name: "Logout",
-    component: Logout,
-  },
-  {
-    path: "/register",
-    name: "Register",
-    component: Register,
-  },
-  {
-    path: "/medicinski-radnik-home",
-    name: "MedicinskiRadnikHome",
-    component: MedicinskiRadnikHome,
-  },
-  // {
-  // 	path: "/AdminPage",
-  // 	name: "AdminPage",
-  // 	component: AdminPage,
-  // 	children: [
-  // 		{
-  // 			path: "CreateCSR",
-  // 			name: "CreateCSRAdmin",
-  // 			component: CreateCSR,
-  // 			meta: {
-  // 				roles: [Role.Admin]
-  // 			},
-  // 		},
-  // 	],
-  // 	meta: {
-  // 		roles: [Role.Admin]
-  // 	},
-  // },
-  {
-    path: "*",
-    redirect: "/Login",
-  },
-];
 
 const router = new VueRouter({
   mode: "history",

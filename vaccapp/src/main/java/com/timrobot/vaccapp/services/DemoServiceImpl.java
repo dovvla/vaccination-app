@@ -42,7 +42,7 @@ public class DemoServiceImpl implements DemoService {
         saglasnost = XMLMapper.<Obrazac>unmarshal(Obrazac.class, new File(SAGLASNOST_FILE_PATH), "saglasnost.xsd");
         potvrda = XMLMapper.<Potvrda>unmarshal(Potvrda.class, new File(POTVRDA_FILE_PATH), "potvrda_o_vakcinaciji.xsd");
         sertifikat = XMLMapper.<Sertifikat>unmarshal(Sertifikat.class, new File(SERTIFIKAT_FILE_PATH), "zeleni_sertifikat.xsd");
-        sertifikat.getPodaciOSertifikatu().setQRkod(QRcodeUtils.writeQRCode(sertifikat.getPodaciOSertifikatu().getQRkod()));
+//        sertifikat.getPodaciOSertifikatu().setQRkod(QRcodeUtils.writeQRCode(sertifikat.getPodaciOSertifikatu().getQRkod()));
         obrazacInteresovanja = XMLMapper.<ObrazacInteresovanja>unmarshal(ObrazacInteresovanja.class, new File(INTERESOVANJE_FILE_PATH), "iskazivanje_interesovanja_za_vakcinaciju.xsd");
         zahtev = XMLMapper.<Zahtev>unmarshal(Zahtev.class, new File(ZAHTEV_FILE_PATH), "zahtev_za_sertifikat.xsd");
         System.out.println(izvestaj);
