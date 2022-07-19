@@ -1,14 +1,14 @@
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:h="http://www.w3.org/1999/xhtml">
-  <rdf:Description rdf:about="http://tim.robot/obrazac_saglasnosti_za_imunizaciju/1234567890123">
-    <pred:fromObrazacInteresovanja xmlns:pred="http://tim.robot/rdf/predicate/" rdf:resource="http://tim.robot/iskazivanje_interesovanja_za_vakcinaciju/1234567890123"/>
+  <rdf:Description rdf:about="http://tim.robot/zeleni_sertifikat/1825247453">
+    <pred:fromZahtev xmlns:pred="http://tim.robot/rdf/predicate/" rdf:resource="http://tim.robot/zahtev_za_sertifikat/69db12e6-9648-44f7-a697-5f533fdefda9"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://tim.robot/obrazac_saglasnosti_za_imunizaciju/1234567890123">
-    <pred:prezime xmlns:pred="http://tim.robot/rdf/predicate/" rdf:datatype="string">lkdjsakldjaslkjd</pred:prezime>
+  <rdf:Description rdf:about="http://tim.robot/zeleni_sertifikat/1825247453">
+    <pred:datum xmlns:pred="http://tim.robot/rdf/predicate/" rdf:datatype="dateTime">2022-07-19T10:44:43</pred:datum>
   </rdf:Description>
-  <rdf:Description rdf:about="http://tim.robot/obrazac_saglasnosti_za_imunizaciju/1234567890123">
-    <pred:ime xmlns:pred="http://tim.robot/rdf/predicate/" rdf:datatype="string">asdkdjaslkjd</pred:ime>
+  <rdf:Description rdf:about="http://tim.robot/zeleni_sertifikat/1825247453">
+    <pred:ime xmlns:pred="http://tim.robot/rdf/predicate/" rdf:datatype="string">Jovan</pred:ime>
   </rdf:Description>
-  <rdf:Description rdf:about="http://tim.robot/obrazac_saglasnosti_za_imunizaciju/1234567890123">
-    <pred:datum xmlns:pred="http://tim.robot/rdf/predicate/" rdf:datatype="date">2022-07-17</pred:datum>
+  <rdf:Description rdf:about="http://tim.robot/zeleni_sertifikat/1825247453">
+    <pred:prezime xmlns:pred="http://tim.robot/rdf/predicate/" rdf:datatype="string">Jovanovic</pred:prezime>
   </rdf:Description>
 </rdf:RDF>

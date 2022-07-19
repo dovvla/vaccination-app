@@ -6,6 +6,7 @@ import com.timrobot.vaccapp.models.Obrazac;
 import com.timrobot.vaccapp.models.Potvrda;
 import com.timrobot.vaccapp.models.Zahtev;
 import com.timrobot.vaccapp.utility.FusekiUtil;
+import com.timrobot.vaccapp.utility.QRcodeUtils;
 import com.timrobot.vaccapp.utility.XMLMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,10 +58,12 @@ public class PotvrdaOVakcinacijiService {
     public Potvrda createPotvrda(Potvrda potvrda) throws TransformerException {
         String identifikator = UUID.randomUUID().toString();
         String documentId = identifikator + ".xml";
-//        String documentId = UUID
-//                                    .randomUUID() + ".xml";
+        // String documentId = UUID
+        // .randomUUID() + ".xml";
 
         potvrda.setSifraPotvrde(identifikator);
+        potvrda.setQRkod(QRcodeUtils.writeQRCode(
+                "http://localhost:8081/documents/potvrda-o-vakcinaciji_" + potvrda.getSifraPotvrde() + ".pdf"));
         potvrda.setAbout("http://tim.robot/potvrda_o_vakcinaciji/" + identifikator);
 
         dataAccessLayer.saveDocument(potvrda, folderId, documentId, Potvrda.class);
@@ -103,7 +106,8 @@ public class PotvrdaOVakcinacijiService {
                 "\n" +
                 "local:search(\"%s\")", search);
 
-        List<String> matchingPotvrdeXML = dataAccessLayer.executeXPathQuery(folderId, searchQuery, "http://tim.robot/potvrda_o_vakcinaciji");
+        List<String> matchingPotvrdeXML = dataAccessLayer.executeXPathQuery(folderId, searchQuery,
+                "http://tim.robot/potvrda_o_vakcinaciji");
 
         List<Potvrda> matchingPotvrde = new ArrayList<>();
         for (String XML : matchingPotvrdeXML) {
@@ -113,15 +117,17 @@ public class PotvrdaOVakcinacijiService {
         return matchingPotvrde;
     }
 
-    public List<Potvrda> advancedSearchPotvrda(String datum, String zdravstvenaUstanova, boolean logicalAnd) throws IOException {
+    public List<Potvrda> advancedSearchPotvrda(String datum, String zdravstvenaUstanova, boolean logicalAnd)
+            throws IOException {
         ArrayList<String> queries = new ArrayList<>();
-        if(!datum.trim().equals("")) {
+        if (!datum.trim().equals("")) {
             queries.add("?s <http://tim.robot/rdf/predicate/datum> ?X . FILTER(str(?X) = \"" + datum + "\")");
         }
-        if(!zdravstvenaUstanova.trim().equals("")) {
-            queries.add("?s <http://tim.robot/rdf/predicate/zdravstvena_ustanova> ?X . FILTER(str(?X) = \"" + zdravstvenaUstanova + "\")");
+        if (!zdravstvenaUstanova.trim().equals("")) {
+            queries.add("?s <http://tim.robot/rdf/predicate/zdravstvena_ustanova> ?X . FILTER(str(?X) = \""
+                    + zdravstvenaUstanova + "\")");
         }
-        if(queries.isEmpty()) {
+        if (queries.isEmpty()) {
             queries.add("?s ?p ?o");
         }
 

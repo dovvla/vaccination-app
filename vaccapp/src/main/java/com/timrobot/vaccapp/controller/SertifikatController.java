@@ -35,7 +35,7 @@ public class SertifikatController {
     private SertifikatService sertifikatService;
 
     @GetMapping("/metadata-json/{id}")
-    @PreAuthorize("hasAuthority('SLUZBENIK')")
+    // @PreAuthorize("hasAuthority('SLUZBENIK')")
     public ResponseEntity<?> getJsonMetadataForDocument(@PathVariable String id) {
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -55,7 +55,7 @@ public class SertifikatController {
     }
 
     @GetMapping(value = "/metadata-rdf/{id}", produces = MediaType.APPLICATION_XML_VALUE)
-    @PreAuthorize("hasAuthority('SLUZBENIK')")
+    // @PreAuthorize("hasAuthority('SLUZBENIK')")
     public ResponseEntity<String> getRDFMetadataForDocument(@PathVariable String id) {
         try {
             String rdf = sertifikatService.getAllMetadataForDocumentInRDF(id);
@@ -72,7 +72,7 @@ public class SertifikatController {
     private XMLMapper xmlMapper;
 
     @GetMapping(value = "/{id}/show", produces = MediaType.APPLICATION_XML_VALUE)
-    @PreAuthorize("hasAuthority('SLUZBENIK')")
+    // @PreAuthorize("hasAuthority('SLUZBENIK')")
     public String getSertifikatXHTML(@PathVariable String id) {
         Sertifikat sertifikat = sertifikatService.getXmlAsObject(id);
         String xml = xmlMapper.convertToXml(sertifikat, Sertifikat.class);
@@ -84,11 +84,12 @@ public class SertifikatController {
     }
 
     @GetMapping(value = "/{id}/xhtml", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    @PreAuthorize("hasAuthority('SLUZBENIK')")
+    // @PreAuthorize("hasAuthority('SLUZBENIK')")
     public void downloadSertifikatXHTML(@PathVariable String id, HttpServletResponse response) {
         try {
             Sertifikat sertifikat = sertifikatService.getXmlAsObject(id);
             String xml = xmlMapper.convertToXml(sertifikat, Sertifikat.class);
+            System.out.println(xml);
             ByteArrayInputStream xhtml = XHtmlUtil.generateHTML(xml, Sertifikat.class);
             org.apache.commons.io.IOUtils.copy(xhtml, response.getOutputStream());
             response.setContentType("application/html");
@@ -100,7 +101,7 @@ public class SertifikatController {
     }
 
     @GetMapping(value = "/{id}/pdf", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    @PreAuthorize("hasAuthority('SLUZBENIK')")
+    // @PreAuthorize("hasAuthority('SLUZBENIK')")
     public void downloadSertifikatPDF(@PathVariable String id, HttpServletResponse response) {
         try {
             Sertifikat sertifikat = sertifikatService.getXmlAsObject(id);

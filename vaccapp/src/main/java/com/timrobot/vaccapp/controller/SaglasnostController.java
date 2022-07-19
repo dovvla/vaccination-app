@@ -74,7 +74,7 @@ public class SaglasnostController {
     }
 
     @PostMapping(value = "/imunizuj", produces = MediaType.APPLICATION_XML_VALUE, consumes = MediaType.APPLICATION_XML_VALUE)
-    @PreAuthorize("hasAuthority('ZDRAVSTENI_RADNIK')")
+    @PreAuthorize("hasAuthority('ZDRAVSTVENI_RADNIK')")
 
     public ResponseEntity<?> imunizujGradjanina(@RequestBody Obrazac obrazac) {
         try {
@@ -87,7 +87,7 @@ public class SaglasnostController {
     }
 
     @GetMapping("/metadata-json/{id}")
-    @PreAuthorize("hasAuthority('SLUZBENIK')")
+    // @PreAuthorize("hasAuthority('SLUZBENIK')")
     public ResponseEntity<?> getJsonMetadataForDocument(@PathVariable String id) {
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -107,7 +107,7 @@ public class SaglasnostController {
     }
 
     @GetMapping(value = "/metadata-rdf/{id}", produces = MediaType.APPLICATION_XML_VALUE)
-    @PreAuthorize("hasAuthority('SLUZBENIK')")
+    // @PreAuthorize("hasAuthority('SLUZBENIK')")
     public ResponseEntity<String> getRDFMetadataForDocument(@PathVariable String id) {
         try {
             String rdf = saglasnostService.getAllMetadataForDocumentInRDF(id);
@@ -124,7 +124,7 @@ public class SaglasnostController {
     private XMLMapper xmlMapper;
 
     @GetMapping(value = "/{id}/show", produces = MediaType.APPLICATION_XML_VALUE)
-    @PreAuthorize("hasAuthority('SLUZBENIK')")
+    // @PreAuthorize("hasAuthority('SLUZBENIK')")
     public String getSaglasnostXHTML(@PathVariable String id) {
         Obrazac saglasnost = saglasnostService.getXmlAsObject(id);
         String xml = xmlMapper.convertToXml(saglasnost, Obrazac.class);
@@ -136,7 +136,7 @@ public class SaglasnostController {
     }
 
     @GetMapping(value = "/{id}/xhtml", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    @PreAuthorize("hasAuthority('SLUZBENIK')")
+    // @PreAuthorize("hasAuthority('SLUZBENIK')")
     public void downloadSaglasnostXHTML(@PathVariable String id, HttpServletResponse response) {
         try {
             Obrazac saglasnost = saglasnostService.getXmlAsObject(id);
@@ -152,7 +152,7 @@ public class SaglasnostController {
     }
 
     @GetMapping(value = "/{id}/pdf", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    @PreAuthorize("hasAuthority('SLUZBENIK')")
+    // @PreAuthorize("hasAuthority('SLUZBENIK')")
     public void downloadSaglasnostPDF(@PathVariable String id, HttpServletResponse response) {
         try {
             Obrazac saglasnost = saglasnostService.getXmlAsObject(id);

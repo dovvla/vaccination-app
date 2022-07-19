@@ -3,6 +3,7 @@ package com.timrobot.vaccapp.services;
 import com.timrobot.vaccapp.dao.DataAccessLayer;
 import com.timrobot.vaccapp.models.*;
 import com.timrobot.vaccapp.utility.FusekiUtil;
+import com.timrobot.vaccapp.utility.QRcodeUtils;
 import com.timrobot.vaccapp.utility.XMLMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,10 +67,10 @@ public class SaglasnostService {
 
     public Obrazac putSaglasnost(Obrazac obrazac) throws TransformerException {
         String documentId = obrazac
-                                    .getPodaciOPacijentu()
-                                    .getDrzavljanstvo()
-                                    .getJMBG()
-                            + ".xml";
+                .getPodaciOPacijentu()
+                .getDrzavljanstvo()
+                .getJMBG()
+                + ".xml";
 
         obrazac.setAbout("http://tim.robot/obrazac_saglasnosti_za_imunizaciju/" + obrazac
                 .getPodaciOPacijentu()
@@ -105,10 +106,9 @@ public class SaglasnostService {
         if (ldt.getSecond() == 0 && ldt.getNano() == 0) {
             iso += ":00"; // necessary hack because the second part is not optional in XML
         }
-        return
-                DatatypeFactory
-                        .newInstance()
-                        .newXMLGregorianCalendar(iso);
+        return DatatypeFactory
+                .newInstance()
+                .newXMLGregorianCalendar(iso);
     }
 
     public Obrazac imunizujGradjanina(Obrazac obrazac) throws DatatypeConfigurationException, TransformerException {
@@ -125,29 +125,35 @@ public class SaglasnostService {
                 .getPodaciOIzvrsenimImunizacijama()
                 .getPrimljenaVakcina()
                 .get(0)
-                .getNaziv().getValue());
+                .getNaziv().getValue().trim());
         Potvrda.PodaciPacijenta podaciPacijenta = new Potvrda.PodaciPacijenta();
         podaciPacijenta.setIme(obrazac
                 .getPodaciOPacijentu()
-                .getIme().getValue());
+                .getIme().getValue().trim());
         podaciPacijenta.setJMBG(obrazac
                 .getPodaciOPacijentu()
                 .getDrzavljanstvo()
-                .getJMBG());
+                .getJMBG().trim());
         podaciPacijenta.setPol(obrazac
                 .getPodaciOPacijentu()
-                .getPol());
+                .getPol().trim());
         podaciPacijenta.setPrezime(obrazac
                 .getPodaciOPacijentu()
-                .getPrezime().getValue());
+                .getPrezime().getValue().trim());
+        potvrda.setPodaciPacijenta(podaciPacijenta);
+        // potvrda.setQRkod(QRcodeUtils.writeQRCode(potvrda.getSifraPotvrde()));
         TZdravstvenaUstanova tZdravstvenaUstanova = new TZdravstvenaUstanova();
         tZdravstvenaUstanova.setDatatype("xs:string");
         tZdravstvenaUstanova.setProperty("pred:zdravstvena_ustanova");
         tZdravstvenaUstanova.setValue(obrazac
                 .getEvidencijaOVakcinaciji()
-                .getZdravstvenaUstanova());
+                .getZdravstvenaUstanova().trim());
         potvrda.setZdravstvenaUstanova(tZdravstvenaUstanova);
 
+        // obrazac = this.getAllForUser(obrazac
+        // .getPodaciOPacijentu()
+        // .getDrzavljanstvo()
+        // .getJMBG().trim()).getItems().get(0);
         obrazac
                 .getEvidencijaOVakcinaciji()
                 .getPodaciOIzvrsenimImunizacijama()
@@ -156,17 +162,21 @@ public class SaglasnostService {
                     TDozaVakcine tDozaVakcine = new TDozaVakcine();
                     try {
                         tDozaVakcine.setDatumDavanja(localDateTimeToXMLDate(LocalDateTime.now()));
-                    }
-                    catch (DatatypeConfigurationException e) {
+                    } catch (DatatypeConfigurationException e) {
                         throw new RuntimeException(e);
                     }
-                    tDozaVakcine.setSerija(tPrimljenaVakcina.getSerijaVakcine());
+                    tDozaVakcine.setSerija(tPrimljenaVakcina.getSerijaVakcine().trim());
                     potvrda
                             .getDozaVakcine()
                             .add(tDozaVakcine);
                 });
+        Obrazac tmpObrazac = this.getAllForUser(obrazac
+                .getPodaciOPacijentu()
+                .getDrzavljanstvo()
+                .getJMBG().trim()).getItems().get(0);
+        tmpObrazac.setEvidencijaOVakcinaciji(obrazac.getEvidencijaOVakcinaciji());
+        this.putSaglasnost(tmpObrazac);
         potvrdaOVakcinacijiService.createPotvrda(potvrda);
-
 
         return obrazac;
     }
@@ -191,7 +201,8 @@ public class SaglasnostService {
                 "\n" +
                 "local:search(\"%s\")", search);
 
-        List<String> matchingSaglasnostiXML = dataAccessLayer.executeXPathQuery(folderId, searchQuery, "http://tim.robot/obrazac_saglasnosti_za_imunizaciju");
+        List<String> matchingSaglasnostiXML = dataAccessLayer.executeXPathQuery(folderId, searchQuery,
+                "http://tim.robot/obrazac_saglasnosti_za_imunizaciju");
 
         List<Obrazac> matchingSaglasnosti = new ArrayList<>();
         for (String XML : matchingSaglasnostiXML) {
@@ -201,24 +212,26 @@ public class SaglasnostService {
         return matchingSaglasnosti;
     }
 
-    public List<Obrazac> advancedSearchSaglasnost(String ime, String prezime, String nazivVakcine, String datumIzdavanja, String hrefInteresovanje, boolean logicalAnd) throws IOException {
+    public List<Obrazac> advancedSearchSaglasnost(String ime, String prezime, String nazivVakcine,
+            String datumIzdavanja, String hrefInteresovanje, boolean logicalAnd) throws IOException {
         ArrayList<String> queries = new ArrayList<>();
-        if(!ime.trim().equals("")) {
+        if (!ime.trim().equals("")) {
             queries.add("?s <http://tim.robot/rdf/predicate/ime> ?X . FILTER(str(?X) = \"" + ime + "\")");
         }
-        if(!prezime.trim().equals("")) {
+        if (!prezime.trim().equals("")) {
             queries.add("?s <http://tim.robot/rdf/predicate/prezime> ?X . FILTER(str(?X) = \"" + prezime + "\")");
         }
-        if(!nazivVakcine.trim().equals("")) {
-            queries.add("?s <http://tim.robot/rdf/predicate/naziv_vakcine> ?X . FILTER(str(?X) = \"" + nazivVakcine + "\")");
+        if (!nazivVakcine.trim().equals("")) {
+            queries.add("?s <http://tim.robot/rdf/predicate/naziv_vakcine> ?X . FILTER(str(?X) = \"" + nazivVakcine
+                    + "\")");
         }
-        if(!datumIzdavanja.trim().equals("")) {
+        if (!datumIzdavanja.trim().equals("")) {
             queries.add("?s <http://tim.robot/rdf/predicate/datum> ?X . FILTER(str(?X) = \"" + datumIzdavanja + "\")");
         }
-        if(!hrefInteresovanje.trim().equals("")) {
+        if (!hrefInteresovanje.trim().equals("")) {
             queries.add("?s <http://tim.robot/rdf/predicate/fromObrazacInteresovanja> " + hrefInteresovanje + " .");
         }
-        if(queries.isEmpty()) {
+        if (queries.isEmpty()) {
             queries.add("?s ?p ?o");
         }
 
@@ -253,7 +266,8 @@ public class SaglasnostService {
     }
 
     public String getAllMetadataForDocumentInRDF(String documentId) throws IOException {
-        return FusekiUtil.getAllMetadataForDocumentInRDF("saglasnost", "obrazac_saglasnosti_za_imunizaciju", documentId);
+        return FusekiUtil.getAllMetadataForDocumentInRDF("saglasnost", "obrazac_saglasnosti_za_imunizaciju",
+                documentId);
     }
 
     public void popuniKorisnika(Obrazac obrazac, Korisnik korisnik) throws DatatypeConfigurationException {

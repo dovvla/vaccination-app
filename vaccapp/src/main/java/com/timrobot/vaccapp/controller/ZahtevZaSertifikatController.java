@@ -36,21 +36,21 @@ public class ZahtevZaSertifikatController {
     private KorisnikService korisnikService;
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_XML_VALUE)
-    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTENI_RADNIK') or hasAuthority('SLUZBENIK')")
+    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTVENI_RADNIK') or hasAuthority('SLUZBENIK')")
 
     public EntityList<Zahtev> getAll() {
         return zahtevZaSertifikatService.getAll();
     }
 
     @GetMapping(value = "/user/{id}", produces = MediaType.APPLICATION_XML_VALUE)
-    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTENI_RADNIK') or hasAuthority('SLUZBENIK')")
+    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTVENI_RADNIK') or hasAuthority('SLUZBENIK')")
 
     public EntityList<Zahtev> getAllForUser(@PathVariable String id) {
         return zahtevZaSertifikatService.getAllForUser(id);
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_XML_VALUE, consumes = MediaType.APPLICATION_XML_VALUE)
-    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTENI_RADNIK') or hasAuthority('SLUZBENIK')")
+    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTVENI_RADNIK') or hasAuthority('SLUZBENIK')")
     public ResponseEntity<?> createZahtevZaZeleni(@RequestBody Zahtev zahtev) {
         try {
             Authentication auth = SecurityContextHolder
@@ -87,10 +87,11 @@ public class ZahtevZaSertifikatController {
     @PreAuthorize("hasAuthority('SLUZBENIK')")
     public ResponseEntity<?> prihvatiZahtev(@PathVariable String id) {
         try {
-            if (!zahtevZaSertifikatService.prihvatiZahtev(id))
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        } catch (DatatypeConfigurationException | TransformerException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            if (!zahtevZaSertifikatService.prihvatiZahtev(id)) {
+            }
+            // throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }

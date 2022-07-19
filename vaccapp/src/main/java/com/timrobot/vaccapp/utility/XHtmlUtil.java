@@ -15,6 +15,8 @@ import java.io.FileOutputStream;
 
 public class XHtmlUtil {
     public static final String HTML_FILE = "src/main/resources/static/documents/";
+    public static final String HTML_FILE_1 = "document.html";
+
     private static final TransformerFactory transformerFactory;
     public static String XSL_FILE;
 
@@ -34,7 +36,7 @@ public class XHtmlUtil {
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty(OutputKeys.METHOD, "xhtml");
             StreamSource source = new StreamSource(new ByteArrayInputStream(documentXml.getBytes()));
-            file = new File(HTML_FILE);
+            file = new File(HTML_FILE_1);
             FileOutputStream output = new FileOutputStream(file);
             StreamResult result = new StreamResult(output);
             transformer.transform(source, result);
@@ -46,6 +48,7 @@ public class XHtmlUtil {
         }
         return retVal;
     }
+
     public static ByteArrayInputStream generateHTML(String documentXml, Class<?> classOfDocument, String path) {
         ByteArrayInputStream retVal = null;
         File file = null;
@@ -58,7 +61,7 @@ public class XHtmlUtil {
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty(OutputKeys.METHOD, "xhtml");
             StreamSource source = new StreamSource(new ByteArrayInputStream(documentXml.getBytes()));
-            file = new File(HTML_FILE+path);
+            file = new File(HTML_FILE + path);
             FileOutputStream output = new FileOutputStream(file);
             StreamResult result = new StreamResult(output);
             transformer.transform(source, result);
@@ -79,7 +82,7 @@ public class XHtmlUtil {
             XSL_FILE = "classpath:xsl/potvrda_o_vakcinaciji.xsl";
         else if (classOfDocument.equals(Sertifikat.class))
             XSL_FILE = "classpath:xsl/zeleni_sertifikat.xsl";
-        else if(classOfDocument.equals(Zahtev.class))
+        else if (classOfDocument.equals(Zahtev.class))
             XSL_FILE = "classpath:xsl/zahtev_za_sertifikat.xsl";
         else
             XSL_FILE = "classpath:xsl/izvestaj_o_imunizaciji.xsl";

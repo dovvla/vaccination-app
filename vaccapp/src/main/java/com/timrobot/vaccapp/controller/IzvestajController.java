@@ -34,22 +34,26 @@ public class IzvestajController {
     @Autowired
     private XMLMapper xmlMapper;
 
-//    @GetMapping(value = "/{startDate}/{endDate}", produces = MediaType.APPLICATION_XML_VALUE)
-//    public Izvestaj getIzvestajForDates(@PathVariable String startDate, @PathVariable String endDate) {
-//        try {
-//            return izvestajService.getOrCreateIzvestajForDateRange(startDate, endDate);
-//        } catch (DatatypeConfigurationException e) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-//        }
-//    }
+    // @GetMapping(value = "/{startDate}/{endDate}", produces =
+    // MediaType.APPLICATION_XML_VALUE)
+    // public Izvestaj getIzvestajForDates(@PathVariable String startDate,
+    // @PathVariable String endDate) {
+    // try {
+    // return izvestajService.getOrCreateIzvestajForDateRange(startDate, endDate);
+    // } catch (DatatypeConfigurationException e) {
+    // throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    // }
+    // }
 
     @GetMapping(value = "/{startDate}/{endDate}", produces = MediaType.APPLICATION_XML_VALUE)
-    @PreAuthorize("hasAuthority('SLUZBENIK')")
+    // @PreAuthorize("hasAuthority('SLUZBENIK')")
     public String getIzvestajXHTMLForDates(@PathVariable String startDate, @PathVariable String endDate) {
         try {
             Izvestaj izvestaj = izvestajService.getOrCreateIzvestajForDateRange(startDate, endDate);
             String xml = xmlMapper.convertToXml(izvestaj, Izvestaj.class);
+            System.out.println(xml);
             ByteArrayInputStream xhtml = XHtmlUtil.generateHTML(xml, Izvestaj.class);
+            System.out.println(xhtml);
             int n = xhtml.available();
             byte[] bytes = new byte[n];
             xhtml.read(bytes, 0, n);
@@ -60,8 +64,9 @@ public class IzvestajController {
     }
 
     @GetMapping(value = "/{startDate}/{endDate}/xhtml", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    @PreAuthorize("hasAuthority('SLUZBENIK')")
-    public void downloadIzvestajXHTMLForDates(@PathVariable String startDate, @PathVariable String endDate, HttpServletResponse response) {
+    // @PreAuthorize("hasAuthority('SLUZBENIK')")
+    public void downloadIzvestajXHTMLForDates(@PathVariable String startDate, @PathVariable String endDate,
+            HttpServletResponse response) {
         try {
             Izvestaj izvestaj = izvestajService.getOrCreateIzvestajForDateRange(startDate, endDate);
             String xml = xmlMapper.convertToXml(izvestaj, Izvestaj.class);
@@ -76,8 +81,9 @@ public class IzvestajController {
     }
 
     @GetMapping(value = "/{startDate}/{endDate}/pdf", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    @PreAuthorize("hasAuthority('SLUZBENIK')")
-    public void downloadIzvestajPDFForDates(@PathVariable String startDate, @PathVariable String endDate, HttpServletResponse response) {
+    // @PreAuthorize("hasAuthority('SLUZBENIK')")
+    public void downloadIzvestajPDFForDates(@PathVariable String startDate, @PathVariable String endDate,
+            HttpServletResponse response) {
         try {
             Izvestaj izvestaj = izvestajService.getOrCreateIzvestajForDateRange(startDate, endDate);
             String xml = xmlMapper.convertToXml(izvestaj, Izvestaj.class);

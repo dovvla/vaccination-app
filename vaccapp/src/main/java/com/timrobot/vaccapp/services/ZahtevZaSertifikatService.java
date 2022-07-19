@@ -91,16 +91,17 @@ public class ZahtevZaSertifikatService {
     private Date stringToDate(String date) {
         ZoneId defaultZoneId = ZoneId.systemDefault();
 
-        //creating the instance of LocalDate using the day, month, year info
+        // creating the instance of LocalDate using the day, month, year info
         LocalDate localDate = LocalDate.parse(date);
 
-        //local date + atStartOfDay() + default time zone + toInstant() = Date
+        // local date + atStartOfDay() + default time zone + toInstant() = Date
         return Date.from(localDate
                 .atStartOfDay(defaultZoneId)
                 .toInstant());
     }
 
-    public EntityList<Zahtev> getAllForDateRangeInclusive(String startDate, String endDate) throws DatatypeConfigurationException {
+    public EntityList<Zahtev> getAllForDateRangeInclusive(String startDate, String endDate)
+            throws DatatypeConfigurationException {
         return new EntityList<>(dataAccessLayer
                 .getAllDocuments(folderId)
                 .stream()
@@ -109,11 +110,12 @@ public class ZahtevZaSertifikatService {
                         .getDatum()
                         .toGregorianCalendar()
                         .getTime()
-                        .before(stringToDate(startDate)) && !zahtev
-                        .getDatum()
-                        .toGregorianCalendar()
-                        .getTime()
-                        .after(stringToDate(endDate)))
+                        .before(stringToDate(startDate))
+                        && !zahtev
+                                .getDatum()
+                                .toGregorianCalendar()
+                                .getTime()
+                                .after(stringToDate(endDate)))
                 .collect(Collectors.toList()));
     }
 
@@ -156,7 +158,8 @@ public class ZahtevZaSertifikatService {
                 .collect(Collectors.toList())
                 .get(0).getEmail();
 
-        emailService.sendSimpleMessage(email, "Odbijen zahtev", "Zahtev za izdavanje zelenog sertifikata je odbijen. Razlog: " + razlog);
+        emailService.sendSimpleMessage(email, "Odbijen zahtev",
+                "Zahtev za izdavanje zelenog sertifikata je odbijen. Razlog: " + razlog);
 
         return true;
     }
@@ -164,7 +167,8 @@ public class ZahtevZaSertifikatService {
     public boolean prihvatiZahtev(String id) throws DatatypeConfigurationException, TransformerException {
         Zahtev zahtev = this.getXmlAsObject(id);
 
-        if (zahtev == null || zahtev.getStatus().equals("Odbijen") || zahtev.getStatus().equals("Prihvacen"))
+        if (zahtev == null || zahtev.getStatus().equals("Odbijen") ||
+                zahtev.getStatus().equals("Prihvacen"))
             return false;
 
         zahtev.setStatus("Prihvacen");
@@ -191,23 +195,30 @@ public class ZahtevZaSertifikatService {
         tKovidTest.setVrstaUzorka("Bris nosa");
         sertifikat.getKovidTest().add(tKovidTest);
         Obrazac saglasnost = saglasnostService.getAllForUser(zahtev.getPodaciOPodnosiocu().getJMBG()).getItems().get(0);
-        Potvrda potvrda = potvrdaOVakcinacijiService.getAllForUser(zahtev.getPodaciOPodnosiocu().getJMBG()).getItems().get(0);
-//        for (TDozaVakcine doza : potvrda.getDozaVakcine()) {
-//            TDozaVakcinacije tDozaVakcinacije = new TDozaVakcinacije();
-//            tDozaVakcinacije.setDatum(doza.getDatumDavanja());
-//            tDozaVakcinacije.setSerija(doza.getSerija());
-//            tDozaVakcinacije.setProizvodjac(saglasnost.getEvidencijaOVakcinaciji().getPodaciOIzvrsenimImunizacijama().getPrimljenaVakcina());
-//            tDozaVakcinacije.setZdravstvenaUstanova(potvrda.getZdravstvenaUstanova());
-//            tDozaVakcinacije.setTip(potvrda.getNazivVakcine());
-//        }
-        for (TPrimljenaVakcina doza : saglasnost.getEvidencijaOVakcinaciji().getPodaciOIzvrsenimImunizacijama().getPrimljenaVakcina()) {
-            TDozaVakcinacije tDozaVakcinacije = new TDozaVakcinacije();
-            tDozaVakcinacije.setDatum(doza.getDatumIzdavanja());
-            tDozaVakcinacije.setSerija(doza.getSerijaVakcine());
-            tDozaVakcinacije.setProizvodjac(doza.getProizvodjac());
-            tDozaVakcinacije.setZdravstvenaUstanova(potvrda.getZdravstvenaUstanova().getValue());
-            tDozaVakcinacije.setTip(doza.getNaziv().getValue());
-            sertifikat.getDozaVakcinacije().add(tDozaVakcinacije);
+        Potvrda potvrda = potvrdaOVakcinacijiService.getAllForUser(zahtev.getPodaciOPodnosiocu().getJMBG()).getItems()
+                .get(0);
+        // for (TDozaVakcine doza : potvrda.getDozaVakcine()) {
+        // TDozaVakcinacije tDozaVakcinacije = new TDozaVakcinacije();
+        // tDozaVakcinacije.setDatum(doza.getDatumDavanja());
+        // tDozaVakcinacije.setSerija(doza.getSerija());
+        // // tDozaVakcinacije.setProizvodjac(
+        // //
+        // saglasnost.getEvidencijaOVakcinaciji().getPodaciOIzvrsenimImunizacijama().getPrimljenaVakcina());
+        // // tDozaVakcinacije.setZdravstvenaUstanova(potvrda.getZdravstvenaUstanova());
+        // // tDozaVakcinacije.setTip(potvrda.getNazivVakcine());
+        // }
+        for (TPrimljenaVakcina doza : saglasnost.getEvidencijaOVakcinaciji().getPodaciOIzvrsenimImunizacijama()
+                .getPrimljenaVakcina()) {
+            try {
+                TDozaVakcinacije tDozaVakcinacije = new TDozaVakcinacije();
+                tDozaVakcinacije.setDatum(doza.getDatumIzdavanja());
+                tDozaVakcinacije.setSerija(doza.getSerijaVakcine());
+                tDozaVakcinacije.setProizvodjac(doza.getProizvodjac());
+                tDozaVakcinacije.setZdravstvenaUstanova(potvrda.getZdravstvenaUstanova().getValue());
+                tDozaVakcinacije.setTip(doza.getNaziv().getValue());
+                sertifikat.getDozaVakcinacije().add(tDozaVakcinacije);
+            } catch (Exception ignored) {
+            }
         }
         Sertifikat.PodaciOPacijentu podaciOPacijentu = new Sertifikat.PodaciOPacijentu();
         podaciOPacijentu.setJMBG(zahtev.getPodaciOPodnosiocu().getJMBG());
@@ -233,7 +244,8 @@ public class ZahtevZaSertifikatService {
         podaciOSertifikatu.setDatumIVreme(tDatumIVremeIzdavanja);
         sertifikat.setPodaciOSertifikatu(podaciOSertifikatu);
 
-        sertifikat.getPodaciOSertifikatu().setQRkod(QRcodeUtils.writeQRCode("http://localhost:8081/api/sertifikat/" + sertifikat.getPodaciOSertifikatu().getBroj() + "/xhtml"));
+        sertifikat.getPodaciOSertifikatu().setQRkod(QRcodeUtils.writeQRCode(
+                "http://localhost:8081/api/sertifikat/" + sertifikat.getPodaciOSertifikatu().getBroj() + "/xhtml"));
 
         // sertifikat se cuva u xml bazi
         String sertifikatDocumentId = sertifikat.getPodaciOSertifikatu().getBroj() + ".xml";
@@ -258,9 +270,12 @@ public class ZahtevZaSertifikatService {
 
         // TO DO : dobaviti sacuvani sertifikat u XHTML & PDF formi za download u mejlu
 
-        emailService.sendSimpleMessage(email, "Prihvacen zahtev", "Zahtev za izdavanje zelenog sertifikata je prihvacen. " +
-                "\n\n<a href=\"http://localhost:8081/api/sertifikat/" + sertifikat.getPodaciOSertifikatu().getBroj() + "/xhtml\">XHTML</a> " +
-                "<a href=\"http://localhost:8081/api/sertifikat/" + sertifikat.getPodaciOSertifikatu().getBroj() + "/pdf\">PDF</a> " );
+        emailService.sendSimpleMessage(email, "Prihvacen zahtev",
+                "Zahtev za izdavanje zelenog sertifikata je prihvacen. " +
+                        "\n\n<a href=\"http://localhost:8081/documents/sertifikat_"
+                        + sertifikat.getPodaciOSertifikatu().getBroj() + ".html\">XHTML</a> " +
+                        "<a href=\"http://localhost:8081/api/sertifikat/" + sertifikat.getPodaciOSertifikatu().getBroj()
+                        + "/pdf\">PDF</a> ");
 
         return true;
     }

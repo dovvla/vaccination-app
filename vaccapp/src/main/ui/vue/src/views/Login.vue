@@ -90,7 +90,7 @@ export default {
         this.$router.push("GradjaninPage");
       }
       if (userRole == "Zdravstveni_radnik") {
-        this.$router.push("RadnikPage");
+        this.$router.push("/medicinski-radnik-home");
       }
     },
   },

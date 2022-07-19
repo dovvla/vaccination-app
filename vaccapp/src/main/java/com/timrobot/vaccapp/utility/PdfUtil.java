@@ -20,6 +20,7 @@ public class PdfUtil {
     public static final String FOX_XCONF = "classpath:xsl_fo/fop.xconf";
     public static String XSL_FILE;
     public static String PDF_FILE = "src/main/resources/static/documents/";
+    public static String PDF_FILE_1 = "document.pdf";
     private final FopFactory fopFactory;
     private final TransformerFactory transformerFactory;
 
@@ -41,7 +42,7 @@ public class PdfUtil {
             Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, userAgent, outStream);
             Result res = new SAXResult(fop.getDefaultHandler());
             xslFoTransformer.transform(source, res);
-            OutputStream outputStream = new FileOutputStream(PDF_FILE);
+            OutputStream outputStream = new FileOutputStream(PDF_FILE_1);
             outStream.writeTo(outputStream);
             outputStream.close();
             return new ByteArrayInputStream(outStream.toByteArray());
@@ -49,6 +50,7 @@ public class PdfUtil {
         }
         return null;
     }
+
     public ByteArrayInputStream generatePDF(String documentXml, Class<?> classOfDocument, String path) {
         try {
             setXSLFile(classOfDocument);
@@ -62,7 +64,7 @@ public class PdfUtil {
             Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, userAgent, outStream);
             Result res = new SAXResult(fop.getDefaultHandler());
             xslFoTransformer.transform(source, res);
-            OutputStream outputStream = new FileOutputStream(PDF_FILE+path);
+            OutputStream outputStream = new FileOutputStream(PDF_FILE + path);
             outStream.writeTo(outputStream);
             outputStream.close();
             return new ByteArrayInputStream(outStream.toByteArray());
@@ -70,6 +72,7 @@ public class PdfUtil {
         }
         return null;
     }
+
     private void setXSLFile(Class<?> classOfDocument) {
         if (classOfDocument.equals(ObrazacInteresovanja.class))
             XSL_FILE = "classpath:xsl_fo/iskazivanje_interesovanja_za_vakcinaciju.xsl";
@@ -79,7 +82,7 @@ public class PdfUtil {
             XSL_FILE = "classpath:xsl_fo/potvrda_o_vakcinaciji.xsl";
         else if (classOfDocument.equals(Sertifikat.class))
             XSL_FILE = "classpath:xsl_fo/zeleni_sertifikat.xsl";
-        else if(classOfDocument.equals(Zahtev.class))
+        else if (classOfDocument.equals(Zahtev.class))
             XSL_FILE = "classpath:xsl_fo/zahtev_za_sertifikat.xsl";
         else
             XSL_FILE = "classpath:xsl_fo/izvestaj_o_imunizaciji.xsl";

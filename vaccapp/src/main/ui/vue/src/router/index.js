@@ -19,9 +19,9 @@ import MedicinskiRadnikHome from "../components/MedicinskiRadnikHome";
 Vue.use(VueRouter);
 
 const Role = {
-  Gradjanin: "Gradjanin",
-  Radnik: "Zdravstveni_radnik",
-  Sluzbenik: "Sluzbenik",
+	Gradjanin: "Gradjanin",
+	Radnik: "Zdravstveni_radnik",
+	Sluzbenik: "Sluzbenik",
 };
 
 const routes = [
@@ -69,6 +69,11 @@ const routes = [
 				// 	roles: [Role.Sluzbenik]
 				// },
 			},
+			{
+				path: "sluzbenik-home",
+				name: "SluzbenikHome",
+				component: SluzbenikHome,
+			},
 		],
 		// meta: {
 		// 	roles: [Role.Sluzbenik]
@@ -102,16 +107,6 @@ const routes = [
 		],
 	},
 	{
-		path: "/Login",
-		name: "Login",
-		component: Login,
-	},
-	{
-		path: "/Logout",
-		name: "Logout",
-		component: Logout,
-	},
-	{
 		path: "/register",
 		name: "Register",
 		component: Register,
@@ -121,11 +116,6 @@ const routes = [
 		name: "MedicinskiRadnikHome",
 		component: MedicinskiRadnikHome,
 	},
-  {
-    path: "/sluzbenik-home",
-    name: "SluzbenikHome",
-    component: SluzbenikHome,
-  },
 	{
 		path: '*',
 		redirect: "/Login"
@@ -134,21 +124,21 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  mode: "history",
-  base: process.env.BASE_URL,
-  routes,
+	mode: "history",
+	base: process.env.BASE_URL,
+	routes,
 });
 
 export default router;
 router.beforeEach((to, from, next) => {
-  const { roles } = to.meta;
-  if (roles) {
-    const userRole = JSON.parse(
-      atob(sessionStorage.getItem("token").split(".")[1])
-    ).role[0].authority;
-    if (roles.length && !roles.includes(userRole)) {
-      return next({ path: "Login" });
-    }
-  }
-  next();
+	const { roles } = to.meta;
+	if (roles) {
+		const userRole = JSON.parse(
+			atob(sessionStorage.getItem("token").split(".")[1])
+		).role[0].authority;
+		if (roles.length && !roles.includes(userRole)) {
+			return next({ path: "Login" });
+		}
+	}
+	next();
 });

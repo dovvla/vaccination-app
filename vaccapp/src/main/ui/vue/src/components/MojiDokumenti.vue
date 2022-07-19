@@ -58,13 +58,13 @@
             :key="index"
           >
             <b-button style="margin: 0 10px" @click="pregledajPotvrda(zahtev)"
-              >Pregledaj zahtev {{ index + 1 }}</b-button
+              >Pregledaj potvrdu {{ index + 1 }}</b-button
             >
             <b-button style="margin: 0 10px" @click="preuzmiPdfPotvrda(zahtev)"
-              >Preuzmi zahtev {{ index + 1 }} kao pdf</b-button
+              >Preuzmi potvrdu {{ index + 1 }} kao pdf</b-button
             >
             <b-button style="margin: 0 10px" @click="preuzmiHtmlPotvrda(zahtev)"
-              >Preuzmi zahtev {{ index + 1 }} kao xhtml</b-button
+              >Preuzmi potvrdu {{ index + 1 }} kao xhtml</b-button
             >
           </div>
         </div>
@@ -181,6 +181,7 @@ export default {
           })
           .then((response) => {
             const json = xml.parse(response.data);
+            console.log(json);
             this.potvrde = json[1].children.map(
               (child) => child.children[0].children[0]
             );

@@ -39,10 +39,9 @@ public class BrojVakcinaService {
                     .get();
 
             return (BrojVakcina) mapper.convertToObject(xmlString, "broj_vakcina", BrojVakcina.class);
-        }
-        catch (Exception ignored) {
+        } catch (Exception ignored) {
             BrojVakcina brojVakcina = new BrojVakcina();
-            brojVakcina.setBroj(0);
+            brojVakcina.setBroj(100);
             brojVakcina.setVakcina(documentId);
             saveXmlFromText(brojVakcina);
             return brojVakcina;

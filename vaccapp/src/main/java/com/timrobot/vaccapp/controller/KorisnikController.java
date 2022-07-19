@@ -31,14 +31,14 @@ public class KorisnikController {
     }
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_XML_VALUE)
-    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTENI_RADNIK') or hasAuthority('SLUZBENIK')")
+    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTVENI_RADNIK') or hasAuthority('SLUZBENIK')")
     public EntityList<Korisnik> getAllKorisnici() {
         return korisnikService.getAll();
     }
 
     @GetMapping(value = "/me", produces = MediaType.APPLICATION_XML_VALUE)
-    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTENI_RADNIK') or hasAuthority('SLUZBENIK')")
-    public Korisnik  getMe() throws Exception {
+    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTVENI_RADNIK') or hasAuthority('SLUZBENIK')")
+    public Korisnik getMe() throws Exception {
         Authentication auth = SecurityContextHolder
                 .getContext().getAuthentication();
         return korisnikService.getKorisnikByEmail((String) auth.getPrincipal());

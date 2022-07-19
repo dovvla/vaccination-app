@@ -1,6 +1,5 @@
 package com.timrobot.vaccapp.controller;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timrobot.vaccapp.models.Obrazac;
 import com.timrobot.vaccapp.models.Potvrda;
@@ -42,22 +41,21 @@ public class PotvrdaController {
     private PotvrdaOVakcinacijiService potvrdaOVakcinacijiService;
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_XML_VALUE)
-    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTENI_RADNIK') or hasAuthority('SLUZBENIK')")
+    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTVENI_RADNIK') or hasAuthority('SLUZBENIK')")
 
     public EntityList<Potvrda> getAll() {
         return potvrdaOVakcinacijiService.getAll();
     }
 
     @GetMapping(value = "/user/{id}", produces = MediaType.APPLICATION_XML_VALUE)
-    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTENI_RADNIK') or hasAuthority('SLUZBENIK')")
+    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTVENI_RADNIK') or hasAuthority('SLUZBENIK')")
 
     public EntityList<Potvrda> getAllForUser(@PathVariable String id) {
         return potvrdaOVakcinacijiService.getAllForUser(id);
     }
 
-
     @GetMapping("/metadata-json/{id}")
-    @PreAuthorize("hasAuthority('SLUZBENIK')")
+    // @PreAuthorize("hasAuthority('SLUZBENIK')")
     public ResponseEntity<?> getJsonMetadataForDocument(@PathVariable String id) {
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -77,7 +75,7 @@ public class PotvrdaController {
     }
 
     @GetMapping(value = "/metadata-rdf/{id}", produces = MediaType.APPLICATION_XML_VALUE)
-    @PreAuthorize("hasAuthority('SLUZBENIK')")
+    // @PreAuthorize("hasAuthority('SLUZBENIK')")
     public ResponseEntity<String> getRDFMetadataForDocument(@PathVariable String id) {
         try {
             String rdf = potvrdaOVakcinacijiService.getAllMetadataForDocumentInRDF(id);
@@ -94,7 +92,7 @@ public class PotvrdaController {
     private XMLMapper xmlMapper;
 
     @GetMapping(value = "/{id}/show", produces = MediaType.APPLICATION_XML_VALUE)
-    @PreAuthorize("hasAuthority('SLUZBENIK')")
+    // @PreAuthorize("hasAuthority('SLUZBENIK')")
     public String getPotvrdaXHTML(@PathVariable String id) {
         Potvrda potvrda = potvrdaOVakcinacijiService.getXmlAsObject(id);
         String xml = xmlMapper.convertToXml(potvrda, Potvrda.class);
@@ -106,7 +104,7 @@ public class PotvrdaController {
     }
 
     @GetMapping(value = "/{id}/xhtml", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    @PreAuthorize("hasAuthority('SLUZBENIK')")
+    // @PreAuthorize("hasAuthority('SLUZBENIK')")
     public void downloadPotvrdaXHTML(@PathVariable String id, HttpServletResponse response) {
         try {
             Potvrda potvrda = potvrdaOVakcinacijiService.getXmlAsObject(id);
@@ -122,7 +120,7 @@ public class PotvrdaController {
     }
 
     @GetMapping(value = "/{id}/pdf", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    @PreAuthorize("hasAuthority('SLUZBENIK')")
+    // @PreAuthorize("hasAuthority('SLUZBENIK')")
     public void downloadPotvrdaPDF(@PathVariable String id, HttpServletResponse response) {
         try {
             Potvrda potvrda = potvrdaOVakcinacijiService.getXmlAsObject(id);
