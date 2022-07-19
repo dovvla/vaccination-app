@@ -25,7 +25,6 @@ public class SaglasnostController {
     @Autowired
     private SaglasnostService saglasnostService;
 
-
     @Autowired
     private KorisnikService korisnikService;
 
@@ -40,21 +39,21 @@ public class SaglasnostController {
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_XML_VALUE, consumes = MediaType.APPLICATION_XML_VALUE)
-    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTENI_RADNIK') or hasAuthority('SLUZBENIK')")
+    // @PreAuthorize("hasAuthority('GRADJANIN')")
     public ResponseEntity<?> putSaglanost(@RequestBody Obrazac obrazac) {
         try {
             Authentication auth = SecurityContextHolder
                     .getContext().getAuthentication();
-            Korisnik korisnik = korisnikService.getKorisnikByEmail( ((User) auth.getPrincipal()).getUsername());
-            if(obrazac.getPodaciOPacijentu().getDrzavljanstvo().getJMBG()==null) {saglasnostService.popuniKorisnika(obrazac, korisnik);}
+            Korisnik korisnik = korisnikService.getKorisnikByEmail((String) auth.getPrincipal());
+            if (obrazac.getPodaciOPacijentu().getDrzavljanstvo().getJMBG() == null) {
+                saglasnostService.popuniKorisnika(obrazac, korisnik);
+            }
             return ResponseEntity.ok(saglasnostService.putSaglasnost(obrazac));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity
                     .badRequest()
                     .body(e.getMessage());
         }
-
 
     }
 
@@ -64,8 +63,7 @@ public class SaglasnostController {
     public ResponseEntity<?> imunizujGradjanina(@RequestBody Obrazac obrazac) {
         try {
             return ResponseEntity.ok(saglasnostService.imunizujGradjanina(obrazac));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity
                     .badRequest()
                     .body(e.getMessage());

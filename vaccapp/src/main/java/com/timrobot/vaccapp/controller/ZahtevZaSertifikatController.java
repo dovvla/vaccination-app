@@ -50,12 +50,13 @@ public class ZahtevZaSertifikatController {
         try {
             Authentication auth = SecurityContextHolder
                     .getContext().getAuthentication();
-            Korisnik korisnik = korisnikService.getKorisnikByEmail( ((User) auth.getPrincipal()).getUsername());
-            if(zahtev.getPodaciOPodnosiocu()==null || zahtev.getPodaciOPodnosiocu().getIme()==null) {zahtevZaSertifikatService.popuniKorisnika(zahtev, korisnik);}
+            Korisnik korisnik = korisnikService.getKorisnikByEmail((String) auth.getPrincipal());
+            if (zahtev.getPodaciOPodnosiocu() == null || zahtev.getPodaciOPodnosiocu().getIme() == null) {
+                zahtevZaSertifikatService.popuniKorisnika(zahtev, korisnik);
+            }
 
             return ResponseEntity.ok(zahtevZaSertifikatService.createZahtev(zahtev));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity
                     .badRequest()
                     .body(e.getMessage());
@@ -64,13 +65,13 @@ public class ZahtevZaSertifikatController {
     }
 
     @GetMapping(value = "/neobradjeni", produces = MediaType.APPLICATION_XML_VALUE)
-//    @PreAuthorize("hasRole('SLUZBENIK')")
+    // @PreAuthorize("hasRole('SLUZBENIK')")
     public EntityList<Zahtev> getAllNeobradjen() {
         return zahtevZaSertifikatService.getAllNeobradjen();
     }
 
     @GetMapping(value = "/odbij/{id}", produces = MediaType.APPLICATION_XML_VALUE)
-//    @PreAuthorize("hasRole('SLUZBENIK')")
+    // @PreAuthorize("hasRole('SLUZBENIK')")
     public ResponseEntity<?> odbijZahtev(@PathVariable String id, @RequestParam String razlog) {
         if (!zahtevZaSertifikatService.odbijZahtev(id, razlog))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
@@ -78,7 +79,7 @@ public class ZahtevZaSertifikatController {
     }
 
     @GetMapping(value = "/prihvati/{id}", produces = MediaType.APPLICATION_XML_VALUE)
-//    @PreAuthorize("hasRole('SLUZBENIK')")
+    // @PreAuthorize("hasRole('SLUZBENIK')")
     public ResponseEntity<?> prihvatiZahtev(@PathVariable String id) {
         try {
             if (!zahtevZaSertifikatService.prihvatiZahtev(id))
