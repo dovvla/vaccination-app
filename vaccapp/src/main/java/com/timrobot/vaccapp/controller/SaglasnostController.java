@@ -2,8 +2,13 @@ package com.timrobot.vaccapp.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timrobot.vaccapp.models.EntityList;
+
 import com.timrobot.vaccapp.models.Izvestaj;
+
+import com.timrobot.vaccapp.models.Korisnik;
+
 import com.timrobot.vaccapp.models.Obrazac;
+import com.timrobot.vaccapp.services.KorisnikService;
 import com.timrobot.vaccapp.services.SaglasnostService;
 import com.timrobot.vaccapp.utility.PdfUtil;
 import com.timrobot.vaccapp.utility.XHtmlUtil;
@@ -14,6 +19,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.xml.sax.SAXException;
@@ -31,6 +41,9 @@ public class SaglasnostController {
     @Autowired
     private SaglasnostService saglasnostService;
 
+    @Autowired
+    private KorisnikService korisnikService;
+
     @GetMapping(value = "", produces = MediaType.APPLICATION_XML_VALUE)
     public EntityList<Obrazac> getAll() {
         return saglasnostService.getAll();
@@ -42,25 +55,31 @@ public class SaglasnostController {
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_XML_VALUE, consumes = MediaType.APPLICATION_XML_VALUE)
+    // @PreAuthorize("hasAuthority('GRADJANIN')")
     public ResponseEntity<?> putSaglanost(@RequestBody Obrazac obrazac) {
         try {
+            Authentication auth = SecurityContextHolder
+                    .getContext().getAuthentication();
+            Korisnik korisnik = korisnikService.getKorisnikByEmail((String) auth.getPrincipal());
+            if (obrazac.getPodaciOPacijentu().getDrzavljanstvo().getJMBG() == null) {
+                saglasnostService.popuniKorisnika(obrazac, korisnik);
+            }
             return ResponseEntity.ok(saglasnostService.putSaglasnost(obrazac));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity
                     .badRequest()
                     .body(e.getMessage());
         }
 
-
     }
 
     @PostMapping(value = "/imunizuj", produces = MediaType.APPLICATION_XML_VALUE, consumes = MediaType.APPLICATION_XML_VALUE)
+    @PreAuthorize("hasAuthority('ZDRAVSTENI_RADNIK')")
+
     public ResponseEntity<?> imunizujGradjanina(@RequestBody Obrazac obrazac) {
         try {
             return ResponseEntity.ok(saglasnostService.imunizujGradjanina(obrazac));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity
                     .badRequest()
                     .body(e.getMessage());

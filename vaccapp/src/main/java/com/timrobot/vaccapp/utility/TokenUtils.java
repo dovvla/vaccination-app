@@ -36,6 +36,7 @@ public class TokenUtils {
         return Jwts.builder()
                 .setIssuer(APP_NAME)
                 .setSubject(id)
+                 .claim("role", authorities)
                 .claim("authority", authorities)
                 .setAudience(AUDIENCE_WEB)
                 .setIssuedAt(new Date())
@@ -64,7 +65,7 @@ public class TokenUtils {
         return role;
     }
 
-    private Claims getAllClaimsFromToken(String token) {
+    public Claims getAllClaimsFromToken(String token) {
         Claims claims;
         try {
             claims = Jwts.parser()

@@ -1,34 +1,34 @@
 <template>
-<div class="justify-content-center login">
-  <b-alert v-model="showSuccessAlert" dismissible fade variant="danger">
+  <div class="justify-content-center login">
+    <b-alert v-model="showSuccessAlert" dismissible fade variant="danger">
       Bad credentials.
     </b-alert>
-  <b-card title="Login">
-    <b-form>
-      <b-form-input
-        id="input-1"
-        v-model="username"
-        placeholder="Username"
-        required
-      >
-      </b-form-input>
-
-      <b-form-input
-        id="input-2"
-        v-model="password"
-        placeholder="Password"
-        required
-        type="password"
-      >
-      </b-form-input>
-      <div class="mt-2">
-        <b-button variant="primary" type="button" v-on:click="login()"
-          >Login</b-button
+    <b-card title="Login">
+      <b-form>
+        <b-form-input
+          id="input-1"
+          v-model="username"
+          placeholder="Username"
+          required
         >
-      </div>
-    </b-form>
-  </b-card>
-</div>
+        </b-form-input>
+
+        <b-form-input
+          id="input-2"
+          v-model="password"
+          placeholder="Password"
+          required
+          type="password"
+        >
+        </b-form-input>
+        <div class="mt-2">
+          <b-button variant="primary" type="button" v-on:click="login()"
+            >Login</b-button
+          >
+        </div>
+      </b-form>
+    </b-card>
+  </div>
 </template>
 
 <script>
@@ -50,15 +50,29 @@ export default {
         return;
       }
       this.axios
-        .post("api/auth/login", {
-          username: this.username,
-          password: this.password,
-        }, { withCredentials: true })
+        .post(
+          "api/auth/login",
+          `<?xml version="1.0" encoding="UTF-8"?>
+              <jwtAuthenticationRequest>
+                <email>${this.username}</email>
+                <password>${this.password}</password>
+              </jwtAuthenticationRequest>`,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/xml",
+            },
+          }
+        )
         .then((response) => {
-          sessionStorage.setItem("token", response.data.accessToken);
+          let accessToken = response.data
+            .split("<accessToken>")[1]
+            .split("</accessToken>")[0];
+          console.log(accessToken);
+          sessionStorage.setItem("token", accessToken);
           this.findUserRole();
         })
-          .catch((error) => {
+        .catch((error) => {
           console.log(error);
           _this.showSuccessAlert = true;
         });
@@ -67,19 +81,20 @@ export default {
     findUserRole() {
       var userRole = JSON.parse(
         atob(sessionStorage.getItem("token").split(".")[1])
-      ).role;
-      if (userRole == "???") {
+      ).role[0].authority;
+      console.log(userRole);
+      if (userRole == "Sluzbenik") {
         this.$router.push("SluzbenikPage");
       }
-      if (userRole == "???") {
+      if (userRole == "Gradjanin") {
         this.$router.push("GradjaninPage");
       }
-      if (userRole == "???") {
+      if (userRole == "Zdravstveni_radnik") {
         this.$router.push("RadnikPage");
       }
     },
   },
-}
+};
 </script>
 
 <style scoped>

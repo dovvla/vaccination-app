@@ -26,50 +26,50 @@ public class InteresovanjeService {
 
     private XMLMapper mapper;
 
-
-    public String convertToXML() throws DatatypeConfigurationException {
-        mapper = new XMLMapper();
-        ObrazacInteresovanja obrazacInteresovanja = new ObrazacInteresovanja();
-        obrazacInteresovanja.setZeljenaVakcina("Sputnik");
-        obrazacInteresovanja.setDavalacKrvi("Nije");
-        obrazacInteresovanja.setZeljenaLokacijaVakcinacije("Novi Sad");
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTime(new Date());
-        XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendarDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)+1, cal.get(Calendar.DAY_OF_MONTH), DatatypeConstants.FIELD_UNDEFINED);
-        obrazacInteresovanja.setDatum(xmlDate);
-        ObrazacInteresovanja.LicniPodaci licniPodaci = new ObrazacInteresovanja.LicniPodaci();
-        licniPodaci.setBrojFiksnogTelefona("0232092332");
-        licniPodaci.setBrojMobilnogTelefona("7643543543");
-        licniPodaci.setDrzavljanstvo("Srbsko");
-        licniPodaci.setIme("Vlado");
-        licniPodaci.setPrezime("Vladic");
-        licniPodaci.setImejl("nesto@nesto.com");
-        licniPodaci.setJMBG("4585478954654");
-        obrazacInteresovanja.setLicniPodaci(licniPodaci);
-        System.out.println(mapper.convertToXml(obrazacInteresovanja, ObrazacInteresovanja.class));
-        return mapper.convertToXml(obrazacInteresovanja, ObrazacInteresovanja.class);
-    }
-
-    public String zahtev() throws DatatypeConfigurationException {
-        mapper = new XMLMapper();
-        Zahtev zahtev = new Zahtev();
-        zahtev.setMesto("Novi Sad");
-        zahtev.setRazlogZaPodnosenje("Idk why");
-        zahtev.setRazlogZaOdbijanje(new JAXBElement(new QName("http://tim.robot", "amount"), String.class, "Hello World"));
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTime(new Date());
-        XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendarDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)+1, cal.get(Calendar.DAY_OF_MONTH), DatatypeConstants.FIELD_UNDEFINED);
-        zahtev.setDatum(xmlDate);
-        Zahtev.PodaciOPodnosiocu podaciOPodnosiocu = new Zahtev.PodaciOPodnosiocu();
-        podaciOPodnosiocu.setBrojPasosa("232232332");
-        podaciOPodnosiocu.setDatumRodjenja(xmlDate);
-        podaciOPodnosiocu.setIme("Vlado");
-        podaciOPodnosiocu.setPol("Musko");
-        podaciOPodnosiocu.setJMBG("322323223");
-        podaciOPodnosiocu.setPrezime("Vladic");
-        zahtev.setPodaciOPodnosiocu(podaciOPodnosiocu);
-        return mapper.convertToXml(zahtev, Zahtev.class);
-    }
+//    public String convertToXML() throws DatatypeConfigurationException {
+//        mapper = new XMLMapper();
+//        ObrazacInteresovanja obrazacInteresovanja = new ObrazacInteresovanja();
+//        obrazacInteresovanja.setZeljenaVakcina("Sputnik");
+//        obrazacInteresovanja.setDavalacKrvi("Nije");
+//        obrazacInteresovanja.setZeljenaLokacijaVakcinacije("Novi Sad");
+//        GregorianCalendar cal = new GregorianCalendar();
+//        cal.setTime(new Date());
+//        XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendarDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)+1, cal.get(Calendar.DAY_OF_MONTH), DatatypeConstants.FIELD_UNDEFINED);
+//        obrazacInteresovanja.setDatum(xmlDate);
+//        ObrazacInteresovanja.LicniPodaci licniPodaci = new ObrazacInteresovanja.LicniPodaci();
+//        licniPodaci.setBrojFiksnogTelefona("0232092332");
+//        licniPodaci.setBrojMobilnogTelefona("7643543543");
+//        licniPodaci.setDrzavljanstvo("Srbsko");
+//        licniPodaci.setIme("Vlado");
+//        licniPodaci.setPrezime("Vladic");
+//        licniPodaci.setImejl("nesto@nesto.com");
+//        licniPodaci.setJMBG("4585478954654");
+//        obrazacInteresovanja.setLicniPodaci(licniPodaci);
+//        System.out.println(mapper.convertToXml(obrazacInteresovanja, ObrazacInteresovanja.class));
+//        return mapper.convertToXml(obrazacInteresovanja, ObrazacInteresovanja.class);
+//    }
+//
+//    public String zahtev() throws DatatypeConfigurationException {
+//        mapper = new XMLMapper();
+//        Zahtev zahtev = new Zahtev();
+//        zahtev.setMesto("Novi Sad");
+//        zahtev.setRazlogZaPodnosenje("Idk why");
+//        zahtev.setRazlogZaOdbijanje(new JAXBElement(new QName("http://tim.robot", "amount"), String.class, "Hello World"));
+//        GregorianCalendar cal = new GregorianCalendar();
+//        cal.setTime(new Date());
+//        XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendarDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)+1, cal.get(Calendar.DAY_OF_MONTH), DatatypeConstants.FIELD_UNDEFINED);
+//        zahtev.setDatum(xmlDate);
+//        Zahtev.PodaciOPodnosiocu podaciOPodnosiocu = new Zahtev.PodaciOPodnosiocu();
+//        podaciOPodnosiocu.setBrojPasosa("232232332");
+//        podaciOPodnosiocu.setDatumRodjenja(xmlDate);
+//        podaciOPodnosiocu.setIme("Vlado");
+//        podaciOPodnosiocu.setPol("Musko");
+//        podaciOPodnosiocu.setJMBG("322323223");
+//        podaciOPodnosiocu.setPrezime("Vladic");
+//        zahtev.setPodaciOPodnosiocu(podaciOPodnosiocu);
+//        return mapper.convertToXml(zahtev, Zahtev.class);
+//    }
+//
 
 //    public String sertifikat(){
 //        try
@@ -233,39 +233,40 @@ public class InteresovanjeService {
 //        }
 //    }
 
-    public String izvestaj(){
-        try {
-            mapper = new XMLMapper();
-            Izvestaj izvestaj = new Izvestaj();
-            GregorianCalendar cal = new GregorianCalendar();
-            cal.setTime(new Date());
-            XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendarDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)+1, cal.get(Calendar.DAY_OF_MONTH), DatatypeConstants.FIELD_UNDEFINED);
-            izvestaj.setDatum(new Izvestaj.Datum());
-            izvestaj.getDatum().setValue(xmlDate);
-            izvestaj.setIzdatihZelenihSertifikata(new BigInteger("123"));
-            izvestaj.setPodnetihInteresovanjaImunizacije(new BigInteger("1223"));
-            izvestaj.setZahteviZaZeleniSertifikat(new BigInteger("4123"));
-            izvestaj.setPeriodIzvestaja(new Izvestaj.PeriodIzvestaja());
-            izvestaj.getPeriodIzvestaja().setDatumDo(new Izvestaj.PeriodIzvestaja.DatumDo());
-            izvestaj.getPeriodIzvestaja().setDatumOd(new Izvestaj.PeriodIzvestaja.DatumOd());
-            izvestaj.getPeriodIzvestaja().getDatumDo().setValue(xmlDate);
-            izvestaj.getPeriodIzvestaja().getDatumOd().setValue(xmlDate);
-
-            izvestaj.setPodaciODatimDozama(new Izvestaj.PodaciODatimDozama());
-            izvestaj.getPodaciODatimDozama().setBrojDateDrugeDoze(new BigInteger("9"));
-            izvestaj.getPodaciODatimDozama().setBrojDatePrveDoze(new BigInteger("8"));
-            izvestaj.getPodaciODatimDozama().setBrojDateTreceDoze(new BigInteger("4"));
-            izvestaj.getPodaciODatimDozama().setUkupnoDoza(new BigInteger("3"));
-
-            izvestaj.setRaspodelaPoProizvodjacima(new Izvestaj.RaspodelaPoProizvodjacima());
-            izvestaj.getRaspodelaPoProizvodjacima().setBrojAzVakcina(new BigInteger("5"));
-            izvestaj.getRaspodelaPoProizvodjacima().setBrojPfizerVakcina(new BigInteger("1"));
-            izvestaj.getRaspodelaPoProizvodjacima().setBrojSinopharmVakcina(new BigInteger("3"));
-            izvestaj.getRaspodelaPoProizvodjacima().setBrojSputnikVakcina(new BigInteger("16"));
-
-            return mapper.convertToXml(izvestaj, Izvestaj.class);
-        }catch (Exception e){
-            return "";
-        }
-    }
+//
+//    public String izvestaj(){
+//        try {
+//            mapper = new XMLMapper();
+//            Izvestaj izvestaj = new Izvestaj();
+//            GregorianCalendar cal = new GregorianCalendar();
+//            cal.setTime(new Date());
+//            XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendarDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)+1, cal.get(Calendar.DAY_OF_MONTH), DatatypeConstants.FIELD_UNDEFINED);
+//            izvestaj.setDatum(new Izvestaj.Datum());
+//            izvestaj.getDatum().setValue(xmlDate);
+//            izvestaj.setIzdatihZelenihSertifikata(new BigInteger("123"));
+//            izvestaj.setPodnetihInteresovanjaImunizacije(new BigInteger("1223"));
+//            izvestaj.setZahteviZaZeleniSertifikat(new BigInteger("4123"));
+//            izvestaj.setPeriodIzvestaja(new Izvestaj.PeriodIzvestaja());
+//            izvestaj.getPeriodIzvestaja().setDatumDo(new Izvestaj.PeriodIzvestaja.DatumDo());
+//            izvestaj.getPeriodIzvestaja().setDatumOd(new Izvestaj.PeriodIzvestaja.DatumOd());
+//            izvestaj.getPeriodIzvestaja().getDatumDo().setValue(xmlDate);
+//            izvestaj.getPeriodIzvestaja().getDatumOd().setValue(xmlDate);
+//
+//            izvestaj.setPodaciODatimDozama(new Izvestaj.PodaciODatimDozama());
+//            izvestaj.getPodaciODatimDozama().setBrojDateDrugeDoze(new BigInteger("9"));
+//            izvestaj.getPodaciODatimDozama().setBrojDatePrveDoze(new BigInteger("8"));
+//            izvestaj.getPodaciODatimDozama().setBrojDateTreceDoze(new BigInteger("4"));
+//            izvestaj.getPodaciODatimDozama().setUkupnoDoza(new BigInteger("3"));
+//
+//            izvestaj.setRaspodelaPoProizvodjacima(new Izvestaj.RaspodelaPoProizvodjacima());
+//            izvestaj.getRaspodelaPoProizvodjacima().setBrojAzVakcina(new BigInteger("5"));
+//            izvestaj.getRaspodelaPoProizvodjacima().setBrojPfizerVakcina(new BigInteger("1"));
+//            izvestaj.getRaspodelaPoProizvodjacima().setBrojSinopharmVakcina(new BigInteger("3"));
+//            izvestaj.getRaspodelaPoProizvodjacima().setBrojSputnikVakcina(new BigInteger("16"));
+//
+//            return mapper.convertToXml(izvestaj, Izvestaj.class);
+//        }catch (Exception e){
+//            return "";
+//        }
+//    }
 }

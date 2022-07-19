@@ -9,10 +9,15 @@ import com.timrobot.vaccapp.utility.XMLMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+
 
 @RestController
 @RequestMapping("/api/interesovanje")
@@ -37,9 +42,10 @@ public class ObrazacInteresovanjaController {
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_XML_VALUE, consumes = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<?> createObrazacInteresovanja(@RequestBody ObrazacInteresovanja obrazacInteresovanja) {
+    @PreAuthorize("hasAuthority('GRADJANIN')")
+    public ResponseEntity<?> createObrazacInteresovanja(@RequestBody ObrazacInteresovanja obrazacInteresovanja) throws DatatypeConfigurationException {
         try {
-            return ResponseEntity.ok(obrazacInteresovanjaService.createObrazacInteresovanja(obrazacInteresovanja));
+        return ResponseEntity.ok(obrazacInteresovanjaService.createObrazacInteresovanja(obrazacInteresovanja));
         }
         catch (Exception e) {
             return ResponseEntity

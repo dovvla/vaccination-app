@@ -1,9 +1,11 @@
 package com.timrobot.vaccapp.controller;
 
 import com.timrobot.vaccapp.models.EntityList;
+import com.timrobot.vaccapp.models.Korisnik;
 import com.timrobot.vaccapp.models.ObrazacInteresovanja;
 import com.timrobot.vaccapp.models.Sertifikat;
 import com.timrobot.vaccapp.models.Zahtev;
+import com.timrobot.vaccapp.services.KorisnikService;
 import com.timrobot.vaccapp.services.ZahtevZaSertifikatService;
 import com.timrobot.vaccapp.utility.XHtmlUtil;
 import com.timrobot.vaccapp.utility.XMLMapper;
@@ -13,6 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -27,23 +32,36 @@ public class ZahtevZaSertifikatController {
 
     @Autowired
     private ZahtevZaSertifikatService zahtevZaSertifikatService;
+    @Autowired
+    private KorisnikService korisnikService;
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_XML_VALUE)
+    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTENI_RADNIK') or hasAuthority('SLUZBENIK')")
+
     public EntityList<Zahtev> getAll() {
         return zahtevZaSertifikatService.getAll();
     }
 
     @GetMapping(value = "/user/{id}", produces = MediaType.APPLICATION_XML_VALUE)
+    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTENI_RADNIK') or hasAuthority('SLUZBENIK')")
+
     public EntityList<Zahtev> getAllForUser(@PathVariable String id) {
         return zahtevZaSertifikatService.getAllForUser(id);
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_XML_VALUE, consumes = MediaType.APPLICATION_XML_VALUE)
+    @PreAuthorize("hasAuthority('GRADJANIN') or hasAuthority('ZDRAVSTENI_RADNIK') or hasAuthority('SLUZBENIK')")
     public ResponseEntity<?> createZahtevZaZeleni(@RequestBody Zahtev zahtev) {
         try {
+            Authentication auth = SecurityContextHolder
+                    .getContext().getAuthentication();
+            Korisnik korisnik = korisnikService.getKorisnikByEmail((String) auth.getPrincipal());
+            if (zahtev.getPodaciOPodnosiocu() == null || zahtev.getPodaciOPodnosiocu().getIme() == null) {
+                zahtevZaSertifikatService.popuniKorisnika(zahtev, korisnik);
+            }
+
             return ResponseEntity.ok(zahtevZaSertifikatService.createZahtev(zahtev));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity
                     .badRequest()
                     .body(e.getMessage());

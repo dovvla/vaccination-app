@@ -1,5 +1,8 @@
 package com.timrobot.vaccapp.dto;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class JwtAuthenticationRequest {
     private String email;
     private String password;

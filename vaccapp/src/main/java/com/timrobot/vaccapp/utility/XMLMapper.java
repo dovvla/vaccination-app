@@ -66,7 +66,7 @@ public class XMLMapper {
 
             File file = ResourceUtils.getFile("src/main/resources/xsd/" + xsdFileName + ".xsd");
             Schema schema = schemaFactory.newSchema(file);
-            unmarshaller.setSchema(schema);
+//            unmarshaller.setSchema(schema);
 
             return unmarshaller.unmarshal(new StringReader(xmlString));
         } catch (Exception e) {
